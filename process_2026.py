@@ -1,3 +1,19 @@
+"""Gera dados_eleicao_2026.js a partir de votacao_secao_2026_BR.csv.
+
+O CSV de 2026 traz os votos de cada seção eleitoral, mas NÃO informa quando
+cada seção foi apurada (todas as linhas têm o mesmo horário de geração).
+Por isso a "linha do tempo" de 2026 é uma reconstrução:
+
+1. Os votos são agregados por seção (FB=22, L=13, outros, brancos=95, nulos=96).
+2. As seções são ordenadas de duas formas:
+   - 'csv': ordem de primeira aparição no arquivo;
+   - 'regional': ordem SIMULADA (sorteio com semente fixa + peso por UF que
+     imita a sequência típica de chegada dos estados em 2022).
+3. Para cada um dos 5.286 passos de 2022, soma-se a mesma fração das seções
+   de 2026, alinhando as duas eleições pelo % de seções apuradas.
+
+Só o resultado final (100%) é real; a trajetória depende da ordem escolhida.
+"""
 import csv
 import json
 import os
@@ -46,7 +62,9 @@ sections_list = list(sec_data.values())
 # 1. Native CSV order (by first appearance of each section in votacao_secao_2026_BR.csv)
 by_first = sorted(sections_list, key=lambda x: x[0])
 
-# 2. Calibrated TSE Regional Totalization Order (mirrors 2022 regional arrival dynamics)
+# 2. Simulated regional order (NOT the real 2026 arrival order): a per-UF bias that
+#    mirrors 2022 regional arrival dynamics, mixed with a seeded random draw.
+#    Lower bias = arrives earlier ('ZZ' = votes from abroad).
 uf_speed_bias = {
     'ZZ': 0.05,
     'SC': 0.30, 'PR': 0.31, 'RS': 0.33, 'DF': 0.32,

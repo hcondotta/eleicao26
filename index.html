@@ -18,14 +18,15 @@
       --text-primary: #f9fafb;
       --text-secondary: #9ca3af;
       --text-muted: #6b7280;
+      /* Uma cor fixa por candidato (validada para daltonismo); o ano é indicado pelo traço: 2022 tracejado, 2026 cheio */
       --color-l: #ef4444;
-      --color-l-glow: rgba(239, 68, 68, 0.35);
       --color-jb: #3b82f6;
-      --color-jb-glow: rgba(59, 130, 246, 0.35);
-      --color-fb: #10b981;
-      --color-fb-glow: rgba(16, 185, 129, 0.35);
+      --color-fb: #0f9f74;
       --color-accent: #10b981;
       --color-gold: #f59e0b;
+      --color-warn-bg: rgba(245, 158, 11, 0.12);
+      --color-warn-border: rgba(245, 158, 11, 0.4);
+      --color-warn-text: #fbbf24;
       --font-main: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
       --font-mono: 'JetBrains Mono', monospace;
     }
@@ -41,11 +42,11 @@
       --text-secondary: #4b5563;
       --text-muted: #9ca3af;
       --color-l: #dc2626;
-      --color-l-glow: rgba(220, 38, 38, 0.2);
       --color-jb: #2563eb;
-      --color-jb-glow: rgba(37, 99, 235, 0.2);
       --color-fb: #059669;
-      --color-fb-glow: rgba(5, 150, 105, 0.2);
+      --color-warn-bg: rgba(245, 158, 11, 0.12);
+      --color-warn-border: rgba(217, 119, 6, 0.45);
+      --color-warn-text: #b45309;
     }
 
     * {
@@ -219,27 +220,6 @@
       color: var(--text-secondary);
     }
 
-    .badge-live {
-      background: rgba(16, 185, 129, 0.15);
-      border-color: rgba(16, 185, 129, 0.35);
-      color: #34d399;
-    }
-
-    .badge-live::before {
-      content: "";
-      width: 7px;
-      height: 7px;
-      border-radius: 50%;
-      background: #10b981;
-      box-shadow: 0 0 8px #10b981;
-      animation: pulse 1.8s infinite;
-    }
-
-    @keyframes pulse {
-      0%, 100% { opacity: 1; transform: scale(1); }
-      50% { opacity: 0.4; transform: scale(1.2); }
-    }
-
     .btn {
       display: inline-flex;
       align-items: center;
@@ -297,30 +277,61 @@
       box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.15);
     }
 
+    /* --card-color é definido pelo JS conforme o candidato exibido no card */
+    .candidate-card {
+      --card-color: var(--text-secondary);
+      border-top: 4px solid var(--card-color);
+    }
+
     .candidate-card.lead {
-      border-width: 2px;
+      box-shadow: 0 0 26px -8px var(--card-color);
     }
 
-    .candidate-card.l-card {
-      border-color: rgba(239, 68, 68, 0.3);
-    }
-    .candidate-card.l-card.lead {
-      border-color: var(--color-l);
-      box-shadow: 0 0 28px var(--color-l-glow);
+    /* No comparativo, cada card mostra os dois candidatos do ano com o mesmo peso */
+    .candidate-card.mode-compare .candidate-bar-wrap { display: none; }
+
+    .duo {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.75rem;
+      width: 100%;
     }
 
-    .candidate-card.jb-card {
-      border-color: rgba(59, 130, 246, 0.3);
+    .duo-item .key { font-size: 0.85rem; font-family: var(--font-main); letter-spacing: 0; }
+
+    .duo-pct {
+      font-size: 2.3rem;
+      font-weight: 900;
+      font-family: var(--font-mono);
+      letter-spacing: -0.03em;
+      line-height: 1.15;
+      color: var(--text-primary);
     }
-    .candidate-card.jb-card.lead {
-      border-color: var(--color-jb);
-      box-shadow: 0 0 28px var(--color-jb-glow);
+
+    .duo-pct .symbol { font-size: 1.1rem; font-weight: 700; }
+
+    .duo-votes {
+      font-size: 0.78rem;
+      font-weight: 500;
+      font-family: var(--font-mono);
+      letter-spacing: 0;
+      color: var(--text-secondary);
+    }
+
+    .card-gauge { margin-top: 0.85rem; }
+
+    .card-lead {
+      margin-top: 0.5rem;
+      font-size: 0.85rem;
+      font-weight: 600;
     }
 
     .candidate-top {
       display: flex;
+      flex-wrap: wrap;
       justify-content: space-between;
       align-items: flex-start;
+      gap: 0.5rem;
       margin-bottom: 0.75rem;
     }
 
@@ -344,14 +355,8 @@
       flex-shrink: 0;
     }
 
-    .l-card .candidate-avatar {
-      background: linear-gradient(135deg, #ef4444, #b91c1c);
-      box-shadow: 0 6px 16px rgba(239, 68, 68, 0.35);
-    }
-
-    .jb-card .candidate-avatar {
-      background: linear-gradient(135deg, #3b82f6, #1d4ed8);
-      box-shadow: 0 6px 16px rgba(59, 130, 246, 0.35);
+    .candidate-card .candidate-avatar {
+      background: var(--card-color);
     }
 
     .candidate-name-box h3 {
@@ -375,10 +380,11 @@
       letter-spacing: 0.05em;
     }
 
+    /* Neutro de propósito: a cor de quem lidera vem da bolinha (.key) dentro do selo */
     .status-lead {
-      background: rgba(16, 185, 129, 0.18);
-      border: 1px solid rgba(16, 185, 129, 0.4);
-      color: #34d399;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color-focus);
+      color: var(--text-primary);
     }
 
     .status-trail {
@@ -403,8 +409,6 @@
       white-space: nowrap;
     }
 
-    .l-card .candidate-pct { color: var(--color-l); }
-    .jb-card .candidate-pct { color: var(--color-jb); }
 
     .candidate-pct span.symbol {
       font-size: 1.55rem;
@@ -441,8 +445,7 @@
       transition: width 0.2s ease;
     }
 
-    .l-card .candidate-bar { background: linear-gradient(90deg, #ef4444, #f87171); }
-    .jb-card .candidate-bar { background: linear-gradient(90deg, #3b82f6, #60a5fa); }
+    .candidate-card .candidate-bar { background: var(--card-color); }
 
     /* CENTER CARD */
     .comparison-card {
@@ -497,17 +500,15 @@
       border: 1px solid var(--border-color);
     }
 
-    .dual-bar-l { background: var(--color-l); height: 100%; transition: width 0.2s ease; }
-    .dual-bar-jb { background: var(--color-jb); height: 100%; transition: width 0.2s ease; }
+    .dual-bar-seg { height: 100%; transition: width 0.2s ease; }
 
     .dual-bar-centerline {
       position: absolute;
       left: 50%;
-      top: 0;
-      bottom: 0;
+      top: -2px;
+      bottom: -2px;
       width: 2px;
-      background: #ffffff;
-      box-shadow: 0 0 6px rgba(255, 255, 255, 0.9);
+      background: var(--text-primary);
       z-index: 2;
     }
 
@@ -639,7 +640,7 @@
       width: 100%;
       height: 8px;
       border-radius: 4px;
-      background: rgba(255, 255, 255, 0.12);
+      background: var(--border-color-focus);
       outline: none;
       cursor: pointer;
     }
@@ -772,17 +773,15 @@
       font-weight: 700;
     }
 
-    .milestone-chip.highlight-virada {
-      border-color: rgba(239, 68, 68, 0.5);
-      background: rgba(239, 68, 68, 0.1);
+    /* A borda esquerda indica de qual eleição é o marco (azul = 2022, verde = 2026) */
+    .milestone-chip {
+      border-left: 3px solid var(--chip-color, var(--border-color));
+      font-family: inherit;
+      text-align: left;
     }
-    .milestone-chip.highlight-virada strong { color: #f87171; }
-
-    .milestone-chip.highlight-jb {
-      border-color: rgba(59, 130, 246, 0.5);
-      background: rgba(59, 130, 246, 0.12);
-    }
-    .milestone-chip.highlight-jb strong { color: #60a5fa; }
+    .milestone-chip.chip-2022 { --chip-color: var(--color-jb); }
+    .milestone-chip.chip-2026 { --chip-color: var(--color-fb); }
+    .milestone-chip .chip-when { font-size: 0.7rem; color: var(--text-muted); font-family: var(--font-mono); }
 
     /* CHART CONTAINER */
     .chart-card {
@@ -825,6 +824,7 @@
 
     .toggle-group {
       display: inline-flex;
+      flex-wrap: wrap;
       background: rgba(255, 255, 255, 0.05);
       border: 1px solid var(--border-color);
       border-radius: 0.6rem;
@@ -841,6 +841,7 @@
       border-radius: 0.45rem;
       cursor: pointer;
       font-family: inherit;
+      white-space: nowrap;
       transition: all 0.15s ease;
     }
 
@@ -1013,10 +1014,546 @@
     }
 
     .text-mono { font-family: var(--font-mono); }
-    .text-red { color: var(--color-l); }
-    .text-blue { color: var(--color-jb); }
-    .text-green { color: var(--color-accent); }
-    .text-gold { color: var(--color-gold); }
+
+    /* COMO LER ESTE PAINEL */
+    .howto {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 1.1rem;
+      padding: 0.9rem 1.25rem;
+      margin-bottom: 1rem;
+    }
+
+    .howto summary {
+      cursor: pointer;
+      font-weight: 800;
+      font-size: 0.95rem;
+      list-style-position: inside;
+    }
+
+    .howto-hint {
+      font-weight: 400;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+
+    .howto-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 0.85rem;
+      margin-top: 0.85rem;
+    }
+
+    .howto-step {
+      display: flex;
+      gap: 0.65rem;
+      font-size: 0.82rem;
+      color: var(--text-secondary);
+      line-height: 1.5;
+    }
+
+    .howto-step strong { color: var(--text-primary); }
+
+    .howto-num {
+      flex-shrink: 0;
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color-focus);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 0.8rem;
+      color: var(--text-primary);
+    }
+
+    .howto-step.warn {
+      background: var(--color-warn-bg);
+      border: 1px solid var(--color-warn-border);
+      border-radius: 0.75rem;
+      padding: 0.6rem 0.75rem;
+    }
+
+    .howto-step.warn .howto-num {
+      border-color: var(--color-warn-border);
+      color: var(--color-warn-text);
+    }
+
+    /* Chave de cor: bolinha colorida + texto neutro */
+    .key {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      white-space: nowrap;
+    }
+
+    .key::before {
+      content: "";
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--key-color);
+    }
+
+    .custom-tooltip .key { color: #f8fafc; }
+
+    .key-l { --key-color: var(--color-l); }
+    .key-jb { --key-color: var(--color-jb); }
+    .key-fb { --key-color: var(--color-fb); }
+
+    /* GRUPOS DE OPÇÕES COM RÓTULO */
+    .opt-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+    }
+
+    .opt-label {
+      font-size: 0.68rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-muted);
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+    }
+
+    /* ÍCONE ⓘ COM EXPLICAÇÃO (hover ou foco pelo teclado) */
+    .info-tip {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      border: 1px solid var(--border-color-focus);
+      font-size: 0.64rem;
+      font-weight: 700;
+      font-style: normal;
+      color: var(--text-secondary);
+      cursor: help;
+      text-transform: none;
+      letter-spacing: 0;
+      vertical-align: middle;
+      flex-shrink: 0;
+      outline: none;
+    }
+
+    .info-tip::after {
+      content: attr(data-tip);
+      position: absolute;
+      left: 50%;
+      top: calc(100% + 8px);
+      transform: translateX(-50%);
+      width: max-content;
+      max-width: min(320px, 80vw);
+      background: #0f172a;
+      color: #f1f5f9;
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      border-radius: 0.6rem;
+      padding: 0.6rem 0.75rem;
+      font-family: var(--font-main);
+      font-size: 0.76rem;
+      font-weight: 400;
+      line-height: 1.45;
+      text-align: left;
+      white-space: normal;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.45);
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+      z-index: 200;
+      transition: opacity 0.15s ease;
+    }
+
+    .info-tip.tip-left::after { left: 0; transform: none; }
+    .info-tip.tip-right::after { left: auto; right: 0; transform: none; }
+
+    .info-tip:hover::after,
+    .info-tip:focus::after {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .info-tip:focus { border-color: var(--text-primary); }
+
+    /* Caixas com backdrop-filter criam contextos de empilhamento próprios: a caixa sobe enquanto seu ⓘ está aberto,
+       senão a explicação ficaria por baixo da caixa seguinte */
+    .mode-selector-bar, .player-card, .chart-card, .comparison-card, .stat-mini-card { position: relative; }
+    :is(.mode-selector-bar, .player-card, .chart-card, .comparison-card, .stat-mini-card):has(.info-tip:hover, .info-tip:focus) { z-index: 50; }
+
+    /* SELO DE SIMULAÇÃO */
+    .sim-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.25rem;
+      font-size: 0.68rem;
+      font-weight: 700;
+      padding: 0.1rem 0.5rem;
+      border-radius: 999px;
+      background: var(--color-warn-bg);
+      border: 1px solid var(--color-warn-border);
+      color: var(--color-warn-text);
+      white-space: nowrap;
+    }
+
+    /* BARRAS DO CARD CENTRAL (uma por eleição) */
+    .gauge-row + .gauge-row { margin-top: 0.6rem; }
+
+    .gauge-caption {
+      font-size: 0.7rem;
+      font-weight: 700;
+      color: var(--text-secondary);
+      text-align: left;
+      margin-bottom: 0.2rem;
+    }
+
+    .urnas-label {
+      font-size: 0.68rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.35rem;
+      margin-bottom: 0.15rem;
+    }
+
+    /* LEITURA DO MOMENTO */
+    .insight-card {
+      display: flex;
+      gap: 0.85rem;
+      align-items: flex-start;
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-left: 4px solid var(--color-gold);
+      border-radius: 1rem;
+      padding: 0.9rem 1.2rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .insight-icon { font-size: 1.4rem; line-height: 1.2; }
+
+    .insight-title {
+      font-size: 0.7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--text-muted);
+      margin-bottom: 0.15rem;
+    }
+
+    .insight-text {
+      font-size: 0.95rem;
+      line-height: 1.55;
+      color: var(--text-primary);
+    }
+
+    /* CARDS DE ESTATÍSTICA: a borda esquerda indica a eleição */
+    .stat-mini-card { border-left: 4px solid var(--accent, var(--border-color)); }
+
+    .stat-label {
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+    }
+
+    /* CARDS DE FASE */
+    .phase-headline {
+      font-size: 0.86rem;
+      color: var(--text-primary);
+      font-weight: 600;
+      line-height: 1.45;
+      margin-bottom: 0.5rem;
+    }
+
+    .phase-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+      margin-bottom: 0.9rem;
+    }
+
+    .phase-list li {
+      font-size: 0.79rem;
+      color: var(--text-secondary);
+      line-height: 1.45;
+      padding-left: 0.85rem;
+      border-left: 3px solid var(--li-color, var(--border-color));
+    }
+
+    .phase-list li.li-2022 { --li-color: var(--color-jb); }
+    .phase-list li.li-2026 { --li-color: var(--color-fb); }
+    .phase-list li.li-note { font-style: italic; color: var(--text-muted); }
+    .phase-list li strong { color: var(--text-primary); }
+
+    /* NOTA ABAIXO DO GRÁFICO */
+    .chart-note {
+      margin-top: 0.6rem;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      text-align: center;
+      line-height: 1.5;
+    }
+
+    /* TABELA */
+    .table-note {
+      font-size: 0.74rem;
+      color: var(--text-muted);
+      margin: 0 0 0.5rem;
+    }
+
+    #dataTable th {
+      padding: 0.6rem 0.85rem;
+      white-space: nowrap;
+      font-weight: 700;
+    }
+
+    #dataTable td {
+      padding: 0.5rem 0.85rem;
+      font-family: var(--font-mono);
+      white-space: nowrap;
+    }
+
+    #dataTable tbody tr {
+      border-bottom: 1px solid var(--border-color);
+      cursor: pointer;
+    }
+
+    #dataTable tbody tr:hover { background: var(--bg-card-hover); }
+    #dataTable tbody tr.row-current { background: rgba(245, 158, 11, 0.14); }
+    #dataTable tbody tr.row-current td:first-child { box-shadow: inset 3px 0 0 var(--color-gold); }
+
+    .table-wrap.hide-2022 .col-22,
+    .table-wrap.hide-2026 .col-26 { display: none; }
+
+    /* METODOLOGIA */
+    .method-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 1.25rem;
+      padding: 1.1rem 1.5rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .method-card summary {
+      cursor: pointer;
+      font-weight: 800;
+      font-size: 1.05rem;
+    }
+
+    .method-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 1.25rem;
+      margin-top: 1rem;
+    }
+
+    .method-grid h4 {
+      font-size: 0.86rem;
+      font-weight: 800;
+      margin-bottom: 0.4rem;
+    }
+
+    .method-grid p,
+    .method-grid li {
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+      line-height: 1.55;
+    }
+
+    .method-grid ol,
+    .method-grid ul { padding-left: 1.1rem; display: flex; flex-direction: column; gap: 0.3rem; }
+    .method-grid strong { color: var(--text-primary); }
+    .method-grid dt { font-size: 0.8rem; font-weight: 700; color: var(--text-primary); margin-top: 0.45rem; }
+    .method-grid dd { font-size: 0.79rem; color: var(--text-secondary); line-height: 1.5; }
+
+    /* PROJEÇÃO "E SE" */
+    .proj-controls {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: flex-end;
+      gap: 0.9rem 1.25rem;
+      margin-bottom: 1rem;
+    }
+
+    .proj-slider-group {
+      flex: 1 1 260px;
+      min-width: 220px;
+    }
+
+    .proj-slider-group .scrubber-slider { margin-top: 0.55rem; }
+
+    .proj-lead {
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      color: var(--text-primary);
+      text-transform: none;
+      letter-spacing: 0;
+    }
+
+    .proj-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
+      gap: 1.25rem;
+    }
+
+    @media (max-width: 1024px) {
+      .proj-grid { grid-template-columns: minmax(0, 1fr); }
+    }
+
+    .proj-canvas-wrap {
+      position: relative;
+      width: 100%;
+      height: 380px;
+    }
+
+    .proj-summary-wrap {
+      position: relative;
+      width: 100%;
+      height: 230px;
+      cursor: pointer;
+    }
+
+    .proj-canvas-wrap canvas,
+    .proj-summary-wrap canvas {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    .proj-canvas-wrap canvas { cursor: crosshair; }
+
+    .proj-readout {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-left: 4px solid var(--verdict-color, var(--color-gold));
+      border-radius: 0.9rem;
+      padding: 0.85rem 1rem;
+      margin-bottom: 0.9rem;
+    }
+
+    .proj-verdict {
+      font-size: 1.02rem;
+      font-weight: 800;
+      line-height: 1.35;
+    }
+
+    .proj-final {
+      font-family: var(--font-mono);
+      font-size: 0.88rem;
+      font-weight: 700;
+      margin-top: 0.25rem;
+    }
+
+    .proj-facts {
+      list-style: none;
+      margin-top: 0.6rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+    }
+
+    .proj-facts li {
+      font-size: 0.78rem;
+      color: var(--text-secondary);
+      line-height: 1.45;
+    }
+
+    .proj-facts li strong { color: var(--text-primary); }
+
+    .proj-summary-title {
+      font-size: 0.8rem;
+      font-weight: 700;
+      margin-bottom: 0.35rem;
+    }
+
+    .proj-hint {
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      margin-top: 0.3rem;
+    }
+
+    .proj-warning {
+      margin-top: 1.1rem;
+      background: var(--color-warn-bg);
+      border: 1px solid var(--color-warn-border);
+      border-radius: 0.9rem;
+      padding: 0.85rem 1.1rem;
+    }
+
+    .proj-warning-title {
+      font-size: 0.86rem;
+      font-weight: 800;
+      color: var(--color-warn-text);
+    }
+
+    .proj-warning ul {
+      margin-top: 0.4rem;
+      padding-left: 1.1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.3rem;
+    }
+
+    .proj-warning li {
+      font-size: 0.79rem;
+      color: var(--text-secondary);
+      line-height: 1.5;
+    }
+
+    .proj-warning li strong { color: var(--text-primary); }
+
+    .legend-line.dotted {
+      background: repeating-linear-gradient(90deg, currentColor 0, currentColor 3px, transparent 3px, transparent 6px);
+    }
+
+    .legend-swatch {
+      display: inline-block;
+      width: 18px;
+      height: 10px;
+      border-radius: 3px;
+    }
+
+    .kbd-hint {
+      font-size: 0.72rem;
+      color: var(--text-muted);
+    }
+
+    .kbd-hint kbd {
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      padding: 0.05rem 0.35rem;
+      border: 1px solid var(--border-color-focus);
+      border-radius: 0.3rem;
+      background: var(--bg-secondary);
+    }
+
+    .time-note {
+      font-family: var(--font-main);
+      font-size: 0.75rem;
+      font-weight: 500;
+      color: var(--text-secondary);
+    }
+
+    @media (max-width: 640px) {
+      .container { padding: 0.75rem 1rem 2rem; }
+      .kbd-hint { display: none; }
+      .candidate-pct { font-size: 2.4rem; }
+      .mode-tab { padding: 0.5rem 0.75rem; font-size: 0.8rem; }
+      .canvas-wrapper { height: 340px; }
+      .proj-canvas-wrap { height: 320px; }
+      #tableSearchInput { width: 100% !important; }
+    }
   </style>
 </head>
 <body>
@@ -1026,194 +1563,189 @@
     <!-- HEADER -->
     <header>
       <div class="header-brand">
-        <div class="brand-icon">🏢</div>
+        <div class="brand-icon">🗳️</div>
         <div>
-          <h1 class="brand-title" id="mainPageTitle">Análise Comparativa: 2022 (JB x L) vs 2026 (FB x L)</h1>
+          <h1 class="brand-title">Apuração 2022 × 2026: a vantagem inicial se repete?</h1>
           <div class="brand-subtitle">
-            <span id="headerSubtitle">Evolução dos Percentuais e Queda da Diferença ao Longo da Apuração</span>
+            <span>Como a diferença entre o nº 22 e o nº 13 (L) mudou durante a contagem dos votos para presidente em 2022 (JB × L) e em 2026 (FB × L)</span>
           </div>
         </div>
       </div>
 
       <div class="header-badges">
-        <div class="badge badge-live" id="badgeLive">DADOS 2022 & 2026 CARREGADOS</div>
+        <span class="badge">Fonte: TSE · 2022 (2º turno) · 2026 (1º turno)</span>
         <button class="btn" id="btnThemeToggle" title="Alternar tema claro/escuro">🌓 Tema</button>
       </div>
     </header>
 
-    <!-- ELECTION / COMPARISON MODE BAR -->
+    <!-- COMO LER ESTE PAINEL -->
+    <details class="howto" id="howtoBox" open>
+      <summary>📖 Como ler este painel <span class="howto-hint">(clique para recolher)</span></summary>
+      <div class="howto-grid">
+        <div class="howto-step">
+          <span class="howto-num">1</span>
+          <div><strong>A contagem anda da esquerda para a direita.</strong> Ela começa com 0% das seções eleitorais apuradas e termina em 100%. Arraste a barra de reprodução ou aperte ▶ para assistir.</div>
+        </div>
+        <div class="howto-step">
+          <span class="howto-num">2</span>
+          <div><strong>Cor = candidato, traço = ano.</strong> <span class="key key-jb">JB</span> <span class="key key-fb">FB</span> <span class="key key-l">L</span>. No gráfico, a linha tracejada é 2022 e a linha cheia é 2026.</div>
+        </div>
+        <div class="howto-step">
+          <span class="howto-num">3</span>
+          <div><strong>A pergunta:</strong> nas duas eleições o nº 22 começa na frente. Essa vantagem encolhe da mesma forma? Em 2022, L virou e venceu; em 2026, FB terminou na frente.</div>
+        </div>
+        <div class="howto-step warn">
+          <span class="howto-num">!</span>
+          <div><strong>Atenção:</strong> a ordem em que as seções de 2026 aparecem é <strong>simulada</strong>, porque o arquivo de 2026 não informa o horário de cada seção. Só o resultado final de 2026 é real. Veja "Metodologia e limitações" no fim da página.</div>
+        </div>
+      </div>
+    </details>
+
+    <!-- MODO DE VISUALIZAÇÃO -->
     <section class="mode-selector-bar">
       <div class="mode-tabs" id="electionModeTabs">
-        <button class="mode-tab active" data-election="compare">
-          ⚖️ Comparativo: 2022 (JB x L) vs 2026 (FB x L)
-        </button>
-        <button class="mode-tab" data-election="2026">
-          🗳️ Eleição 2026 (FB x L • 499.206 seções)
-        </button>
-        <button class="mode-tab" data-election="2022">
-          🗳️ Eleição 2022 (JB x L • 472.075 seções)
-        </button>
+        <button class="mode-tab active" data-election="compare">⚖️ Comparar 2022 e 2026</button>
+        <button class="mode-tab" data-election="2026">🗳️ Só 2026 (FB × L)</button>
+        <button class="mode-tab" data-election="2022">🗳️ Só 2022 (JB × L)</button>
       </div>
 
       <div class="sub-options-2026" id="subOptions2026">
-        <div class="toggle-group" id="order2026Toggle" title="Como ordenar as 499.206 seções do CSV de 2026 (já que o arquivo de seção tem hora de geração fixa 14:03:43)">
-          <button class="toggle-opt active" data-order="regional">2026: Ritmo Cronológico TSE</button>
-          <button class="toggle-opt" data-order="csv">2026: Ordem Bruta do CSV</button>
+        <div class="opt-group">
+          <span class="opt-label">Ordem de chegada 2026
+            <span class="info-tip" tabindex="0" data-tip="O arquivo de 2026 traz os votos de cada seção, mas não o horário em que cada uma foi apurada. Por isso a ordem é uma estimativa. 'Simulada por região' sorteia a ordem dando prioridade aos estados que costumam chegar antes (Sul e Centro-Oeste primeiro, Nordeste e Norte depois), como aconteceu em 2022. 'Ordem do arquivo' usa a sequência das linhas do CSV. O resultado final (100%) é igual nas duas.">ⓘ</span>
+          </span>
+          <div class="toggle-group" id="order2026Toggle">
+            <button class="toggle-opt active" data-order="regional">Simulada por região</button>
+            <button class="toggle-opt" data-order="csv">Ordem do arquivo</button>
+          </div>
         </div>
 
-        <div class="toggle-group" id="norm2026Toggle" title="Comparar proporção direta FB vs L (soma 100%) ou percentual sobre todos os votos válidos do 1º turno">
-          <button class="toggle-opt active" data-norm="two">FB x L (100%)</button>
-          <button class="toggle-opt" data-norm="valid">Válidos 1ºT</button>
+        <div class="opt-group">
+          <span class="opt-label">Base do % de 2026
+            <span class="info-tip tip-right" tabindex="0" data-tip="Em 2022 (2º turno) só havia dois candidatos, então JB + L = 100%. Em 2026 (1º turno) houve outros candidatos. 'Só FB e L' ignora os demais para comparar de igual para igual com 2022. 'Todos os votos válidos' mostra o % oficial do 1º turno, em que FB + L somam menos de 100%.">ⓘ</span>
+          </span>
+          <div class="toggle-group" id="norm2026Toggle">
+            <button class="toggle-opt active" data-norm="two">Só FB e L (soma 100%)</button>
+            <button class="toggle-opt" data-norm="valid">Todos os votos válidos</button>
+          </div>
         </div>
       </div>
     </section>
 
-    <!-- SCOREBOARD -->
+    <!-- PLACAR -->
     <section class="scoreboard">
 
-      <!-- LEFT CARD (L in single election, or 2022 JB x L in Compare Mode) -->
-      <div class="candidate-card l-card" id="cardLeft">
+      <!-- Card esquerdo: 2022 no comparativo, ou L numa eleição isolada -->
+      <div class="candidate-card" id="cardLeft">
         <div class="candidate-top">
           <div class="candidate-info">
-            <div class="candidate-avatar" id="avatarLeft">L</div>
+            <div class="candidate-avatar" id="avatarLeft">22</div>
             <div class="candidate-name-box">
-              <h3 id="titleLeft">Chapa L</h3>
-              <div class="candidate-role" id="roleLeft">Candidato (13)</div>
+              <h3 id="titleLeft">—</h3>
+              <div class="candidate-role" id="roleLeft">—</div>
             </div>
           </div>
-          <span class="status-pill status-lead" id="pillLeft">LIDERANDO</span>
+          <span class="status-pill status-lead" id="pillLeft">—</span>
         </div>
 
         <div class="candidate-metric">
-          <div class="candidate-pct" id="pctLeft">
-            50,90<span class="symbol">%</span>
-          </div>
-          <div class="candidate-votes" id="subLeft">
-            <span id="votesLeft">60.345.999</span>
-            <span class="label" id="labelLeft">votos válidos</span>
-          </div>
+          <div class="candidate-pct" id="pctLeft">—</div>
+          <div class="candidate-votes" id="subLeft">—</div>
         </div>
 
         <div class="candidate-bar-wrap">
-          <div class="candidate-bar" id="barLeft" style="width: 50.9%;"></div>
+          <div class="candidate-bar" id="barLeft" style="width: 0%;"></div>
         </div>
       </div>
 
-      <!-- CENTER COMPARISON CARD -->
+      <!-- Card central: vantagem e progresso da apuração -->
       <div class="comparison-card">
-        <div class="comp-title" id="centerTitle">Diferença em Tempo Real</div>
+        <div class="comp-title" id="centerTitle">—</div>
 
         <div style="margin: 0.4rem 0; width: 100%;">
-          <div class="comp-diff-val" id="diffValue">+2.139.645</div>
-          <div class="comp-diff-sub" id="diffSubtitle">Vantagem de 1,80% p.p.</div>
+          <div class="comp-diff-val" id="diffValue">—</div>
+          <div class="comp-diff-sub" id="diffSubtitle">—</div>
         </div>
 
-        <div class="gauge-wrapper">
-          <div class="dual-bar-container">
-            <div class="dual-bar-l" id="dualBarLeft" style="width: 50.9%;"></div>
-            <div class="dual-bar-jb" id="dualBarRight" style="width: 49.1%;"></div>
-            <div class="dual-bar-centerline" title="Marca de equilíbrio (50%)"></div>
-          </div>
-          <div class="gauge-labels">
-            <span id="gaugeLabelLeft">L: 50,90%</span>
-            <span>50%</span>
-            <span id="gaugeLabelRight">JB: 49,10%</span>
-          </div>
-        </div>
+        <div class="gauge-wrapper" id="gaugeWrapper"></div>
 
         <div class="comp-urnas">
-          <div class="urnas-pct" id="urnasPct">100,00%</div>
-          <div class="urnas-sub" id="urnasCount">100% das seções apuradas</div>
+          <div class="urnas-label">Seções apuradas
+            <span class="info-tip tip-right" tabindex="0" data-tip="Seção eleitoral é a sala onde as pessoas votam; cada uma tem uma urna. '% apurado' é quanto das seções já foi somado. 2022 teve 472.075 seções e 2026, 499.206.">ⓘ</span>
+          </div>
+          <div class="urnas-pct" id="urnasPct">—</div>
+          <div class="urnas-sub" id="urnasCount">—</div>
           <div class="urnas-bar-bg">
-            <div class="urnas-bar-fill" id="urnasBarFill" style="width: 100%;"></div>
+            <div class="urnas-bar-fill" id="urnasBarFill" style="width: 0%;"></div>
           </div>
         </div>
       </div>
 
-      <!-- RIGHT CARD (JB / FB in single election, or 2026 FB x L in Compare Mode) -->
-      <div class="candidate-card jb-card" id="cardRight">
+      <!-- Card direito: 2026 no comparativo, ou o nº 22 numa eleição isolada -->
+      <div class="candidate-card" id="cardRight">
         <div class="candidate-top">
           <div class="candidate-info">
-            <div class="candidate-avatar" id="avatarRight">FB</div>
+            <div class="candidate-avatar" id="avatarRight">26</div>
             <div class="candidate-name-box">
-              <h3 id="titleRight">Chapa FB</h3>
-              <div class="candidate-role" id="roleRight">Candidato (22)</div>
+              <h3 id="titleRight">—</h3>
+              <div class="candidate-role" id="roleRight">—</div>
             </div>
           </div>
-          <span class="status-pill status-trail" id="pillRight">LIDERANDO</span>
+          <span class="status-pill status-trail" id="pillRight">—</span>
         </div>
 
         <div class="candidate-metric">
-          <div class="candidate-pct" id="pctRight">
-            51,01<span class="symbol">%</span>
-          </div>
-          <div class="candidate-votes" id="subRight">
-            <span id="votesRight">56.104.503</span>
-            <span class="label" id="labelRight">votos válidos</span>
-          </div>
+          <div class="candidate-pct" id="pctRight">—</div>
+          <div class="candidate-votes" id="subRight">—</div>
         </div>
 
         <div class="candidate-bar-wrap">
-          <div class="candidate-bar" id="barRight" style="width: 51.01%;"></div>
+          <div class="candidate-bar" id="barRight" style="width: 0%;"></div>
         </div>
       </div>
 
     </section>
 
-    <!-- STATS ROW -->
-    <section class="stats-row">
-      <div class="stat-mini-card">
-        <span class="stat-label" id="stat1Label">Pico Inicial (JB 2022)</span>
-        <span class="stat-val text-blue" id="stat1Val">56,84% vs 43,16%</span>
-        <span class="stat-sub" id="stat1Sub">Às 17:17 (vantagem de +13,68 p.p.)</span>
-      </div>
-      <div class="stat-mini-card">
-        <span class="stat-label" id="stat2Label">Pico Inicial (FB 2026)</span>
-        <span class="stat-val text-green" id="stat2Val">63,72% vs 36,28%</span>
-        <span class="stat-sub" id="stat2Sub">58,02% x 33,04% dos válidos totais</span>
-      </div>
-      <div class="stat-mini-card">
-        <span class="stat-label" id="stat3Label">Aos 68,34% das Urnas (18:44)</span>
-        <span class="stat-val text-gold" id="stat3Val">22: Empate | 26: FB +4,8 p.p.</span>
-        <span class="stat-sub" id="stat3Sub">Momento da virada em 2022</span>
-      </div>
-      <div class="stat-mini-card">
-        <span class="stat-label" id="stat4Label">Resultado Final 2022 (100%)</span>
-        <span class="stat-val text-red" id="stat4Val">L 50,90% x 49,10% JB</span>
-        <span class="stat-sub" id="stat4Sub">L vence por +2.139.645 votos</span>
-      </div>
-      <div class="stat-mini-card">
-        <span class="stat-label" id="stat5Label">Resultado Final 2026 (100%)</span>
-        <span class="stat-val text-blue" id="stat5Val">FB 51,01% x 48,99% L</span>
-        <span class="stat-sub" id="stat5Sub">FB vence por +2.224.965 votos (47,03% x 45,16% vál.)</span>
+    <!-- LEITURA DO MOMENTO (frase gerada a partir dos dados) -->
+    <section class="insight-card" aria-live="polite">
+      <div class="insight-icon">💡</div>
+      <div>
+        <div class="insight-title">O que está acontecendo neste ponto da contagem</div>
+        <p class="insight-text" id="insightText">—</p>
       </div>
     </section>
 
-    <!-- SCRUBBER / REPLAY CONTROLS -->
+    <!-- NÚMEROS-CHAVE (gerados pelo JS a partir dos marcos) -->
+    <section class="stats-row" id="statsRow"></section>
+
+    <!-- REPRODUÇÃO DA APURAÇÃO -->
     <section class="player-card">
       <div class="scrubber-header">
         <div class="time-display">
           <span>🕒</span>
-          <span id="currentTimeDisplay">100,00% das seções</span>
-          <span class="badge" id="scrubberPctBadge" style="margin-left: 0.4rem;">100,00% apurado</span>
+          <span id="currentTimeDisplay">—</span>
+          <span class="badge" id="scrubberPctBadge" style="margin-left: 0.4rem;">—</span>
         </div>
-        <div style="font-size: 0.78rem; color: var(--text-secondary);">
-          Passo <span id="currentRecordIdx" class="text-mono" style="color: var(--text-primary);">5286</span> de <span id="totalRecordsCount" class="text-mono">5286</span>
+        <div style="font-size: 0.78rem; color: var(--text-secondary); display: flex; align-items: center; gap: 0.35rem;">
+          Atualização <span id="currentRecordIdx" class="text-mono" style="color: var(--text-primary);">—</span> de <span id="totalRecordsCount" class="text-mono">—</span>
+          <span class="info-tip tip-right" tabindex="0" data-tip="Em 2022 o TSE publicou 5.286 atualizações do placar entre 17:00 e 00:18. Cada passo da barra é uma dessas atualizações. Para 2026, o painel mostra o mesmo % de seções apuradas em cada passo.">ⓘ</span>
         </div>
       </div>
 
       <div class="scrubber-slider-wrap">
-        <input type="range" id="scrubberSlider" class="scrubber-slider" min="0" max="5285" value="5285">
+        <input type="range" id="scrubberSlider" class="scrubber-slider" min="0" max="0" value="0" aria-label="Momento da apuração">
       </div>
 
       <div class="player-controls-row">
         <div class="play-btns">
-          <button class="btn btn-circle" id="btnToStart" title="Ir para o início">⏮</button>
-          <button class="btn btn-circle" id="btnStepBack" title="Voltar 1 registro">◀</button>
-          <button class="btn btn-circle btn-play" id="btnPlayPause" title="Reproduzir / Pausar">▶</button>
-          <button class="btn btn-circle" id="btnStepFwd" title="Avançar 1 registro">▶</button>
-          <button class="btn btn-circle" id="btnToEnd" title="Ir para 100%">⏭</button>
+          <button class="btn btn-circle" id="btnToStart" title="Ir para o início (Home)">⏮</button>
+          <button class="btn btn-circle" id="btnStepBack" title="Voltar 1 atualização (←)">◀</button>
+          <button class="btn btn-circle btn-play" id="btnPlayPause" title="Reproduzir / Pausar (Espaço)">▶</button>
+          <button class="btn btn-circle" id="btnStepFwd" title="Avançar 1 atualização (→)">▶</button>
+          <button class="btn btn-circle" id="btnToEnd" title="Ir para 100% (End)">⏭</button>
         </div>
+
+        <span class="kbd-hint">Atalhos: <kbd>Espaço</kbd> reproduz/pausa · <kbd>←</kbd> <kbd>→</kbd> passo a passo · <kbd>Home</kbd> <kbd>End</kbd> início/fim</span>
 
         <div style="display: flex; align-items: center; gap: 0.65rem;">
           <span style="font-size: 0.75rem; color: var(--text-muted); font-weight: 700;">VELOCIDADE:</span>
@@ -1222,185 +1754,196 @@
             <button class="speed-btn" data-speed="5">5x</button>
             <button class="speed-btn active" data-speed="20">20x</button>
             <button class="speed-btn" data-speed="60">60x</button>
-            <button class="speed-btn" data-speed="150">Max</button>
+            <button class="speed-btn" data-speed="150">Máx.</button>
           </div>
         </div>
       </div>
 
-      <!-- KEY MOMENTS CHIPS -->
       <div class="milestones-section">
         <div class="milestones-title">
-          ⚡ Saltos Rápidos para Comparar a Queda da Diferença (2022 vs 2026):
+          ⚡ Momentos-chave: clique para pular até eles
+          <span style="text-transform: none; font-weight: 500;">(borda <span class="key key-jb">2022</span> ou <span class="key key-fb">2026</span>)</span>
         </div>
-        <div class="milestones-chips">
-          <div class="milestone-chip" data-idx="0" data-zoom="inicio">
-            <strong>🏁 0,01% Urnas (17:00)</strong>
-            <span>2022: L 50,6% | 2026 CSV: FB 57,1% x L 42,9%</span>
-          </div>
-          <div class="milestone-chip highlight-jb" data-idx="50" data-zoom="inicio">
-            <strong>🚀 0,61% Urnas (17:11)</strong>
-            <span>2022: JB 55,6% | 2026: FB > 54% (Vantagem Inicial)</span>
-          </div>
-          <div class="milestone-chip highlight-jb" data-idx="140" data-zoom="inicio" style="border-color: #3b82f6; background: rgba(59, 130, 246, 0.18);">
-            <strong>🔥 1,78% Urnas (17:17:29)</strong>
-            <span>Pico JB 2022 (56,84% x 43,16%) & FB 2026 na frente</span>
-          </div>
-          <div class="milestone-chip highlight-jb" data-idx="500" data-zoom="inicio">
-            <strong>📉 8,13% Urnas (17:30)</strong>
-            <span>Diferença começa a cair (JB 52,4% | FB 58,9%)</span>
-          </div>
-          <div class="milestone-chip highlight-jb" data-idx="1387" data-zoom="all">
-            <strong>🏔️ 25,70% Urnas (17:56)</strong>
-            <span>2022: JB +2,62 p.p. (+790k) | 2026: FB +9,12 p.p.</span>
-          </div>
-          <div class="milestone-chip" data-idx="2500" data-zoom="all">
-            <strong>⚖️ 50,45% Urnas (18:27)</strong>
-            <span>Metade das urnas: 2022 JB +0,7% | 2026 FB +5,9%</span>
-          </div>
-          <div class="milestone-chip highlight-virada" data-idx="3190" data-zoom="all">
-            <strong>⚡ 68,34% Urnas (18:44:51)</strong>
-            <span>Virada de L em 2022 (50,0%) | Em 2026 FB mantém +4,8 p.p.</span>
-          </div>
-          <div class="milestone-chip" data-idx="5285" data-zoom="all">
-            <strong>🏁 100% Urnas (00:18)</strong>
-            <span>Final: 2022 L +1,80 p.p. | 2026 FB +2,02 p.p. (+2,22M)</span>
-          </div>
-        </div>
+        <div class="milestones-chips" id="milestoneChips"></div>
       </div>
     </section>
 
-    <!-- CHART CARD -->
+    <!-- GRÁFICO -->
     <section class="chart-card">
       <div class="chart-header">
         <div class="chart-title-box">
-          <h3 id="chartMainTitle">Comparativo: Evolução dos Percentuais e Queda da Diferença (2022 vs 2026)</h3>
-          <p id="chartSubTitle">Veja como JB (2022) e FB (2026) largam acima de 56% contra menos de 44% de L, e como a vantagem diminui ao longo da apuração</p>
+          <h3 id="chartMainTitle">—</h3>
+          <p id="chartSubTitle">—</p>
         </div>
 
         <div class="chart-actions">
-          <!-- ZOOM / PERÍODO -->
-          <div class="toggle-group" id="chartZoomToggle">
-            <button class="toggle-opt" data-zoom="inicio" title="Zoom nos primeiros 45 minutos (0% a 15% das urnas) onde JB e FB passam de 56% e L fica abaixo de 44%">🔍 Início (0% - 15%)</button>
-            <button class="toggle-opt" data-zoom="virada" title="Zoom no meio da apuração e momento da virada de 2022">⚡ Meio / Virada (38% - 88%)</button>
-            <button class="toggle-opt" data-zoom="final" title="Zoom na reta final">🏁 Reta Final (80% - 100%)</button>
-            <button class="toggle-opt active" data-zoom="all" title="Visão completa de 0% a 100%">🌐 Total (0% - 100%)</button>
+          <div class="opt-group">
+            <span class="opt-label">O que mostrar</span>
+            <div class="toggle-group" id="chartMetricToggle">
+              <button class="toggle-opt active" data-metric="pct" title="O % de votos de cada candidato">% de cada candidato</button>
+              <button class="toggle-opt" data-metric="gap_pct" title="Quantos pontos percentuais o nº 22 tem a mais que L">📉 Vantagem do nº 22 (p.p.)</button>
+              <button class="toggle-opt" data-metric="diff" title="Quantos votos o nº 22 tem a mais que L">Vantagem em votos</button>
+            </div>
           </div>
 
-          <!-- ESCALA Y -->
-          <div class="toggle-group" id="chartYScaleToggle">
-            <button class="toggle-opt active" data-yscale="full" title="Escala ampla (35% a 65%) que exibe todos os picos iniciais">Escala Total (35%-65%)</button>
-            <button class="toggle-opt" data-yscale="tight" title="Foco na faixa central (45% a 55%)">Foco Central (45%-55%)</button>
-            <button class="toggle-opt" data-yscale="auto" title="Escala automática">Auto</button>
+          <div class="opt-group">
+            <span class="opt-label">Trecho da contagem</span>
+            <div class="toggle-group" id="chartZoomToggle">
+              <button class="toggle-opt" data-zoom="inicio">🔍 Início</button>
+              <button class="toggle-opt" data-zoom="virada">⚡ Meio e virada</button>
+              <button class="toggle-opt" data-zoom="final">🏁 Reta final</button>
+              <button class="toggle-opt active" data-zoom="all">🌐 Tudo</button>
+            </div>
           </div>
 
-          <!-- MÉTRICA -->
-          <div class="toggle-group" id="chartMetricToggle">
-            <button class="toggle-opt active" data-metric="pct" title="Curvas de evolução percentual dos candidatos">Curvas (%)</button>
-            <button class="toggle-opt" data-metric="gap_pct" title="Mostra diretamente a queda da diferença percentual: (JB - L) em 2022 vs (FB - L) em 2026">📉 Queda da Diferença (p.p.)</button>
-            <button class="toggle-opt" data-metric="diff" title="Diferença absoluta em votos nominais">Margem (Votos)</button>
+          <div class="opt-group" id="yScaleGroup">
+            <span class="opt-label">Escala vertical</span>
+            <div class="toggle-group" id="chartYScaleToggle">
+              <button class="toggle-opt active" data-yscale="full" title="De 35% a 65%: mostra os picos do início">Ampla</button>
+              <button class="toggle-opt" data-yscale="tight" title="De 44% a 56%: aproxima a disputa perto dos 50%">Perto dos 50%</button>
+              <button class="toggle-opt" data-yscale="auto" title="Ajusta aos valores do trecho visível">Automática</button>
+            </div>
           </div>
 
-          <!-- EIXO X -->
-          <div class="toggle-group" id="chartAxisToggle">
-            <button class="toggle-opt active" data-axis="urnas">Eixo X: % Seções</button>
-            <button class="toggle-opt" data-axis="time">Eixo X: Horário</button>
+          <div class="opt-group">
+            <span class="opt-label">Eixo horizontal</span>
+            <div class="toggle-group" id="chartAxisToggle">
+              <button class="toggle-opt active" data-axis="urnas">% apurado</button>
+              <button class="toggle-opt" data-axis="time">Horário (2022)</button>
+            </div>
           </div>
 
-          <button class="btn" id="btnExportChart" style="padding: 0.35rem 0.7rem; font-size: 0.75rem;" title="Baixar gráfico como PNG">
+          <button class="btn" id="btnExportChart" style="padding: 0.35rem 0.7rem; font-size: 0.75rem; align-self: flex-end;" title="Baixar gráfico como PNG">
             📸 PNG
           </button>
         </div>
       </div>
 
       <div class="canvas-wrapper" id="canvasWrapper">
-        <canvas id="electionChart"></canvas>
+        <canvas id="electionChart" role="img" aria-label="Gráfico da evolução da apuração"></canvas>
         <div class="custom-tooltip" id="customTooltip">
           <div class="tt-header">
             <span id="ttTime">--:--:--</span>
-            <span id="ttUrnas">0,00% seções</span>
+            <span id="ttUrnas">0,00% apurado</span>
           </div>
           <div id="ttBody"></div>
         </div>
       </div>
 
-      <div class="chart-legend" id="chartLegend">
-        <div class="legend-item"><span class="legend-line" style="background: #10b981;"></span> FB 2026 (22)</div>
-        <div class="legend-item"><span class="legend-line" style="background: #ef4444;"></span> L 2026 (13)</div>
-        <div class="legend-item"><span class="legend-line dashed" style="color: #60a5fa;"></span> JB 2022 (22)</div>
-        <div class="legend-item"><span class="legend-line dashed" style="color: #fca5a5;"></span> L 2022 (13)</div>
+      <div class="chart-legend" id="chartLegend"></div>
+      <p class="chart-note" id="chartNote"></p>
+    </section>
+
+    <!-- A HISTÓRIA EM 4 FASES (gerada pelo JS) -->
+    <section class="phases-grid" id="phasesGrid"></section>
+
+    <!-- PROJEÇÃO "E SE" (frágil): o que aconteceria se a vantagem encolhesse como em 2022 -->
+    <section class="chart-card" id="projectionCard">
+      <div class="chart-header">
+        <div class="chart-title-box">
+          <h3>E se 2026 repetir o padrão de 2022? L conseguiria passar FB? <span class="sim-badge">⚠ projeção frágil</span></h3>
+          <p>Exercício "e se", não uma previsão. Escolha a vantagem de FB em um ponto da contagem e veja se, e quando, L passaria à frente caso a vantagem do nº 22 encolhesse como encolheu em 2022.</p>
+        </div>
+      </div>
+
+      <div class="proj-controls">
+        <div class="opt-group">
+          <span class="opt-label">Ponto da contagem
+            <span class="info-tip tip-left" tabindex="0" data-tip="Em que momento da apuração você observa a vantagem de FB. Quanto mais cedo, menos seções foram contadas e mais incerta é a projeção. Durante uma apuração real, use o % apurado mais próximo do momento.">ⓘ</span>
+          </span>
+          <div class="toggle-group" id="projRefToggle">
+            <button class="toggle-opt active" data-ref="peak">Pico de 2022</button>
+            <button class="toggle-opt" data-ref="10">10%</button>
+            <button class="toggle-opt" data-ref="25">25%</button>
+            <button class="toggle-opt" data-ref="50">50%</button>
+            <button class="toggle-opt" data-ref="75">75%</button>
+          </div>
+        </div>
+
+        <div class="opt-group proj-slider-group">
+          <span class="opt-label">Vantagem de FB nesse ponto: <strong class="proj-lead" id="projLeadLabel">—</strong></span>
+          <input type="range" id="projSlider" class="scrubber-slider" min="0" max="20" step="0.01" value="13.68" aria-label="Vantagem de FB no ponto escolhido, em pontos percentuais">
+        </div>
+
+        <div class="opt-group">
+          <span class="opt-label">Cenários prontos</span>
+          <div class="toggle-group" id="projPresets">
+            <button class="toggle-opt" data-preset="same" title="FB com a mesma vantagem que JB tinha nesse ponto em 2022">Igual a JB em 2022</button>
+            <button class="toggle-opt" data-preset="limit" title="A vantagem com que FB terminaria exatamente empatado">Empate no final</button>
+            <button class="toggle-opt" data-preset="first" title="Se o 2º turno terminar com a mesma divisão FB × L do 1º turno de 2026">Repete o 1º turno</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="proj-grid">
+        <div>
+          <div class="proj-canvas-wrap">
+            <canvas id="projChart" role="img" aria-label="Gráfico da trajetória projetada da vantagem de FB"></canvas>
+            <div class="custom-tooltip" id="projTooltip"></div>
+          </div>
+          <div class="chart-legend">
+            <div class="legend-item"><span class="legend-line dashed" style="color: var(--color-jb);"></span> 2022 real (JB − L)</div>
+            <div class="legend-item"><span class="legend-line dotted" style="color: var(--color-fb);"></span> Projeção 2026 (FB − L)</div>
+            <div class="legend-item"><span class="legend-swatch" style="background: var(--color-fb); opacity: 0.3;"></span> Faixa ilustrativa (queda 25% menor ou maior)</div>
+            <div class="legend-item"><span class="legend-line dotted" style="color: var(--text-secondary);"></span> Limite: abaixo dele, L termina na frente</div>
+            <div class="legend-item"><span class="legend-line dashed" style="color: var(--color-gold);"></span> Zero = empate</div>
+          </div>
+          <p class="chart-note">Eixo horizontal como no gráfico principal (uma atualização do TSE por vez), a partir de 1% apurado. Passe o mouse para ver os valores.</p>
+        </div>
+
+        <div>
+          <div class="proj-readout" id="projReadout">
+            <div class="proj-verdict" id="projVerdict">—</div>
+            <div class="proj-final" id="projFinal">—</div>
+            <ul class="proj-facts" id="projFacts"></ul>
+          </div>
+          <div class="proj-summary-title">Quando L passaria à frente, conforme a vantagem de FB</div>
+          <div class="proj-summary-wrap">
+            <canvas id="projSummary" role="img" aria-label="Gráfico do momento da ultrapassagem conforme a vantagem de FB"></canvas>
+          </div>
+          <p class="proj-hint">Clique no gráfico para escolher um valor.</p>
+        </div>
+      </div>
+
+      <div class="proj-warning">
+        <div class="proj-warning-title">⚠ Por que esta projeção é frágil</div>
+        <ul>
+          <li>Supõe que as seções de 2026 cheguem <strong>na mesma ordem de estados</strong> que em 2022.</li>
+          <li>Supõe que FB esteja <strong>igualmente acima (ou abaixo) de JB em todo o país</strong>. Se o voto de FB estiver distribuído de outro jeito, a curva muda de forma.</li>
+          <li>Existe <strong>só uma apuração real</strong> como referência (2022), então não há margem de erro calculável. A faixa sombreada é ilustrativa, não estatística.</li>
+          <li id="projOrderFact"></li>
+          <li>Quanto mais cedo o ponto da contagem, maior a incerteza. Prefira 25% ou 50%.</li>
+        </ul>
       </div>
     </section>
 
-    <!-- COMPARATIVE INSIGHTS CARDS -->
-    <section class="phases-grid">
-      <div class="phase-card">
-        <div>
-          <span class="phase-badge phase-1">1. Abertura (0% a 2% das seções)</span>
-          <h4 class="phase-title">Largada Acima de 56% vs Abaixo de 44%</h4>
-          <p class="phase-desc">
-            Em <strong>2022</strong>, às 17:17 (1,78% das seções), <strong>JB atingiu 56,84%</strong> contra <strong>43,16% de L</strong> (+13,68 p.p.). Em <strong>2026</strong>, o mesmo fenômeno se repete: na ordem bruta do CSV, <strong>FB larga com 57,10% a 60,98%</strong> contra <strong>42,90% a 39,02% de L</strong>; e no ritmo cronológico regional, FB abre acima de <strong>58% dos válidos (63,7% direto)</strong>.
-          </p>
-        </div>
-        <button class="btn phase-btn" onclick="window.app.jumpToAndZoom(140, 'inicio')">🔍 Ver Início no Gráfico (1,78%)</button>
-      </div>
-
-      <div class="phase-card">
-        <div>
-          <span class="phase-badge phase-2">2. Desaceleração (5% a 50% das seções)</span>
-          <h4 class="phase-title">Como a Diferença Vai Diminuindo</h4>
-          <p class="phase-desc">
-            À medida que a apuração avança pelas demais regiões, a diferença cai nas duas eleições: em <strong>2022</strong>, a vantagem de JB cai de <strong>+13,68 p.p.</strong> para <strong>+2,62 p.p.</strong> (aos 25,7% das urnas) e <strong>+0,72 p.p.</strong> (aos 50%). Em <strong>2026</strong>, a vantagem de FB também recua continuamente para <strong>+9,12 p.p.</strong> (aos 25,7%) e <strong>+5,91 p.p.</strong> (aos 50%).
-          </p>
-        </div>
-        <button class="btn phase-btn" onclick="window.app.setMetricAndZoom('gap_pct', 'all')">📉 Ver Curva de Queda da Diferença</button>
-      </div>
-
-      <div class="phase-card">
-        <div>
-          <span class="phase-badge phase-3">3. O Ponto Crítico (68,34% das seções)</span>
-          <h4 class="phase-title">Virada em 2022 vs Sustentação em 2026</h4>
-          <p class="phase-desc">
-            Aos <strong>68,34% das seções (18:44:51)</strong>, a curva de diferença de <strong>2022</strong> cruza o zero: L empata e vira sobre JB. Já em <strong>2026</strong>, embora a diferença entre FB e L continue diminuindo na mesma inclinação, FB sustenta uma margem positiva de <strong>+4,80 p.p.</strong> (+3,59 milhões de votos naquele instante).
-          </p>
-        </div>
-        <button class="btn phase-btn" onclick="window.app.jumpToAndZoom(3190, 'virada')">⚡ Comparar nos 68,34% (18:44)</button>
-      </div>
-
-      <div class="phase-card">
-        <div>
-          <span class="phase-badge phase-4">4. Fechamento 100% (Totalização Final)</span>
-          <h4 class="phase-title">Resultado Final Comparado</h4>
-          <p class="phase-desc">
-            Em <strong>2022 (2ºT)</strong>, L encerra com <strong>50,90% (60.345.999)</strong> contra <strong>49,10% (58.206.354)</strong> de JB (L +2.139.645 votos). Em <strong>2026 (1ºT)</strong>, FB encerra com <strong>56.104.503 votos (47,03% dos válidos / 51,01% FBxL)</strong> contra <strong>53.879.538 de L (45,16% dos válidos / 48,99% FBxL)</strong> — vantagem final de <strong>+2.224.965 votos para FB</strong>.
-          </p>
-        </div>
-        <button class="btn phase-btn" onclick="window.app.jumpToAndZoom(5285, 'all')">🏁 Ver 100% Totalizado</button>
-      </div>
-    </section>
-
-    <!-- DATA TABLE SECTION -->
+    <!-- TABELA -->
     <section class="chart-card" style="margin-top: 1rem;">
-      <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; margin-bottom: 1rem;">
+      <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; margin-bottom: 0.75rem;">
         <div>
-          <h3 style="font-size: 1.1rem; font-weight: 700;">Tabela Comparativa Passo a Passo (2022 vs 2026)</h3>
-          <p style="font-size: 0.78rem; color: var(--text-secondary);">Compare os percentuais e a queda da diferença em cada percentual de seções apuradas</p>
+          <h3 style="font-size: 1.1rem; font-weight: 700;">Tabela passo a passo</h3>
+          <p style="font-size: 0.78rem; color: var(--text-secondary);">Os números exatos de cada momento da contagem. Clique numa linha para levar o painel até ela.</p>
         </div>
         <div style="display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap;">
-          <input type="text" id="tableSearchInput" placeholder="Filtrar por horário ou % (ex: 17:17 ou 68,3)..." style="background: rgba(255,255,255,0.05); border: 1px solid var(--border-color); border-radius: 0.5rem; padding: 0.42rem 0.85rem; font-size: 0.8rem; color: var(--text-primary); outline: none; width: 260px;">
-          <button class="btn" id="btnFilterMilestones" style="font-size: 0.76rem; padding: 0.42rem 0.75rem;">⭐ Apenas Marcos</button>
+          <input type="text" id="tableSearchInput" placeholder="Buscar horário ou % (ex.: 17:17 ou 68,3)" style="background: rgba(255,255,255,0.05); border: 1px solid var(--border-color); border-radius: 0.5rem; padding: 0.42rem 0.85rem; font-size: 0.8rem; color: var(--text-primary); outline: none; width: 260px;">
+          <button class="btn" id="btnFilterMilestones" style="font-size: 0.76rem; padding: 0.42rem 0.75rem;">⭐ Só momentos-chave</button>
         </div>
       </div>
 
-      <div style="max-height: 390px; overflow-y: auto; border: 1px solid var(--border-color); border-radius: 0.75rem;">
+      <p class="table-note" id="tableNote"></p>
+
+      <div class="table-wrap" id="tableWrap" style="max-height: 390px; overflow: auto; border: 1px solid var(--border-color); border-radius: 0.75rem;">
         <table style="width: 100%; border-collapse: collapse; font-size: 0.78rem; text-align: left;" id="dataTable">
           <thead style="position: sticky; top: 0; background: var(--bg-secondary); border-bottom: 1px solid var(--border-color); z-index: 10;">
             <tr>
-              <th style="padding: 0.6rem 0.85rem;">Ref. Tempo</th>
-              <th style="padding: 0.6rem 0.85rem;">% Seções</th>
-              <th style="padding: 0.6rem 0.85rem; color: #60a5fa;">2022: JB x L</th>
-              <th style="padding: 0.6rem 0.85rem;">Dif. 2022 (JB-L)</th>
-              <th style="padding: 0.6rem 0.85rem; color: #34d399;">2026: FB x L</th>
-              <th style="padding: 0.6rem 0.85rem;">Dif. 2026 (FB-L)</th>
+              <th>Horário (2022)</th>
+              <th>% apurado</th>
+              <th class="col-22">2022: JB × L</th>
+              <th class="col-22">Quem lidera 2022 <span class="info-tip" tabindex="0" data-tip="Vantagem de quem está na frente, em pontos percentuais (p.p.): a diferença entre os dois percentuais. Ex.: 52% contra 48% = 4 p.p.">ⓘ</span></th>
+              <th class="col-22">Votos de frente 2022</th>
+              <th class="col-26">2026: FB × L</th>
+              <th class="col-26">Quem lidera 2026</th>
+              <th class="col-26">Votos de frente 2026</th>
             </tr>
           </thead>
           <tbody id="dataTableBody"></tbody>
@@ -1408,28 +1951,95 @@
       </div>
     </section>
 
-    <!-- FOOTER -->
+    <!-- METODOLOGIA E LIMITAÇÕES -->
+    <details class="method-card" id="methodBox">
+      <summary>🔬 Metodologia e limitações: de onde vêm os dados e o que dá para concluir</summary>
+      <div class="method-grid">
+        <div>
+          <h4>Fontes</h4>
+          <ul>
+            <li><strong>2022:</strong> <code>Presidente_BR_2T_2022.csv</code>, boletim de totalização do TSE do 2º turno (30/10/2022). São 5.286 atualizações reais do placar acumulado, das 17:00:51 às 00:18:04, em 472.075 seções.</li>
+            <li><strong>2026:</strong> <code>votacao_secao_2026_BR.csv</code>, votos por seção eleitoral do 1º turno (04/10/2026): 499.206 seções e 3,8 milhões de linhas. O arquivo foi gerado de uma só vez (06/10/2026, 14:03:43) e <strong>não informa quando cada seção foi apurada</strong>.</li>
+          </ul>
+        </div>
+        <div>
+          <h4>Como a curva de 2026 foi montada</h4>
+          <ol>
+            <li>Os votos de cada seção são somados: FB (22), L (13), demais candidatos, brancos (95) e nulos (96).</li>
+            <li>As seções são postas numa ordem de chegada. <strong>Simulada por região</strong>: sorteio com semente fixa, com prioridade para os estados que chegaram antes em 2022. <strong>Ordem do arquivo</strong>: a sequência das linhas do CSV.</li>
+            <li>Para cada uma das 5.286 atualizações de 2022, soma-se a mesma fração das seções de 2026. Por isso as duas eleições ficam alinhadas pelo <strong>% apurado</strong>, e o "horário" exibido é sempre o de 2022.</li>
+          </ol>
+        </div>
+        <div>
+          <h4>O que dá e o que não dá para concluir</h4>
+          <ul>
+            <li>✅ A trajetória de 2022 e o resultado final de 2026 são <strong>reais</strong>.</li>
+            <li>⚠️ O caminho de 2026 até o resultado é <strong>ilustrativo</strong>: os picos, as viradas e os momentos de liderança mudam conforme a ordem escolhida. Troque o botão "Ordem de chegada 2026" e compare.</li>
+            <li>⚠️ Na ordem <strong>simulada por região</strong>, os estados de 2026 entram na sequência típica de 2022. Por isso, parte da semelhança entre as curvas dos dois anos é consequência da própria simulação, e não uma descoberta.</li>
+            <li>⚠️ 2022 foi <strong>2º turno</strong> (só dois candidatos) e 2026 foi <strong>1º turno</strong> (com outros candidatos). Use "Só FB e L (soma 100%)" para comparar na mesma base.</li>
+            <li>⚠️ O eleitorado e o número de seções mudaram entre as eleições, então diferenças em votos não são diretamente comparáveis. Prefira os pontos percentuais.</li>
+          </ul>
+        </div>
+        <div>
+          <h4>Glossário</h4>
+          <dl>
+            <dt>Seção eleitoral</dt>
+            <dd>A sala onde as pessoas votam. Cada uma tem uma urna.</dd>
+            <dt>% apurado</dt>
+            <dd>Quanto das seções já foi somado ao placar.</dd>
+            <dt>Votos válidos</dt>
+            <dd>Votos dados a candidatos; brancos e nulos ficam de fora.</dd>
+            <dt>p.p. (pontos percentuais)</dt>
+            <dd>A diferença entre dois percentuais. 52% contra 48% = 4 p.p. de vantagem.</dd>
+            <dt>Virada</dt>
+            <dd>Quando quem estava atrás passa à frente e não perde mais a liderança até o fim.</dd>
+          </dl>
+        </div>
+      </div>
+    </details>
+
     <footer>
-      <p>Painel Comparativo de Evolução Eleitoral • 2022 (<code class="text-mono">Presidente_BR_2T_2022.csv</code>) vs 2026 (<code class="text-mono">votacao_secao_2026_BR.csv</code>)</p>
-      <p style="margin-top: 0.3rem;">Nota técnica: O arquivo de 2026 é por seção eleitoral (499.206 seções, 3.800.511 linhas, exportado em 06/10/2026 às 14:03:43). Você pode alternar no topo entre o <strong>Ritmo Cronológico Regional TSE</strong> e a <strong>Ordem Bruta de Aparição das Seções no CSV</strong>.</p>
+      <p>Painel comparativo da apuração presidencial · 2022 (<code class="text-mono">Presidente_BR_2T_2022.csv</code>) e 2026 (<code class="text-mono">votacao_secao_2026_BR.csv</code>)</p>
+      <p style="margin-top: 0.3rem;">Dados processados por <code class="text-mono">process_data.py</code> e <code class="text-mono">process_2026.py</code>. A ordem de chegada de 2026 é simulada; veja "Metodologia e limitações".</p>
     </footer>
 
   </div>
 
-  <!-- DATASETS -->
+  <!-- DADOS -->
   <script src="dados_eleicao.js"></script>
   <script src="dados_eleicao_2026.js"></script>
 
-  <!-- APPLICATION SCRIPT -->
+  <!-- APLICAÇÃO -->
   <script>
+    // Formatadores pt-BR usados em todo o painel
+    const fmt = {
+      int: (n) => Math.round(n || 0).toLocaleString('pt-BR'),
+      num: (n, d = 2) => (n || 0).toLocaleString('pt-BR', { minimumFractionDigits: d, maximumFractionDigits: d }),
+      pct: (n, d = 2) => fmt.num(n, d) + '%',
+      // % apurado com casas suficientes para não mostrar "0,0%" no início
+      share: (n) => fmt.pct(n, n < 1 ? 2 : 1),
+      pp: (n) => fmt.num(Math.abs(n)) + ' p.p.',
+      // Sem sinal quando arredonda para zero, para não exibir "−0,00"
+      signPP: (n) => (Math.abs(n) < 0.005 ? '' : n > 0 ? '+' : '−') + fmt.pp(n),
+      time: (t) => t.split(' ')[1] || t,
+      hhmm: (t) => fmt.time(t).substring(0, 5),
+    };
+
+    // Texto "quem lidera e por quanto" a partir da diferença (nº 22 − L)
+    const TIE_PP = 0.005;
+    // Diferenças menores que 0,005 p.p. arredondariam para "0,00": mostra-se "<0,01" para não esconder quem lidera
+    const leadPP = (gap, name22) => gap === 0 ? 'empate' : `${gap > 0 ? name22 : 'L'} +${Math.abs(gap) < TIE_PP ? '<0,01 p.p.' : fmt.pp(gap)}`;
+    const leadVotes = (diff, name22) => diff === 0 ? 'empate em votos' : `${diff > 0 ? name22 : 'L'} +${fmt.int(Math.abs(diff))} votos`;
+    const leaderKey = (gap, key22) => gap >= 0 ? key22 : 'l';
+
     class ElectionComparisonApp {
       constructor() {
         this.data2022 = window.RAW_ELECTION_DATA || [];
         this.raw2026 = window.RAW_ELECTION_DATA_2026 || { csv: [], regional: [], summary: {} };
 
         this.electionMode = 'compare'; // 'compare' | '2026' | '2022'
-        this.order2026 = 'regional';   // 'regional' | 'csv'
-        this.norm2026 = 'two';         // 'two' (FB+L=100%) | 'valid' (% over all valid votes)
+        this.order2026 = 'regional';   // 'regional' (simulada por região) | 'csv' (ordem do arquivo)
+        this.norm2026 = 'two';         // 'two' (FB+L=100%) | 'valid' (% sobre todos os válidos do 1º turno)
 
         this.currentIndex = Math.max(0, this.data2022.length - 1);
         this.isPlaying = false;
@@ -1442,6 +2052,12 @@
         this.yScaleMode = 'full';      // 'full' | 'tight' | 'auto'
         this.zoomRange = { start: 0, end: Math.max(0, this.data2022.length - 1) };
         this.hoverIndex = -1;
+        this.onlyMilestones = false;
+
+        // Projeção "e se": ponto de referência e quanto FB está acima de JB nesse ponto (p.p.)
+        this.projRef = 'peak';         // 'peak' (pico de 2022) | '10' | '25' | '50' | '75' (% apurado)
+        this.projDelta = 0;
+        this.projHover = -1;
 
         this.canvas = document.getElementById('electionChart');
         this.ctx = this.canvas.getContext('2d');
@@ -1454,12 +2070,31 @@
         return this.order2026 === 'csv' ? this.raw2026.csv : this.raw2026.regional;
       }
 
+      get show22() { return this.electionMode !== '2026'; }
+      get show26() { return this.electionMode !== '2022' && this.active2026.length > 0; }
+
+      get orderLabel() {
+        return this.order2026 === 'csv' ? 'ordem do arquivo' : 'ordem simulada';
+      }
+
       get2026Pct(row) {
         if (!row) return { fb: 0, l: 0 };
         if (this.norm2026 === 'valid') {
           return { fb: row.jpv, l: row.lpv };
         }
         return { fb: row.jp, l: row.lp };
+      }
+
+      // Tudo o que o painel precisa saber sobre um passo da apuração, nas duas eleições
+      snap(i) {
+        const r22 = this.data2022[i];
+        const r26 = this.active2026[i] || r22;
+        const p26 = this.get2026Pct(r26);
+        return {
+          i, r22, r26, t: r22.t, p: r22.p,
+          jb: r22.jp, l22: r22.lp, gap22: r22.jp - r22.lp, votes22: r22.jv - r22.lv,
+          fb: p26.fb, l26: p26.l, gap26: p26.fb - p26.l, votes26: r26.jv - r26.lv,
+        };
       }
 
       init() {
@@ -1474,174 +2109,587 @@
         slider.value = this.currentIndex;
         document.getElementById('totalRecordsCount').textContent = total.toLocaleString('pt-BR');
 
-        this.updateModeHeaders();
+        if (total) {
+          this.m22 = this.computeMilestones2022();
+          this.m26 = this.computeMilestones2026();
+          this.labelZoomButtons();
+        }
+
+        this.renderNarrative();
+        this.updateChartTexts();
         this.updateUI();
         this.initTable();
+        this.initProjection();
       }
 
-      updateModeHeaders() {
-        const subOpts = document.getElementById('subOptions2026');
-        subOpts.style.display = this.electionMode === '2022' ? 'none' : 'flex';
+      // ---------- MARCOS CALCULADOS A PARTIR DOS DADOS ----------
 
-        const legend = document.getElementById('chartLegend');
-        if (this.electionMode === 'compare') {
-          if (this.chartMetric === 'gap_pct' || this.chartMetric === 'diff') {
-            legend.innerHTML = `
-              <div class="legend-item"><span class="legend-line" style="background: #10b981;"></span> Vantagem FB sobre L em 2026 (FB - L)</div>
-              <div class="legend-item"><span class="legend-line" style="background: #3b82f6;"></span> Vantagem JB sobre L em 2022 (JB - L)</div>
-              <div class="legend-item"><span class="legend-line dashed" style="color: #f59e0b;"></span> Linha de Empate (0,00 p.p.)</div>
-            `;
-          } else {
-            legend.innerHTML = `
-              <div class="legend-item"><span class="legend-line" style="background: #10b981;"></span> FB 2026 (22)</div>
-              <div class="legend-item"><span class="legend-line" style="background: #ef4444;"></span> L 2026 (13)</div>
-              <div class="legend-item"><span class="legend-line dashed" style="color: #60a5fa;"></span> JB 2022 (22)</div>
-              <div class="legend-item"><span class="legend-line dashed" style="color: #fca5a5;"></span> L 2022 (13)</div>
-            `;
-          }
-        } else if (this.electionMode === '2026') {
-          legend.innerHTML = `
-            <div class="legend-item"><span class="legend-line" style="background: #3b82f6;"></span> Chapa FB 2026 (22)</div>
-            <div class="legend-item"><span class="legend-line" style="background: #ef4444;"></span> Chapa L 2026 (13)</div>
-          `;
-        } else {
-          legend.innerHTML = `
-            <div class="legend-item"><span class="legend-line" style="background: #3b82f6;"></span> Chapa JB 2022 (22)</div>
-            <div class="legend-item"><span class="legend-line" style="background: #ef4444;"></span> Chapa L 2022 (13)</div>
-          `;
+      // Primeiro índice com pelo menos 1% apurado: antes disso o placar oscila demais
+      firstReliableIdx(rows) {
+        const i = rows.findIndex(r => r.p >= 1);
+        return i < 0 ? 0 : i;
+      }
+
+      argMax(from, to, f) {
+        let best = from;
+        for (let i = from; i <= to; i++) if (f(i) > f(best)) best = i;
+        return best;
+      }
+
+      firstIdx(from, pred) {
+        for (let i = from; i < this.data2022.length; i++) if (pred(i)) return i;
+        return -1;
+      }
+
+      computeMilestones2022() {
+        const d = this.data2022;
+        const last = d.length - 1;
+        const gap = (i) => d[i].jp - d[i].lp;
+        const votes = (i) => d[i].jv - d[i].lv;
+
+        // Virada definitiva: primeiro passo depois do qual JB nunca mais lidera
+        let lastJb = -1;
+        for (let i = last; i >= 0; i--) if (gap(i) >= 0) { lastJb = i; break; }
+        const virada = lastJb >= 0 && lastJb < last ? lastJb + 1 : -1;
+        const peakVotes = this.argMax(0, last, votes);
+
+        return {
+          start: 0,
+          jbLead: this.firstIdx(0, i => gap(i) > 0),
+          peakPct: this.argMax(this.firstReliableIdx(d), last, gap),
+          peakVotes,
+          firstTie: this.firstIdx(peakVotes, i => gap(i) <= 0),
+          q25: this.firstIdx(0, i => d[i].p >= 25),
+          half: this.firstIdx(0, i => d[i].p >= 50),
+          virada,
+          lead1m: virada < 0 ? -1 : this.firstIdx(virada, i => -votes(i) >= 1e6),
+          lead2m: virada < 0 ? -1 : this.firstIdx(virada, i => -votes(i) >= 2e6),
+          end: last,
+        };
+      }
+
+      // Depende da ordem e da base escolhidas para 2026; recalculado a cada troca
+      computeMilestones2026() {
+        const d = this.active2026;
+        const last = Math.min(d.length, this.data2022.length) - 1;
+        if (last < 0) return { peak: -1, peakVotes: -1, firstL: -1, flip: -1, end: -1 };
+        const gap = (i) => { const p = this.get2026Pct(d[i]); return p.fb - p.l; };
+        const from = this.firstReliableIdx(d);
+
+        let firstL = -1, lastL = -1;
+        for (let i = from; i <= last; i++) {
+          if (gap(i) < 0) { if (firstL < 0) firstL = i; lastL = i; }
         }
+
+        return {
+          peak: this.argMax(from, last, gap),
+          peakVotes: this.argMax(0, last, i => d[i].jv - d[i].lv),
+          firstL,
+          flip: lastL >= 0 && lastL < last && gap(last) > 0 ? lastL + 1 : -1,
+          end: last,
+        };
+      }
+
+      milestoneIndexSet() {
+        const set = new Set();
+        const m = this.m22 || {}, k = this.m26 || {};
+        if (this.show22) [m.start, m.jbLead, m.peakPct, m.peakVotes, m.firstTie, m.half, m.virada, m.lead1m, m.lead2m, m.end].forEach(i => set.add(i));
+        if (this.show26) [k.peak, k.firstL, k.flip, m.half, m.end].forEach(i => set.add(i));
+        set.delete(-1);
+        set.delete(undefined);
+        return set;
+      }
+
+      // Recortes de zoom em índices do boletim de 2022; os rótulos mostram o % real de cada recorte
+      zoomRangeFor(key) {
+        const last = this.data2022.length - 1;
+        if (key === 'inicio') return { start: 0, end: Math.min(last, 1000) };
+        if (key === 'virada') return { start: Math.min(last, 2000), end: Math.min(last, 4000) };
+        if (key === 'final') return { start: Math.min(last, 3800), end: last };
+        return { start: 0, end: last };
+      }
+
+      zoomFor(idx) {
+        if (idx === this.data2022.length - 1) return 'all';
+        for (const key of ['inicio', 'virada', 'final']) {
+          const r = this.zoomRangeFor(key);
+          if (idx >= r.start && idx <= r.end) return key;
+        }
+        return 'all';
+      }
+
+      labelZoomButtons() {
+        const d = this.data2022;
+        const icons = { inicio: '🔍 Início', virada: '⚡ Meio e virada', final: '🏁 Reta final', all: '🌐 Tudo' };
+        document.querySelectorAll('#chartZoomToggle .toggle-opt').forEach(btn => {
+          const r = this.zoomRangeFor(btn.dataset.zoom);
+          const a = Math.round(d[r.start].p), b = Math.round(d[r.end].p);
+          btn.textContent = `${icons[btn.dataset.zoom]} (${a}–${b}%)`;
+          btn.title = `Mostra o trecho entre ${fmt.share(d[r.start].p)} e ${fmt.share(d[r.end].p)} das seções apuradas`;
+        });
+      }
+
+      // ---------- TEXTOS GERADOS (cards, chips e fases) ----------
+
+      renderNarrative() {
+        if (!this.data2022.length) return;
+        this.renderStats();
+        this.renderMilestoneChips();
+        this.renderPhases();
+        document.getElementById('subOptions2026').style.display = this.show26 ? 'flex' : 'none';
+      }
+
+      renderStats() {
+        const m = this.m22, k = this.m26;
+        const compare = this.electionMode === 'compare';
+        const pk22 = this.snap(m.peakPct), pk26 = this.snap(k.peak), end = this.snap(m.end);
+        const base = this.norm2026 === 'two' ? 'só FB e L' : 'dos válidos';
+        const cards = [];
+
+        if (this.show22) {
+          cards.push({
+            accent: 'var(--color-jb)', label: 'Maior vantagem de JB em 2022',
+            tip: 'A maior diferença a favor de JB a partir de 1% apurado. Antes disso, pouquíssimas seções tinham sido contadas e o placar oscilava muito.',
+            val: `JB ${fmt.signPP(pk22.gap22)}`,
+            sub: `${fmt.pct(pk22.jb)} × ${fmt.pct(pk22.l22)} com ${fmt.share(pk22.p)} apurado (${fmt.hhmm(pk22.t)})`,
+          });
+        }
+        if (this.show26) {
+          cards.push({
+            accent: 'var(--color-fb)', label: 'Maior vantagem de FB em 2026',
+            tip: 'A maior diferença a favor de FB a partir de 1% apurado. Como a ordem de chegada de 2026 é estimada, esse pico muda quando você troca a "Ordem de chegada 2026".',
+            val: `FB ${fmt.signPP(pk26.gap26)}`,
+            sub: `${fmt.pct(pk26.fb)} × ${fmt.pct(pk26.l26)} com ${fmt.share(pk26.p)} apurado · ${this.orderLabel}`,
+          });
+        }
+        if (compare && m.virada >= 0) {
+          const v = this.snap(m.virada);
+          cards.push({
+            accent: 'var(--color-gold)', label: `No ponto da virada de 2022 (${fmt.share(v.p)})`,
+            tip: 'O que acontecia em 2026 no mesmo % de seções apuradas em que L passou JB em 2022.',
+            val: `2026: ${leadPP(v.gap26, 'FB')}`,
+            sub: `Em 2022, L passou JB aqui (${fmt.time(v.t)}) e não perdeu mais a liderança`,
+          });
+        }
+        if (this.electionMode === '2022' && m.virada >= 0) {
+          const v = this.snap(m.virada);
+          cards.push({
+            accent: 'var(--color-l)', label: 'Virada de 2022',
+            tip: 'Virada é quando quem estava atrás passa à frente e não perde mais a liderança até o fim.',
+            val: `L vira com ${fmt.share(v.p)}`,
+            sub: `Às ${fmt.time(v.t)}; depois disso, JB não voltou a liderar`,
+          });
+        }
+        if (this.electionMode === '2026') {
+          cards.push(k.firstL < 0 ? {
+            accent: 'var(--color-fb)', label: 'Liderança em 2026',
+            tip: 'Quem esteve à frente ao longo da contagem, a partir de 1% apurado.',
+            val: 'FB sempre à frente',
+            sub: `A partir de 1% apurado, L não fica à frente (${this.orderLabel})`,
+          } : {
+            accent: 'var(--color-fb)', label: 'Liderança em 2026',
+            tip: 'Quem esteve à frente ao longo da contagem, a partir de 1% apurado.',
+            val: `L lidera ${fmt.share(this.data2022[k.firstL].p)}–${fmt.share(this.data2022[Math.max(k.firstL, k.flip - 1)].p)}`,
+            sub: k.flip >= 0 ? `FB passa de vez com ${fmt.share(this.data2022[k.flip].p)} apurado (${this.orderLabel})` : `(${this.orderLabel})`,
+          });
+        }
+        if (this.show22) {
+          const winner = end.gap22 < 0 ? 'L' : 'JB';
+          cards.push({
+            accent: 'var(--color-l)', label: 'Resultado final 2022 (2º turno)',
+            tip: 'Placar oficial com 100% das seções apuradas.',
+            val: `${winner} +${fmt.pp(end.gap22)}`,
+            sub: `${winner} venceu: L ${fmt.pct(end.l22)} × JB ${fmt.pct(end.jb)} · ${fmt.int(Math.abs(end.votes22))} votos de diferença`,
+          });
+        }
+        if (this.show26) {
+          cards.push({
+            accent: 'var(--color-fb)', label: 'Resultado final 2026 (1º turno)',
+            tip: 'Placar com 100% das seções. É real e não depende da ordem de chegada escolhida.',
+            val: `${end.gap26 >= 0 ? 'FB' : 'L'} +${fmt.pp(end.gap26)}`,
+            sub: `${end.gap26 >= 0 ? 'FB' : 'L'} terminou à frente: FB ${fmt.pct(end.fb)} × L ${fmt.pct(end.l26)} (${base}) · ${fmt.int(Math.abs(end.votes26))} votos de diferença`,
+          });
+        }
+
+        document.getElementById('statsRow').innerHTML = cards.map((c, n) => `
+          <div class="stat-mini-card" style="--accent: ${c.accent};">
+            <span class="stat-label">${c.label} <span class="info-tip${n === 0 ? ' tip-left' : ''}" tabindex="0" data-tip="${c.tip}">ⓘ</span></span>
+            <span class="stat-val">${c.val}</span>
+            <span class="stat-sub">${c.sub}</span>
+          </div>
+        `).join('');
+      }
+
+      renderMilestoneChips() {
+        const m = this.m22, k = this.m26;
+        const compare = this.electionMode === 'compare';
+        const chips = [];
+        const add = (idx, year, icon, title) => { if (idx >= 0) chips.push({ idx, year, icon, title }); };
+
+        add(m.start, null, '🏁', 'Início da contagem');
+        if (this.show22) {
+          add(m.peakPct, '2022', '🔝', 'Maior vantagem de JB');
+          add(m.peakVotes, '2022', '🏔️', 'JB com mais votos de frente');
+          add(m.virada, '2022', '⚡', 'Virada de L');
+          add(m.lead1m, '2022', '📈', 'L abre 1 milhão de votos');
+        }
+        if (this.show26) {
+          add(k.peak, '2026', '🔝', 'Maior vantagem de FB');
+          add(k.firstL, '2026', '↘️', 'L passa à frente');
+          add(k.flip, '2026', '⚡', 'FB retoma a frente de vez');
+        }
+        add(m.half, null, '⚖️', 'Metade das seções');
+        add(m.end, null, '🏁', 'Resultado final (100%)');
+        chips.sort((a, b) => a.idx - b.idx);
+
+        document.getElementById('milestoneChips').innerHTML = chips.map(c => {
+          const s = this.snap(c.idx);
+          const parts = [];
+          if (this.show22) parts.push(`${compare ? '2022: ' : ''}${leadPP(s.gap22, 'JB')}`);
+          if (this.show26) parts.push(`${compare ? '2026: ' : ''}${leadPP(s.gap26, 'FB')}`);
+          const yearTag = c.year && compare ? ` (${c.year})` : '';
+          return `
+            <button class="milestone-chip${c.year ? ' chip-' + c.year : ''}" data-idx="${c.idx}" data-zoom="${this.zoomFor(c.idx)}">
+              <strong>${c.icon} ${c.title}${yearTag}</strong>
+              <span class="chip-when">${fmt.share(s.p)} apurado · ${fmt.time(s.t)} (2022)</span>
+              <span>${parts.join(' · ')}</span>
+            </button>
+          `;
+        }).join('');
+      }
+
+      renderPhases() {
+        const m = this.m22, k = this.m26;
+        const show22 = this.show22, show26 = this.show26;
+        const compare = this.electionMode === 'compare';
+        const sim = show26 ? ` <span class="sim-badge">⚠ ${this.orderLabel}</span>` : '';
+        const a = this.snap(m.peakPct);
+        const q25 = this.snap(m.q25), q50 = this.snap(m.half);
+        const pk26 = this.snap(k.peak);
+        const e = this.snap(m.end);
+        const li = (cls, html) => `<li class="li-${cls}">${html}</li>`;
+        const phases = [];
+
+        // 1. Largada
+        let h1;
+        if (compare) h1 = a.gap26 > 0 ? 'Nas duas eleições, o nº 22 larga bem na frente.' : 'Em 2022, JB larga na frente; em 2026, nesta ordem de chegada, quem larga na frente é L.';
+        else if (show22) h1 = 'JB larga bem na frente de L.';
+        else h1 = a.gap26 > 0 ? 'FB larga bem na frente de L.' : 'Nesta ordem de chegada, L larga na frente de FB.';
+        phases.push({
+          badge: `1. Largada (até ${fmt.share(a.p)} apurado)`, title: 'Quem sai na frente', headline: h1,
+          items: [
+            show22 && li('2022', `<strong>2022:</strong> com ${fmt.share(a.p)} apurado (${fmt.hhmm(a.t)}), JB tinha <strong>${fmt.pct(a.jb)}</strong> contra ${fmt.pct(a.l22)} de L: ${fmt.pp(a.gap22)} de vantagem, a maior da noite.`),
+            show26 && li('2026', `<strong>2026:</strong> ${compare ? 'no mesmo ponto' : `com ${fmt.share(a.p)} apurado`}, FB ${fmt.pct(a.fb)} × L ${fmt.pct(a.l26)} (${leadPP(a.gap26, 'FB')}). A maior vantagem de FB foi de <strong>${fmt.pp(pk26.gap26)}</strong>, com ${fmt.share(pk26.p)} apurado.`),
+            li('note', 'Por que isso acontece? As primeiras seções a chegar vêm de poucas regiões e ainda não representam o país inteiro.'),
+          ],
+          btn: '🔍 Ver a largada no gráfico', action: `window.app.jumpToAndZoom(${show22 ? m.peakPct : k.peak}, 'inicio')`,
+        });
+
+        // 2. A diferença encolhe
+        phases.push({
+          badge: `2. Meio da contagem (até 50%)`, title: 'A diferença vai diminuindo',
+          headline: 'Conforme a contagem avança e chegam seções de todo o país, a vantagem do nº 22 diminui.',
+          items: [
+            show22 && li('2022', `<strong>2022:</strong> ${leadPP(a.gap22, 'JB')} → <strong>${leadPP(q25.gap22, 'JB')}</strong> com 25% apurado → <strong>${leadPP(q50.gap22, 'JB')}</strong> na metade.`),
+            show26 && li('2026', `<strong>2026:</strong> ${leadPP(a.gap26, 'FB')} → <strong>${leadPP(q25.gap26, 'FB')}</strong> com 25% apurado → <strong>${leadPP(q50.gap26, 'FB')}</strong> na metade.`),
+            show26 && li('note', this.order2026 === 'csv'
+              ? 'Na ordem do arquivo, a sequência das seções de 2026 não segue a apuração real; compare a forma das curvas com cautela.'
+              : 'Cuidado: na ordem simulada, os estados de 2026 chegam na mesma sequência típica de 2022. Parte da semelhança entre as curvas vem da própria simulação.'),
+          ],
+          btn: '📉 Ver a curva da vantagem', action: `window.app.setMetricAndZoom('gap_pct', 'all')`,
+        });
+
+        // 3. Momento decisivo
+        if (m.virada >= 0) {
+          const v = this.snap(m.virada);
+          const flipTxt = k.flip >= 0
+            ? `Nesta ordem de chegada, L lidera 2026 de ${fmt.share(this.data2022[k.firstL].p)} a ${fmt.share(this.data2022[k.flip - 1].p)}, e FB passa de vez com <strong>${fmt.share(this.data2022[k.flip].p)}</strong> apurado.`
+            : 'A partir de 1% apurado, L não chega a liderar 2026 nesta ordem de chegada.';
+          let h3;
+          if (compare) h3 = v.gap26 > 0 ? 'Em 2022, L passa JB aqui. Em 2026, no mesmo ponto, FB ainda está na frente.' : 'Em 2022, L passa JB aqui. Em 2026, nesse ponto, L também está na frente.';
+          else if (show22) h3 = 'L passa JB e não perde mais a liderança.';
+          else h3 = k.flip >= 0 ? 'Em 2026 também há uma virada, mas a favor de FB.' : 'Em 2026, FB não perde a liderança.';
+          phases.push({
+            badge: show22 ? `3. Virada de 2022 (${fmt.share(v.p)})` : '3. Momento decisivo',
+            title: compare ? 'Virada em 2022, e em 2026?' : show22 ? 'L passa à frente' : (k.flip >= 0 ? 'FB retoma a frente' : 'FB não perde a liderança'),
+            headline: h3,
+            items: [
+              show22 && li('2022', `<strong>2022:</strong> às ${fmt.time(v.t)}, com ${fmt.share(v.p)} apurado, L passa JB. Até o fim, a vantagem de L só cresce.`),
+              compare && li('2026', `<strong>2026:</strong> com ${fmt.share(v.p)} apurado: <strong>${leadPP(v.gap26, 'FB')}</strong> (${leadVotes(v.votes26, 'FB')}).`),
+              show26 && li('2026', flipTxt),
+            ],
+            btn: '⚡ Ver esse momento', action: `window.app.jumpToAndZoom(${show22 || k.flip < 0 ? m.virada : k.flip}, 'virada')`,
+          });
+        }
+
+        // 4. Resultado final
+        const s26 = this.raw2026.summary || {};
+        const valid26 = (s26.fb_votos || 0) + (s26.l_votos || 0) + (s26.outros_votos || 0);
+        const outrosPct = valid26 ? (s26.outros_votos / valid26) * 100 : 0;
+        const winner22 = e.gap22 < 0 ? 'L' : 'JB';
+        let h4;
+        if (compare) h4 = `2022: ${winner22} venceu por ${fmt.pp(e.gap22)} · 2026: ${e.gap26 >= 0 ? 'FB' : 'L'} terminou à frente por ${fmt.pp(e.gap26)}`;
+        else if (show22) h4 = `${winner22} venceu por ${fmt.pp(e.gap22)} (${fmt.int(Math.abs(e.votes22))} votos).`;
+        else h4 = `${e.gap26 >= 0 ? 'FB' : 'L'} terminou à frente por ${fmt.pp(e.gap26)} (${fmt.int(Math.abs(e.votes26))} votos).`;
+        phases.push({
+          badge: '4. Resultado final (100%)', title: 'Como terminou', headline: h4,
+          items: [
+            show22 && li('2022', `<strong>2022 (2º turno):</strong> L ${fmt.pct(e.l22)} (${fmt.int(e.r22.lv)} votos) × JB ${fmt.pct(e.jb)} (${fmt.int(e.r22.jv)}).`),
+            show26 && li('2026', `<strong>2026 (1º turno):</strong> FB ${fmt.int(e.r26.jv)} votos × L ${fmt.int(e.r26.lv)}. Só FB e L: ${fmt.pct(e.r26.jp)} × ${fmt.pct(e.r26.lp)}. Sobre todos os válidos: ${fmt.pct(e.r26.jpv)} × ${fmt.pct(e.r26.lpv)}.`),
+            show26 && li('note', `Em 2026, os outros candidatos somaram ${fmt.pct(outrosPct)} dos votos válidos. Por isso, nessa base, nem FB nem L chegam a 50%.`),
+          ],
+          btn: '🏁 Ver o resultado final', action: `window.app.jumpToAndZoom(${m.end}, 'all')`,
+        });
+
+        document.getElementById('phasesGrid').innerHTML = phases.map((ph, n) => `
+          <div class="phase-card">
+            <div>
+              <span class="phase-badge phase-${n + 1}">${ph.badge}</span>
+              <h4 class="phase-title">${ph.title}${n === 0 ? sim : ''}</h4>
+              <p class="phase-headline">${ph.headline}</p>
+              <ul class="phase-list">${ph.items.filter(Boolean).join('')}</ul>
+            </div>
+            <button class="btn phase-btn" onclick="${ph.action}">${ph.btn}</button>
+          </div>
+        `).join('');
+      }
+
+      // Título, subtítulo, legenda e nota do gráfico conforme a métrica e o modo
+      updateChartTexts() {
+        const metric = this.chartMetric;
+        const show22 = this.show22, show26 = this.show26;
+        const titles = {
+          pct: ['Como o % de cada candidato mudou durante a contagem', 'Cada linha é o % de votos de um candidato a cada momento. Quem está acima da linha de 50% está na frente.'],
+          gap_pct: ['A vantagem do nº 22 encolhe da mesma forma?', 'Quantos pontos percentuais o nº 22 (JB em 2022, FB em 2026) tem a mais que L. Acima de zero, o 22 lidera; abaixo, L lidera.'],
+          diff: ['Vantagem do nº 22 em número de votos', 'A mesma ideia, contada em votos. Acima de zero, o 22 lidera; abaixo, L lidera.'],
+        };
+        document.getElementById('chartMainTitle').textContent = titles[metric][0];
+        document.getElementById('chartSubTitle').textContent = titles[metric][1];
+        document.getElementById('yScaleGroup').style.display = metric === 'pct' ? 'flex' : 'none';
+
+        const item = (color, dashed, text) =>
+          `<div class="legend-item"><span class="legend-line${dashed ? ' dashed' : ''}" style="${dashed ? 'color' : 'background'}: ${color};"></span> ${text}</div>`;
+        const items = [];
+        if (metric === 'pct') {
+          if (show22) items.push(item('var(--color-jb)', true, 'JB 2022 (22)'), item('var(--color-l)', true, 'L 2022 (13)'));
+          if (show26) items.push(item('var(--color-fb)', false, 'FB 2026 (22)'), item('var(--color-l)', false, 'L 2026 (13)'));
+          items.push(item('var(--text-secondary)', true, 'Linha de 50%: acima dela, o candidato está na frente'));
+        } else {
+          if (show22) items.push(item('var(--color-jb)', true, 'Vantagem de JB sobre L em 2022'));
+          if (show26) items.push(item('var(--color-fb)', false, 'Vantagem de FB sobre L em 2026'));
+          items.push(item('var(--color-gold)', true, 'Zero = empate'));
+        }
+        document.getElementById('chartLegend').innerHTML = items.join('');
+
+        const notes = [this.chartAxis === 'time'
+          ? 'Eixo horizontal: horário da apuração de 2022. Em 2026, cada ponto mostra o mesmo % de seções apuradas que 2022 tinha naquele horário.'
+          : 'Eixo horizontal: % das seções apuradas; as duas eleições estão alinhadas por ele.',
+          'O eixo avança uma atualização do TSE por vez. Como no começo elas eram mais frequentes, o início aparece "esticado" e os rótulos não ficam igualmente espaçados.'];
+        if (show26) {
+          notes.push(`⚠ A ordem de chegada de 2026 é ${this.order2026 === 'csv' ? 'a das linhas do arquivo' : 'simulada por região'}, não a real.`);
+          if (metric === 'pct') notes.push(this.norm2026 === 'two' ? '2026 em "só FB e L" (soma 100%).' : '2026 em % de todos os votos válidos (FB + L < 100%).');
+        }
+        if (metric === 'diff' && show22 && show26) notes.push('Em votos, os anos não são diretamente comparáveis: o eleitorado mudou e 2026 teve outros candidatos.');
+        document.getElementById('chartNote').textContent = notes.join(' ');
+      }
+
+      setCard(side, c) {
+        const card = document.getElementById('card' + side);
+        card.style.setProperty('--card-color', c.color);
+        card.classList.toggle('lead', !!c.lead);
+        card.classList.toggle('mode-compare', this.electionMode === 'compare');
+        document.getElementById('avatar' + side).textContent = c.avatar;
+        document.getElementById('title' + side).textContent = c.title;
+        document.getElementById('role' + side).innerHTML = c.role;
+        const pill = document.getElementById('pill' + side);
+        pill.className = 'status-pill ' + (c.pillLead ? 'status-lead' : 'status-trail');
+        pill.innerHTML = c.pill;
+        document.getElementById('pct' + side).innerHTML = c.pct;
+        document.getElementById('sub' + side).innerHTML = c.sub;
+        document.getElementById('bar' + side).style.width = `${Math.min(100, Math.max(0, c.bar))}%`;
+      }
+
+      // Barra de dois candidatos com marca de 50%; as larguras são a divisão entre os dois (soma 100%)
+      gaugeRow(caption, left, right) {
+        const tot = left.pct + right.pct;
+        const wl = tot > 0 ? (left.pct / tot) * 100 : 50;
+        return `
+          <div class="gauge-row">
+            ${caption ? `<div class="gauge-caption">${caption}</div>` : ''}
+            <div class="dual-bar-container">
+              <div class="dual-bar-seg" style="width: ${wl}%; background: ${left.color};"></div>
+              <div class="dual-bar-seg" style="width: ${100 - wl}%; background: ${right.color};"></div>
+              <div class="dual-bar-centerline" title="Metade: quem passa desta marca está na frente"></div>
+            </div>
+            <div class="gauge-labels">
+              <span>${left.name} ${fmt.pct(left.pct)}</span>
+              <span>50%</span>
+              <span>${right.name} ${fmt.pct(right.pct)}</span>
+            </div>
+          </div>
+        `;
+      }
+
+      // Conteúdo de um card do comparativo: os dois candidatos lado a lado e a barra entre eles
+      duoHTML(name22, key22, color22, p22, v22, pL, vL, votesDiff) {
+        const item = (name, key, p, v) => `
+          <div class="duo-item">
+            <span class="key key-${key}">${name}</span>
+            <div class="duo-pct">${fmt.num(p)}<span class="symbol">%</span></div>
+            <div class="duo-votes">${fmt.int(v)} votos</div>
+          </div>`;
+        return {
+          pct: `<div class="duo">${item(name22, key22, p22, v22)}${item('L', 'l', pL, vL)}</div>`,
+          sub: `<div class="card-gauge">${this.gaugeRow('', { name: name22, pct: p22, color: color22 }, { name: 'L', pct: pL, color: 'var(--color-l)' })}</div>
+                <div class="card-lead">Diferença: ${leadVotes(votesDiff, name22)}</div>`,
+        };
       }
 
       updateUI() {
         if (!this.data2022.length) return;
-        const r22 = this.data2022[this.currentIndex];
-        const r26 = this.active2026[this.currentIndex] || r22;
-        const p26 = this.get2026Pct(r26);
-
-        const fmtInt = (n) => (n || 0).toLocaleString('pt-BR');
-        const fmtPct = (n) => (n || 0).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + '%';
-        const fmtPctNoSym = (n) => (n || 0).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        const S = this.snap(this.currentIndex);
+        const { r22, r26 } = S;
+        const sim = `<span class="sim-badge" title="A ordem de chegada das seções de 2026 é estimada; veja Metodologia">⚠ ${this.orderLabel}</span>`;
+        const keyPill = (gap, key22, name22) => `<span class="key key-${leaderKey(gap, key22)}">${gap >= 0 ? name22 : 'L'} na frente</span>`;
 
         if (this.electionMode === 'compare') {
-          // Left Card = 2022 (JB x L)
-          document.getElementById('avatarLeft').textContent = '22';
-          document.getElementById('titleLeft').textContent = 'Eleição 2022 (JB x L)';
-          document.getElementById('roleLeft').textContent = `Seções: ${fmtInt(r22.s)} / ${fmtInt(r22.st)}`;
+          const card22 = this.duoHTML('JB', 'jb', 'var(--color-jb)', S.jb, r22.jv, S.l22, r22.lv, S.votes22);
+          const card26 = this.duoHTML('FB', 'fb', 'var(--color-fb)', S.fb, r26.jv, S.l26, r26.lv, S.votes26);
+          this.setCard('Left', {
+            color: 'var(--color-jb)', avatar: '22', title: '2022: JB × L',
+            role: `2º turno · ${fmt.int(r22.s)} de ${fmt.int(r22.st)} seções`,
+            pillLead: true, pill: keyPill(S.gap22, 'jb', 'JB'),
+            pct: card22.pct, sub: card22.sub, bar: 0,
+          });
+          this.setCard('Right', {
+            color: 'var(--color-fb)', avatar: '26', title: '2026: FB × L',
+            role: `1º turno · ${fmt.int(r26.s)} de ${fmt.int(r26.st)} seções ${sim}`,
+            pillLead: true, pill: keyPill(S.gap26, 'fb', 'FB'),
+            pct: card26.pct, sub: card26.sub, bar: 0,
+          });
 
-          const gap22 = r22.jp - r22.lp; // JB - L
-          const diffVotes22 = r22.jv - r22.lv;
-          const jbLeads22 = gap22 >= 0;
-
-          document.getElementById('pillLeft').className = 'status-pill ' + (jbLeads22 ? 'status-lead' : 'status-trail');
-          document.getElementById('pillLeft').textContent = jbLeads22 ? `JB +${fmtPctNoSym(Math.abs(gap22))} p.p.` : `L +${fmtPctNoSym(Math.abs(gap22))} p.p.`;
-          document.getElementById('pctLeft').innerHTML = `JB ${fmtPctNoSym(r22.jp)}<span class="symbol">%</span>`;
-          document.getElementById('subLeft').innerHTML = `L: <strong>${fmtPct(r22.lp)}</strong> • Dif (JB-L): <strong>${diffVotes22 >= 0 ? '+' : ''}${fmtInt(diffVotes22)}</strong>`;
-          document.getElementById('barLeft').style.width = `${Math.min(100, Math.max(0, r22.jp))}%`;
-
-          // Right Card = 2026 (FB x L)
-          document.getElementById('avatarRight').textContent = '26';
-          document.getElementById('titleRight').textContent = 'Eleição 2026 (FB x L)';
-          document.getElementById('roleRight').textContent = `Seções: ${fmtInt(r26.s)} / ${fmtInt(r26.st)}`;
-
-          const gap26 = p26.fb - p26.l; // FB - L
-          const diffVotes26 = r26.jv - r26.lv;
-          const fbLeads26 = gap26 >= 0;
-
-          document.getElementById('pillRight').className = 'status-pill ' + (fbLeads26 ? 'status-lead' : 'status-trail');
-          document.getElementById('pillRight').textContent = fbLeads26 ? `FB +${fmtPctNoSym(Math.abs(gap26))} p.p.` : `L +${fmtPctNoSym(Math.abs(gap26))} p.p.`;
-          document.getElementById('pctRight').innerHTML = `FB ${fmtPctNoSym(p26.fb)}<span class="symbol">%</span>`;
-          document.getElementById('subRight').innerHTML = `L: <strong>${fmtPct(p26.l)}</strong> • Dif (FB-L): <strong>${diffVotes26 >= 0 ? '+' : ''}${fmtInt(diffVotes26)}</strong>`;
-          document.getElementById('barRight').style.width = `${Math.min(100, Math.max(0, p26.fb))}%`;
-
-          // Center Card = Gap Comparison
-          document.getElementById('centerTitle').textContent = 'Diferença (JB-L 22 vs FB-L 26)';
-          document.getElementById('diffValue').className = 'comp-diff-val text-green';
-          document.getElementById('diffValue').textContent = `${gap22 >= 0 ? '+' : ''}${fmtPctNoSym(gap22)} vs ${gap26 >= 0 ? '+' : ''}${fmtPctNoSym(gap26)} p.p.`;
-          document.getElementById('diffSubtitle').textContent = `2022: ${jbLeads22 ? 'JB' : 'L'} lidera | 2026: ${fbLeads26 ? 'FB' : 'L'} lidera`;
-
-          document.getElementById('dualBarLeft').style.width = `${ p26.l }%`;
-          document.getElementById('dualBarRight').style.width = `${ p26.fb }%`;
-          document.getElementById('gaugeLabelLeft').textContent = `26 L: ${fmtPct(p26.l)}`;
-          document.getElementById('gaugeLabelRight').textContent = `26 FB: ${fmtPct(p26.fb)}`;
+          document.getElementById('centerTitle').textContent = 'Vantagem do nº 22 sobre L';
+          document.getElementById('diffValue').innerHTML = `
+            <div style="font-size: 1.15rem;"><span class="key key-jb">2022</span> ${fmt.signPP(S.gap22)}</div>
+            <div style="font-size: 1.15rem;"><span class="key key-fb">2026</span> ${fmt.signPP(S.gap26)}</div>`;
+          document.getElementById('diffSubtitle').innerHTML = `Positivo = nº 22 na frente; negativo = L na frente
+            <span class="info-tip tip-right" tabindex="0" data-tip="p.p. (pontos percentuais) é a diferença entre dois percentuais. Ex.: 52% contra 48% = 4 p.p. de vantagem.">ⓘ</span>`;
+          document.getElementById('gaugeWrapper').innerHTML = '';
+          document.getElementById('urnasCount').textContent = `2022: ${fmt.int(r22.s)} seções · 2026: ${fmt.int(r26.s)} seções`;
 
         } else {
-          // Single election mode (2022 or 2026)
           const is26 = this.electionMode === '2026';
           const row = is26 ? r26 : r22;
-          const rightCand = is26 ? 'FB' : 'JB';
-          const lPct = is26 ? p26.l : r22.lp;
-          const rPct = is26 ? p26.fb : r22.jp;
+          const name22 = is26 ? 'FB' : 'JB';
+          const color22 = is26 ? 'var(--color-fb)' : 'var(--color-jb)';
+          const lPct = is26 ? S.l26 : S.l22;
+          const rPct = is26 ? S.fb : S.jb;
+          const gap = rPct - lPct;
+          const votes = row.jv - row.lv;
+          const turno = is26 ? `2026 · 1º turno ${sim}` : '2022 · 2º turno';
+          const status = (leading, key, name) => leading
+            ? `<span class="key key-${key}">${name} na frente</span>`
+            : 'atrás';
 
-          document.getElementById('avatarLeft').textContent = 'L';
-          document.getElementById('titleLeft').textContent = 'Chapa L (13)';
-          document.getElementById('roleLeft').textContent = is26 ? 'Eleição 2026 (1º Turno)' : 'Eleição 2022 (2º Turno)';
-          document.getElementById('pctLeft').innerHTML = `${fmtPctNoSym(lPct)}<span class="symbol">%</span>`;
-          document.getElementById('subLeft').innerHTML = `<span id="votesLeft">${fmtInt(row.lv)}</span> <span class="label">votos válidos</span>`;
-          document.getElementById('barLeft').style.width = `${Math.min(100, Math.max(0, lPct))}%`;
+          this.setCard('Left', {
+            color: 'var(--color-l)', lead: gap < 0, avatar: 'L', title: 'L (13)', role: turno,
+            pillLead: gap < 0, pill: status(gap < 0, 'l', 'L'),
+            pct: `${fmt.num(lPct)}<span class="symbol">%</span>`,
+            sub: `${fmt.int(row.lv)} <span class="label">votos</span>`,
+            bar: lPct,
+          });
+          this.setCard('Right', {
+            color: color22, lead: gap >= 0, avatar: name22, title: `${name22} (22)`, role: turno,
+            pillLead: gap >= 0, pill: status(gap >= 0, is26 ? 'fb' : 'jb', name22),
+            pct: `${fmt.num(rPct)}<span class="symbol">%</span>`,
+            sub: `${fmt.int(row.jv)} <span class="label">votos</span>`,
+            bar: rPct,
+          });
 
-          document.getElementById('avatarRight').textContent = rightCand;
-          document.getElementById('titleRight').textContent = `Chapa ${rightCand} (22)`;
-          document.getElementById('roleRight').textContent = is26 ? 'Eleição 2026 (1º Turno)' : 'Eleição 2022 (2º Turno)';
-          document.getElementById('pctRight').innerHTML = `${fmtPctNoSym(rPct)}<span class="symbol">%</span>`;
-          document.getElementById('subRight').innerHTML = `<span id="votesRight">${fmtInt(row.jv)}</span> <span class="label">votos válidos</span>`;
-          document.getElementById('barRight').style.width = `${Math.min(100, Math.max(0, rPct))}%`;
-
-          const diffVotes = row.jv - row.lv; // Right (JB/FB) - L
-          const diffPct = Math.abs(rPct - lPct);
-          const rightLeads = rPct > lPct;
-
-          document.getElementById('pillLeft').className = 'status-pill ' + (!rightLeads ? 'status-lead' : 'status-trail');
-          document.getElementById('pillLeft').textContent = !rightLeads ? 'LIDERANDO' : '2º LUGAR';
-          document.getElementById('pillRight').className = 'status-pill ' + (rightLeads ? 'status-lead' : 'status-trail');
-          document.getElementById('pillRight').textContent = rightLeads ? 'LIDERANDO' : '2º LUGAR';
-
-          document.getElementById('centerTitle').textContent = `Diferença (${rightCand} vs L)`;
-          document.getElementById('diffValue').className = 'comp-diff-val ' + (rightLeads ? 'text-blue' : 'text-red');
-          document.getElementById('diffValue').textContent = `${rightLeads ? rightCand : 'L'} +${fmtInt(Math.abs(diffVotes))}`;
-          document.getElementById('diffSubtitle').textContent = `Diferença de ${fmtPctNoSym(diffPct)} p.p.`;
-
-          const tot2 = lPct + rPct;
-          const barL = tot2 > 0 ? (lPct / tot2) * 100 : 50;
-          const barR = tot2 > 0 ? (rPct / tot2) * 100 : 50;
-          document.getElementById('dualBarLeft').style.width = `${barL}%`;
-          document.getElementById('dualBarRight').style.width = `${barR}%`;
-          document.getElementById('gaugeLabelLeft').textContent = `L: ${fmtPct(lPct)}`;
-          document.getElementById('gaugeLabelRight').textContent = `${rightCand}: ${fmtPct(rPct)}`;
+          document.getElementById('centerTitle').textContent = `Diferença entre ${name22} e L`;
+          document.getElementById('diffValue').textContent = leadVotes(votes, name22);
+          document.getElementById('diffSubtitle').innerHTML = `${fmt.pp(gap)} de vantagem
+            <span class="info-tip tip-right" tabindex="0" data-tip="p.p. (pontos percentuais) é a diferença entre dois percentuais. Ex.: 52% contra 48% = 4 p.p. de vantagem.">ⓘ</span>`;
+          document.getElementById('gaugeWrapper').innerHTML =
+            this.gaugeRow('', { name: 'L', pct: lPct, color: 'var(--color-l)' }, { name: name22, pct: rPct, color: color22 });
+          document.getElementById('urnasCount').textContent = `${fmt.int(row.s)} de ${fmt.int(row.st)} seções`;
         }
 
-        // Common progress & scrubber info
-        document.getElementById('urnasPct').textContent = fmtPct(r22.p);
-        document.getElementById('urnasCount').textContent = `2022: ${fmtInt(r22.s)} seções | 2026: ${fmtInt(r26.s)} seções`;
-        document.getElementById('urnasBarFill').style.width = `${Math.min(100, Math.max(0, r22.p))}%`;
+        document.getElementById('diffValue').className = 'comp-diff-val';
+        document.getElementById('urnasPct').textContent = fmt.pct(S.p);
+        document.getElementById('urnasBarFill').style.width = `${Math.min(100, Math.max(0, S.p))}%`;
 
-        const timePart = r22.t.split(' ')[1] || r22.t;
-        document.getElementById('currentTimeDisplay').textContent = `Horário Ref: ${timePart} (${fmtPct(r22.p)} das seções)`;
-        document.getElementById('scrubberPctBadge').textContent = `${fmtPct(r22.p)} apurado`;
+        document.getElementById('currentTimeDisplay').innerHTML = `${fmt.time(S.t)} <span class="time-note">(horário de 2022)</span>`;
+        document.getElementById('scrubberPctBadge').textContent = `${fmt.pct(S.p)} apurado`;
         document.getElementById('currentRecordIdx').textContent = (this.currentIndex + 1).toLocaleString('pt-BR');
         document.getElementById('scrubberSlider').value = this.currentIndex;
 
+        document.getElementById('insightText').innerHTML = this.insightSentence(S);
+        this.highlightTableRow();
         this.renderChart();
       }
 
-      setZoom(key) {
-        const total = this.data2022.length;
-        if (!total) return;
-        this.zoomKey = key;
+      // Frase em linguagem natural que resume o momento atual
+      insightSentence(S) {
+        const m = this.m22, k = this.m26;
+        const where = `Com <strong>${fmt.share(S.p)} das seções apuradas</strong>`;
+        const state = (gap, name22) => {
+          if (gap === 0) return `${name22} e L estavam empatados`;
+          const amount = Math.abs(gap) < TIE_PP ? 'menos de 0,01 p.p. (praticamente empate)' : fmt.pp(gap);
+          return `${gap > 0 ? name22 : 'L'} estava <strong>${amount}</strong> à frente de ${gap > 0 ? 'L' : name22}`;
+        };
 
-        if (key === 'inicio') {
-          this.zoomRange = { start: 0, end: Math.min(total - 1, 1000) };
-        } else if (key === 'virada') {
-          this.zoomRange = { start: Math.min(total - 1, 2000), end: Math.min(total - 1, 4000) };
-        } else if (key === 'final') {
-          this.zoomRange = { start: Math.min(total - 1, 3800), end: total - 1 };
-        } else {
-          this.zoomRange = { start: 0, end: total - 1 };
+        // No fim, a frase vira um resumo do resultado (o final de 2026 é real, não depende da ordem)
+        if (this.currentIndex === this.data2022.length - 1) {
+          const final = (gap, name22, verb) => `${gap > 0 ? name22 : 'L'} ${verb} ${gap > 0 ? 'L' : name22} por <strong>${fmt.pp(gap)}</strong>`;
+          const real26 = ' O resultado final de 2026 é real; só o caminho até ele depende da ordem de chegada.';
+          const head = '<strong>Resultado final, com 100% das seções:</strong>';
+          // fmt.pp já termina em "p.p.", que serve de ponto final
+          if (this.electionMode === 'compare') return `${head} em 2022, ${final(S.gap22, 'JB', 'venceu')}; em 2026, ${final(S.gap26, 'FB', 'terminou à frente de')}${real26}`;
+          if (this.electionMode === '2022') return `${head} ${final(S.gap22, 'JB', 'venceu')} (${fmt.int(Math.abs(S.votes22))} votos de diferença).`;
+          return `${head} ${final(S.gap26, 'FB', 'terminou à frente de')} (${fmt.int(Math.abs(S.votes26))} votos de diferença).${real26}`;
         }
 
+        if (this.electionMode === 'compare') {
+          let txt = `${where} (${fmt.time(S.t)} em 2022): em <strong>2022</strong>, ${state(S.gap22, 'JB')}; em <strong>2026</strong> (${this.orderLabel}), ${state(S.gap26, 'FB')}.`;
+          if (S.gap22 > TIE_PP && S.gap26 > TIE_PP) {
+            const ratio = S.gap26 / S.gap22;
+            if (ratio >= 1.15) txt += ` A vantagem do nº 22 era <strong>${fmt.num(ratio, 1)}× maior em 2026</strong>.`;
+            else if (ratio <= 0.87) txt += ` A vantagem do nº 22 era <strong>menor em 2026</strong>.`;
+            else txt += ' As vantagens do nº 22 eram parecidas nos dois anos.';
+          } else if (S.gap22 < -TIE_PP && S.gap26 > TIE_PP) {
+            txt += ' Ou seja, neste ponto o nº 22 já tinha perdido a liderança em 2022, mas ainda liderava em 2026.';
+          } else if (S.gap22 > TIE_PP && S.gap26 < -TIE_PP) {
+            txt += ' Ou seja, neste ponto o nº 22 liderava em 2022, mas não em 2026.';
+          } else if (S.gap22 < -TIE_PP && S.gap26 < -TIE_PP) {
+            txt += ' Nos dois anos, L liderava neste ponto.';
+          }
+          return txt;
+        }
+
+        const is26 = this.electionMode === '2026';
+        const name22 = is26 ? 'FB' : 'JB';
+        const gap = is26 ? S.gap26 : S.gap22;
+        const votes = is26 ? S.votes26 : S.votes22;
+        let txt = `${where}${is26 ? ` (${this.orderLabel})` : ` (${fmt.time(S.t)})`}, ${state(gap, name22)}: ${leadVotes(votes, name22)}.`;
+        const peakIdx = is26 ? k.peak : m.peakPct;
+        const flipIdx = is26 ? k.flip : m.virada;
+        const peakGap = is26 ? this.snap(peakIdx).gap26 : this.snap(peakIdx).gap22;
+        if (flipIdx >= 0 && this.currentIndex >= flipIdx) {
+          txt += is26 ? ' FB já retomou a frente e não perde mais a liderança.' : ' L já passou JB e não perde mais a liderança.';
+        } else if (this.currentIndex > peakIdx && gap > 0 && peakGap > gap) {
+          txt += ` A vantagem de ${name22} já caiu ${fmt.pp(peakGap - gap)} desde o pico (${fmt.pp(peakGap)}).`;
+        }
+        return txt;
+      }
+
+      setZoom(key) {
+        if (!this.data2022.length) return;
+        this.zoomKey = key;
+        this.zoomRange = this.zoomRangeFor(key);
         document.querySelectorAll('#chartZoomToggle .toggle-opt').forEach(btn => {
           btn.classList.toggle('active', btn.dataset.zoom === key);
         });
-
         this.renderChart();
       }
 
@@ -1651,8 +2699,9 @@
         document.querySelectorAll('#chartMetricToggle .toggle-opt').forEach(o => {
           o.classList.toggle('active', o.dataset.metric === metric);
         });
-        this.updateModeHeaders();
+        this.updateChartTexts();
         this.setZoom(zoomKey);
+        document.querySelector('.chart-card').scrollIntoView({ behavior: 'smooth', block: 'start' });
       }
 
       jumpToAndZoom(index, zoomKey) {
@@ -1699,135 +2748,101 @@
         document.getElementById('btnPlayPause').textContent = '▶';
       }
 
+      // Troca de modo, ordem ou base de 2026: recalcula marcos e textos para nunca contradizer o gráfico
+      refreshAll() {
+        this.m26 = this.computeMilestones2026();
+        this.renderNarrative();
+        this.updateChartTexts();
+        this.updateUI();
+        this.renderTable(document.getElementById('tableSearchInput').value, this.onlyMilestones);
+      }
+
       setupEventListeners() {
-        // Election Mode Tabs
-        document.querySelectorAll('#electionModeTabs .mode-tab').forEach(tab => {
-          tab.addEventListener('click', () => {
-            document.querySelectorAll('#electionModeTabs .mode-tab').forEach(t => t.classList.remove('active'));
-            tab.classList.add('active');
-            this.electionMode = tab.dataset.election;
-            this.updateModeHeaders();
-            this.updateUI();
-            this.renderTable(document.getElementById('tableSearchInput').value, this.onlyMilestones);
+        const bindToggle = (selector, onPick) => {
+          document.querySelectorAll(selector).forEach(opt => {
+            opt.addEventListener('click', () => {
+              document.querySelectorAll(selector).forEach(o => o.classList.remove('active'));
+              opt.classList.add('active');
+              onPick(opt.dataset);
+            });
           });
+        };
+
+        bindToggle('#electionModeTabs .mode-tab', (ds) => { this.electionMode = ds.election; this.refreshAll(); });
+        bindToggle('#order2026Toggle .toggle-opt', (ds) => { this.order2026 = ds.order; this.refreshAll(); });
+        bindToggle('#norm2026Toggle .toggle-opt', (ds) => { this.norm2026 = ds.norm; this.refreshAll(); });
+        bindToggle('#chartYScaleToggle .toggle-opt', (ds) => { this.yScaleMode = ds.yscale; this.renderChart(); });
+        bindToggle('#chartMetricToggle .toggle-opt', (ds) => { this.chartMetric = ds.metric; this.updateChartTexts(); this.renderChart(); });
+        bindToggle('#chartAxisToggle .toggle-opt', (ds) => { this.chartAxis = ds.axis; this.updateChartTexts(); this.renderChart(); });
+        bindToggle('.speed-btn', (ds) => { this.playSpeed = parseInt(ds.speed, 10); });
+
+        document.querySelectorAll('#chartZoomToggle .toggle-opt').forEach(opt => {
+          opt.addEventListener('click', () => this.setZoom(opt.dataset.zoom));
         });
 
-        // 2026 Ordering Toggle
-        document.querySelectorAll('#order2026Toggle .toggle-opt').forEach(opt => {
-          opt.addEventListener('click', () => {
-            document.querySelectorAll('#order2026Toggle .toggle-opt').forEach(o => o.classList.remove('active'));
-            opt.classList.add('active');
-            this.order2026 = opt.dataset.order;
-            this.updateUI();
-            this.renderTable(document.getElementById('tableSearchInput').value, this.onlyMilestones);
-          });
+        // Chips são recriados a cada troca de modo, então o clique é delegado ao contêiner
+        document.getElementById('milestoneChips').addEventListener('click', (e) => {
+          const chip = e.target.closest('.milestone-chip');
+          if (chip) this.jumpToAndZoom(parseInt(chip.dataset.idx, 10), chip.dataset.zoom);
         });
 
-        // 2026 Normalization Toggle
-        document.querySelectorAll('#norm2026Toggle .toggle-opt').forEach(opt => {
-          opt.addEventListener('click', () => {
-            document.querySelectorAll('#norm2026Toggle .toggle-opt').forEach(o => o.classList.remove('active'));
-            opt.classList.add('active');
-            this.norm2026 = opt.dataset.norm;
-            this.updateUI();
-            this.renderTable(document.getElementById('tableSearchInput').value, this.onlyMilestones);
-          });
-        });
-
-        // Scrubber
         document.getElementById('scrubberSlider').addEventListener('input', (e) => {
           this.pause();
           this.currentIndex = parseInt(e.target.value, 10);
           this.updateUI();
         });
 
-        // Player Buttons
         document.getElementById('btnPlayPause').addEventListener('click', () => this.togglePlay());
         document.getElementById('btnToStart').addEventListener('click', () => { this.pause(); this.jumpTo(0); });
         document.getElementById('btnToEnd').addEventListener('click', () => { this.pause(); this.jumpTo(this.data2022.length - 1); });
         document.getElementById('btnStepBack').addEventListener('click', () => { this.pause(); this.jumpTo(this.currentIndex - 1); });
         document.getElementById('btnStepFwd').addEventListener('click', () => { this.pause(); this.jumpTo(this.currentIndex + 1); });
 
-        // Speed
-        document.querySelectorAll('.speed-btn').forEach(btn => {
-          btn.addEventListener('click', () => {
-            document.querySelectorAll('.speed-btn').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-            this.playSpeed = parseInt(btn.dataset.speed, 10);
-          });
+        // Atalhos de teclado (ignorados quando o foco está num campo, botão ou no slider)
+        document.addEventListener('keydown', (e) => {
+          if (e.target.closest('input, textarea, select')) return;
+          if (e.code === 'Space') {
+            if (e.target.closest('button, summary, a, [tabindex]')) return;
+            e.preventDefault();
+            this.togglePlay();
+          } else if (e.key === 'ArrowLeft') {
+            this.pause(); this.jumpTo(this.currentIndex - 1);
+          } else if (e.key === 'ArrowRight') {
+            this.pause(); this.jumpTo(this.currentIndex + 1);
+          } else if (e.key === 'Home') {
+            e.preventDefault(); this.pause(); this.jumpTo(0);
+          } else if (e.key === 'End') {
+            e.preventDefault(); this.pause(); this.jumpTo(this.data2022.length - 1);
+          }
         });
 
-        // Milestone chips
-        document.querySelectorAll('.milestone-chip').forEach(chip => {
-          chip.addEventListener('click', () => {
-            const idx = parseInt(chip.dataset.idx, 10);
-            const z = chip.dataset.zoom;
-            this.jumpToAndZoom(idx, z);
-          });
-        });
-
-        // Chart Zoom
-        document.querySelectorAll('#chartZoomToggle .toggle-opt').forEach(opt => {
-          opt.addEventListener('click', () => this.setZoom(opt.dataset.zoom));
-        });
-
-        // Chart Y-Scale
-        document.querySelectorAll('#chartYScaleToggle .toggle-opt').forEach(opt => {
-          opt.addEventListener('click', () => {
-            document.querySelectorAll('#chartYScaleToggle .toggle-opt').forEach(o => o.classList.remove('active'));
-            opt.classList.add('active');
-            this.yScaleMode = opt.dataset.yscale;
-            this.renderChart();
-          });
-        });
-
-        // Chart Metric
-        document.querySelectorAll('#chartMetricToggle .toggle-opt').forEach(opt => {
-          opt.addEventListener('click', () => {
-            document.querySelectorAll('#chartMetricToggle .toggle-opt').forEach(o => o.classList.remove('active'));
-            opt.classList.add('active');
-            this.chartMetric = opt.dataset.metric;
-            this.updateModeHeaders();
-            this.renderChart();
-          });
-        });
-
-        // Chart X-Axis
-        document.querySelectorAll('#chartAxisToggle .toggle-opt').forEach(opt => {
-          opt.addEventListener('click', () => {
-            document.querySelectorAll('#chartAxisToggle .toggle-opt').forEach(o => o.classList.remove('active'));
-            opt.classList.add('active');
-            this.chartAxis = opt.dataset.axis;
-            this.renderChart();
-          });
-        });
-
-        // Export PNG
         document.getElementById('btnExportChart').addEventListener('click', () => {
           const link = document.createElement('a');
-          link.download = `comparativo-eleicao-${this.electionMode}.png`;
+          link.download = `comparativo-eleicao-${this.electionMode}-${this.chartMetric}.png`;
           link.href = this.canvas.toDataURL('image/png');
           link.click();
         });
 
-        // Theme Toggle
         document.getElementById('btnThemeToggle').addEventListener('click', () => {
           const cur = document.body.getAttribute('data-theme');
           const next = cur === 'light' ? 'dark' : 'light';
           document.body.setAttribute('data-theme', next);
-          localStorage.setItem('election_theme', next);
+          try { localStorage.setItem('election_theme', next); } catch (err) { /* sem armazenamento local */ }
           this.renderChart();
+          this.renderProjection();
         });
 
-        // Resize
         window.addEventListener('resize', () => {
           this.setupCanvas();
           this.renderChart();
+          this.setupProjectionCanvases();
+          this.renderProjection();
         });
       }
 
       initTheme() {
-        const saved = localStorage.getItem('election_theme') || 'dark';
+        let saved = 'dark';
+        try { saved = localStorage.getItem('election_theme') || 'dark'; } catch (err) { /* sem armazenamento local */ }
         document.body.setAttribute('data-theme', saved);
       }
 
@@ -1843,17 +2858,21 @@
         this.setupChartInteractivity();
       }
 
+      // Margens da área de plotagem; a da direita abriga os rótulos no fim de cada linha
+      chartPad() {
+        const narrow = this.canvasCSSWidth < 560;
+        return { top: 26, right: narrow ? 66 : 76, bottom: 50, left: 70 };
+      }
+
       setupChartInteractivity() {
         const getIndexFromX = (clientX) => {
           const rect = this.canvas.getBoundingClientRect();
-          const pad = { left: 68, right: 30 };
+          const pad = this.chartPad();
           const chartW = rect.width - pad.left - pad.right;
           const x = clientX - rect.left - pad.left;
           if (x < 0 || x > chartW || !this.data2022.length) return -1;
-          const startIdx = this.zoomRange.start;
-          const endIdx = this.zoomRange.end;
           const pct = Math.max(0, Math.min(1, x / chartW));
-          return Math.round(startIdx + pct * (endIdx - startIdx));
+          return Math.round(this.zoomRange.start + pct * (this.zoomRange.end - this.zoomRange.start));
         };
 
         this.canvas.onmousemove = (e) => {
@@ -1885,58 +2904,31 @@
       }
 
       showTooltip(idx, mouseX, mouseY) {
-        const r22 = this.data2022[idx];
-        const r26 = this.active2026[idx] || r22;
-        const p26 = this.get2026Pct(r26);
+        const S = this.snap(idx);
         const rect = this.canvas.getBoundingClientRect();
 
-        const fmtInt = (n) => (n || 0).toLocaleString('pt-BR');
-        const fmtPct = (n) => (n || 0).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + '%';
-        const fmtSignPct = (n) => (n >= 0 ? '+' : '') + (n || 0).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' p.p.';
+        document.getElementById('ttTime').textContent = `${fmt.time(S.t)} (2022)`;
+        document.getElementById('ttUrnas').textContent = `${fmt.pct(S.p)} apurado`;
 
-        document.getElementById('ttTime').textContent = r22.t.split(' ')[1] || r22.t;
-        document.getElementById('ttUrnas').textContent = `${fmtPct(r22.p)} seções`;
-
-        const gap22 = r22.jp - r22.lp;
-        const gap26 = p26.fb - p26.l;
+        const block = (year, key, name22, p22, pL, gap, votes, extra = '') => `
+          <div class="tt-row"><span class="key key-${key}">${year}: ${name22} × L</span><span>${fmt.pct(p22)} × ${fmt.pct(pL)}</span></div>
+          <div class="tt-row" style="color: #cbd5e1; font-size: 0.73rem;"><span>Quem lidera:</span><span>${leadPP(gap, name22)}</span></div>
+          <div class="tt-row" style="color: #cbd5e1; font-size: 0.73rem;"><span>Em votos:</span><span>${leadVotes(votes, name22)}</span></div>
+          ${extra}`;
 
         let html = '';
-        if (this.electionMode === 'compare') {
-          html = `
-            <div class="tt-row" style="color: #34d399;">
-              <span><strong>2026 FB x L:</strong></span>
-              <span>${fmtPct(p26.fb)} x ${fmtPct(p26.l)}</span>
-            </div>
-            <div class="tt-row" style="color: #a7f3d0; font-size: 0.73rem;">
-              <span>Dif. 2026 (FB-L):</span>
-              <span>${fmtSignPct(gap26)} (${r26.jv - r26.lv >= 0 ? '+' : ''}${fmtInt(r26.jv - r26.lv)})</span>
-            </div>
-            <div class="tt-row" style="color: #60a5fa; border-top: 1px dashed rgba(255,255,255,0.12); padding-top: 0.3rem; margin-top: 0.3rem;">
-              <span><strong>2022 JB x L:</strong></span>
-              <span>${fmtPct(r22.jp)} x ${fmtPct(r22.lp)}</span>
-            </div>
-            <div class="tt-row" style="color: #bfdbfe; font-size: 0.73rem;">
-              <span>Dif. 2022 (JB-L):</span>
-              <span>${fmtSignPct(gap22)} (${r22.jv - r22.lv >= 0 ? '+' : ''}${fmtInt(r22.jv - r22.lv)})</span>
-            </div>
-          `;
-        } else if (this.electionMode === '2026') {
-          html = `
-            <div class="tt-row text-blue"><span>FB (22):</span><span>${fmtPct(p26.fb)} (${fmtInt(r26.jv)})</span></div>
-            <div class="tt-row text-red"><span>L (13):</span><span>${fmtPct(p26.l)} (${fmtInt(r26.lv)})</span></div>
-            <div class="tt-row text-gold"><span>Dif. (FB-L):</span><span>${fmtSignPct(gap26)}</span></div>
-          `;
-        } else {
-          html = `
-            <div class="tt-row text-blue"><span>JB (22):</span><span>${fmtPct(r22.jp)} (${fmtInt(r22.jv)})</span></div>
-            <div class="tt-row text-red"><span>L (13):</span><span>${fmtPct(r22.lp)} (${fmtInt(r22.lv)})</span></div>
-            <div class="tt-row text-gold"><span>Dif. (JB-L):</span><span>${fmtSignPct(gap22)}</span></div>
-          `;
-        }
+        if (this.show22) html += block('2022', 'jb', 'JB', S.jb, S.l22, S.gap22, S.votes22);
+        if (this.show22 && this.show26) html += '<div style="border-top: 1px dashed rgba(255,255,255,0.15); margin: 0.35rem 0;"></div>';
+        if (this.show26) html += block('2026', 'fb', 'FB', S.fb, S.l26, S.gap26, S.votes26,
+          `<div style="color: #fbbf24; font-size: 0.7rem; margin-top: 0.3rem;">⚠ 2026: ${this.orderLabel}</div>`);
 
         document.getElementById('ttBody').innerHTML = html;
-        this.tooltip.style.left = `${mouseX - rect.left}px`;
-        this.tooltip.style.top = `${mouseY - rect.top}px`;
+        // Mantém o tooltip dentro do gráfico (ele é centralizado no cursor e fica acima dele)
+        const half = 130;
+        const x = Math.max(half, Math.min(rect.width - half, mouseX - rect.left));
+        const y = Math.max(190, mouseY - rect.top);
+        this.tooltip.style.left = `${x}px`;
+        this.tooltip.style.top = `${y}px`;
         this.tooltip.classList.add('show');
       }
 
@@ -1944,16 +2936,39 @@
         this.tooltip.classList.remove('show');
       }
 
+      // Cores lidas das variáveis CSS, para o gráfico acompanhar o tema
+      chartColors() {
+        const css = getComputedStyle(document.body);
+        const v = (name) => css.getPropertyValue(name).trim();
+        const isDark = document.body.getAttribute('data-theme') !== 'light';
+        return {
+          jb: v('--color-jb'), fb: v('--color-fb'), l: v('--color-l'), tie: v('--color-gold'),
+          text: v('--text-primary'), muted: isDark ? '#94a3b8' : '#64748b',
+          grid: isDark ? 'rgba(255, 255, 255, 0.07)' : 'rgba(0, 0, 0, 0.07)',
+          ref: isDark ? 'rgba(255, 255, 255, 0.45)' : 'rgba(0, 0, 0, 0.45)',
+          surface: v('--bg-secondary'), isDark,
+        };
+      }
+
+      // Marcas "redondas" para o eixo Y (passos de 1, 2, 2,5 ou 5 × 10^n)
+      niceTicks(min, max, target = 6) {
+        const raw = (max - min) / target;
+        const mag = Math.pow(10, Math.floor(Math.log10(raw)));
+        const step = [1, 2, 2.5, 5, 10].map(s => s * mag).find(s => s >= raw) || 10 * mag;
+        const ticks = [];
+        for (let v = Math.ceil(min / step) * step; v <= max + step * 1e-9; v += step) ticks.push(Math.round(v / step) * step);
+        return { ticks, min: Math.min(min, ticks[0]), max: Math.max(max, ticks[ticks.length - 1]), step };
+      }
+
       renderChart() {
-        if (!this.data2022.length) return;
+        if (!this.data2022.length || !this.m22) return;
         const ctx = this.ctx;
         const width = this.canvasCSSWidth;
         const height = this.canvasCSSHeight;
-        const isDark = document.body.getAttribute('data-theme') !== 'light';
-
+        const C = this.chartColors();
         ctx.clearRect(0, 0, width, height);
 
-        const pad = { top: 32, right: 30, bottom: 42, left: 68 };
+        const pad = this.chartPad();
         const chartW = width - pad.left - pad.right;
         const chartH = height - pad.top - pad.bottom;
         if (chartW <= 0 || chartH <= 0) return;
@@ -1963,356 +2978,237 @@
         const count = Math.max(2, endIdx - startIdx + 1);
         const getX = (i) => pad.left + ((i - startIdx) / (count - 1)) * chartW;
 
-        const d26 = this.active2026;
+        const d22 = this.data2022, d26 = this.active2026;
+        const p26 = (i) => this.get2026Pct(d26[i]);
+        const metric = this.chartMetric;
+        const m = this.m22, k = this.m26;
 
-        // Draw X Axis Ticks
+        // 1. Séries da métrica escolhida (cor = candidato, traço = ano)
+        const series = [];
+        let yTitle, ref, tickLabel;
+        if (metric === 'pct') {
+          if (this.show22) series.push(
+            { label: 'JB 2022', color: C.jb, dashed: true, value: i => d22[i].jp },
+            { label: 'L 2022', color: C.l, dashed: true, value: i => d22[i].lp });
+          if (this.show26) series.push(
+            { label: 'FB 2026', color: C.fb, dashed: false, value: i => p26(i).fb },
+            { label: 'L 2026', color: C.l, dashed: false, value: i => p26(i).l });
+          yTitle = '% dos votos';
+          ref = 50;
+          tickLabel = (v) => `${fmt.num(v, v % 1 ? 1 : 0)}%`;
+        } else if (metric === 'gap_pct') {
+          if (this.show22) series.push({ label: 'JB 2022', color: C.jb, dashed: true, value: i => d22[i].jp - d22[i].lp });
+          if (this.show26) series.push({ label: 'FB 2026', color: C.fb, dashed: false, value: i => { const p = p26(i); return p.fb - p.l; } });
+          yTitle = 'Vantagem do nº 22 (p.p.)';
+          ref = 0;
+          tickLabel = (v) => v === 0 ? '0' : `${v > 0 ? '+' : '−'}${fmt.num(Math.abs(v), v % 1 ? 1 : 0)}`;
+        } else {
+          if (this.show22) series.push({ label: 'JB 2022', color: C.jb, dashed: true, value: i => d22[i].jv - d22[i].lv });
+          if (this.show26) series.push({ label: 'FB 2026', color: C.fb, dashed: false, value: i => d26[i].jv - d26[i].lv });
+          yTitle = 'Vantagem do nº 22 (votos)';
+          ref = 0;
+          tickLabel = (v) => v === 0 ? '0' : `${v > 0 ? '+' : '−'}${fmt.num(Math.abs(v) / 1e6, 1)} mi`;
+        }
+
+        // 2. Escala vertical: fixa (ampla / perto dos 50%) ou ajustada aos dados visíveis
+        let dataMin = ref, dataMax = ref;
+        for (const s of series) {
+          for (let i = startIdx; i <= endIdx; i++) {
+            const v = s.value(i);
+            if (v < dataMin) dataMin = v;
+            if (v > dataMax) dataMax = v;
+          }
+        }
+        let minY, maxY, ticks;
+        if (metric === 'pct' && this.yScaleMode === 'full') {
+          minY = Math.min(35, Math.floor(dataMin / 5) * 5);
+          maxY = Math.max(65, Math.ceil(dataMax / 5) * 5);
+          ticks = this.niceTicks(minY, maxY).ticks;
+        } else if (metric === 'pct' && this.yScaleMode === 'tight') {
+          minY = 44; maxY = 56;
+          ticks = [44, 46, 48, 50, 52, 54, 56];
+        } else {
+          const span = Math.max(dataMax - dataMin, metric === 'diff' ? 100000 : 1);
+          const nice = this.niceTicks(dataMin - span * 0.06, dataMax + span * 0.06);
+          minY = nice.min; maxY = nice.max; ticks = nice.ticks;
+        }
+        const getY = (val) => pad.top + chartH - ((val - minY) / (maxY - minY)) * chartH;
+        const clampY = (y) => Math.max(pad.top, Math.min(pad.top + chartH, y));
+        this.plotArea = { left: pad.left, right: pad.left + chartW };
+
+        // 3. Faixas "quem está na frente" nos gráficos de vantagem
+        if (metric !== 'pct') {
+          const y0 = clampY(getY(0));
+          ctx.fillStyle = C.isDark ? 'rgba(239, 68, 68, 0.07)' : 'rgba(220, 38, 38, 0.06)';
+          ctx.fillRect(pad.left, y0, chartW, pad.top + chartH - y0);
+          // Rótulos à direita: as anotações dos picos ficam no início, à esquerda
+          ctx.font = '600 11px Inter, sans-serif';
+          ctx.textAlign = 'right';
+          ctx.fillStyle = C.muted;
+          if (y0 - pad.top > 24) { ctx.textBaseline = 'top'; ctx.fillText('▲ nº 22 à frente', pad.left + chartW - 8, pad.top + 6); }
+          if (pad.top + chartH - y0 > 24) { ctx.textBaseline = 'bottom'; ctx.fillText('▼ L à frente', pad.left + chartW - 8, pad.top + chartH - 6); }
+        }
+
+        // 4. Grade e rótulos do eixo Y
+        ctx.lineWidth = 1;
+        ctx.textAlign = 'right';
+        ctx.textBaseline = 'middle';
+        ticks.forEach(val => {
+          const y = getY(val);
+          if (y < pad.top - 1 || y > pad.top + chartH + 1) return;
+          ctx.strokeStyle = C.grid;
+          ctx.beginPath();
+          ctx.moveTo(pad.left, y);
+          ctx.lineTo(pad.left + chartW, y);
+          ctx.stroke();
+          const isRef = Math.abs(val - ref) < 1e-9;
+          ctx.fillStyle = isRef ? C.text : C.muted;
+          ctx.font = `${isRef ? 'bold ' : ''}11px JetBrains Mono, monospace`;
+          ctx.fillText(tickLabel(val), pad.left - 8, y);
+        });
+
+        // 5. Rótulos e títulos dos eixos
         const xLabelsCount = width > 768 ? 8 : 4;
-        ctx.fillStyle = isDark ? '#64748b' : '#94a3b8';
+        ctx.fillStyle = C.muted;
         ctx.textAlign = 'center';
         ctx.textBaseline = 'top';
         ctx.font = '11px JetBrains Mono, monospace';
-
-        for (let k = 0; k <= xLabelsCount; k++) {
-          const idx = Math.min(endIdx, Math.round(startIdx + (k / xLabelsCount) * (endIdx - startIdx)));
-          const x = getX(idx);
-          const item = this.data2022[idx];
-          let label = '';
-          if (this.chartAxis === 'time') {
-            label = (item.t.split(' ')[1] || item.t).substring(0, 5);
-          } else {
-            label = `${item.p.toFixed(item.p < 1 ? 2 : 1)}%`;
-          }
-          ctx.fillText(label, x, pad.top + chartH + 12);
+        for (let n = 0; n <= xLabelsCount; n++) {
+          const idx = Math.min(endIdx, Math.round(startIdx + (n / xLabelsCount) * (endIdx - startIdx)));
+          const item = d22[idx];
+          const label = this.chartAxis === 'time' ? fmt.hhmm(item.t) : fmt.share(item.p);
+          ctx.fillText(label, getX(idx), pad.top + chartH + 8);
         }
+        ctx.font = '600 11px Inter, sans-serif';
+        ctx.fillStyle = C.muted;
+        ctx.fillText(this.chartAxis === 'time' ? 'Horário da apuração de 2022 →' : '% das seções apuradas →', pad.left + chartW / 2, pad.top + chartH + 28);
+        ctx.save();
+        ctx.translate(14, pad.top + chartH / 2);
+        ctx.rotate(-Math.PI / 2);
+        ctx.textBaseline = 'middle';
+        ctx.fillText(yTitle, 0, 0);
+        ctx.restore();
 
-        if (this.chartMetric === 'pct') {
-          // --- PERCENTAGE EVOLUTION CURVES ---
-          let minY = 35.0;
-          let maxY = 65.0;
-          let ySteps = [35, 40, 45, 50, 55, 60, 65];
-
-          if (this.yScaleMode === 'tight') {
-            minY = 44.0;
-            maxY = 56.0;
-            ySteps = [44, 46, 48, 50, 52, 54, 56];
-          } else if (this.yScaleMode === 'auto') {
-            let curMin = 100, curMax = 0;
-            for (let i = startIdx; i <= endIdx; i++) {
-              const vals = [];
-              if (this.electionMode !== '2026') vals.push(this.data2022[i].lp, this.data2022[i].jp);
-              if (this.electionMode !== '2022' && d26[i]) {
-                const p = this.get2026Pct(d26[i]);
-                vals.push(p.fb, p.l);
-              }
-              for (const v of vals) {
-                if (v < curMin) curMin = v;
-                if (v > curMax) curMax = v;
-              }
-            }
-            minY = Math.max(25, Math.floor(curMin - 1.5));
-            maxY = Math.min(75, Math.ceil(curMax + 1.5));
-            ySteps = [];
-            const step = (maxY - minY) > 14 ? 4 : 2;
-            for (let s = Math.floor(minY); s <= Math.ceil(maxY); s += step) ySteps.push(s);
-          }
-
-          const getY = (val) => pad.top + chartH - ((val - minY) / (maxY - minY)) * chartH;
-
-          // Horizontal Grid
-          ctx.strokeStyle = isDark ? 'rgba(255, 255, 255, 0.06)' : 'rgba(0, 0, 0, 0.06)';
-          ctx.lineWidth = 1;
-          ctx.textAlign = 'right';
-          ctx.textBaseline = 'middle';
-
-          ySteps.forEach(val => {
-            const y = getY(val);
-            if (y < pad.top - 2 || y > pad.top + chartH + 2) return;
-            ctx.beginPath();
-            ctx.moveTo(pad.left, y);
-            ctx.lineTo(pad.left + chartW, y);
-            ctx.stroke();
-
-            ctx.fillStyle = val === 50 ? (isDark ? '#e2e8f0' : '#1e293b') : (isDark ? '#64748b' : '#94a3b8');
-            ctx.font = val === 50 ? 'bold 11px JetBrains Mono, monospace' : '11px JetBrains Mono, monospace';
-            ctx.fillText(`${val}.0%`, pad.left - 10, y);
-          });
-
-          // 50% Reference Line
-          const y50 = getY(50.0);
-          if (y50 >= pad.top && y50 <= pad.top + chartH) {
-            ctx.save();
-            ctx.strokeStyle = isDark ? 'rgba(255, 255, 255, 0.4)' : 'rgba(0, 0, 0, 0.4)';
-            ctx.lineWidth = 1.5;
-            ctx.setLineDash([6, 4]);
-            ctx.beginPath();
-            ctx.moveTo(pad.left, y50);
-            ctx.lineTo(pad.left + chartW, y50);
-            ctx.stroke();
-            ctx.restore();
-          }
-
-          // Draw 2022 Curves (Dashed in Compare Mode, Solid in 2022 Mode)
-          if (this.electionMode === 'compare' || this.electionMode === '2022') {
-            const isComp = this.electionMode === 'compare';
-            ctx.save();
-            if (isComp) ctx.setLineDash([6, 4]);
-
-            // JB 2022
-            ctx.beginPath();
-            for (let i = startIdx; i <= endIdx; i++) {
-              const x = getX(i);
-              const y = getY(this.data2022[i].jp);
-              if (i === startIdx) ctx.moveTo(x, y);
-              else ctx.lineTo(x, y);
-            }
-            ctx.strokeStyle = isComp ? '#60a5fa' : '#3b82f6';
-            ctx.lineWidth = isComp ? 2.0 : 2.5;
-            ctx.stroke();
-
-            // L 2022
-            ctx.beginPath();
-            for (let i = startIdx; i <= endIdx; i++) {
-              const x = getX(i);
-              const y = getY(this.data2022[i].lp);
-              if (i === startIdx) ctx.moveTo(x, y);
-              else ctx.lineTo(x, y);
-            }
-            ctx.strokeStyle = isComp ? '#fca5a5' : '#ef4444';
-            ctx.lineWidth = isComp ? 2.0 : 2.5;
-            ctx.stroke();
-            ctx.restore();
-          }
-
-          // Draw 2026 Curves (Solid)
-          if ((this.electionMode === 'compare' || this.electionMode === '2026') && d26.length) {
-            const isComp = this.electionMode === 'compare';
-            // FB 2026
-            ctx.beginPath();
-            for (let i = startIdx; i <= endIdx; i++) {
-              const x = getX(i);
-              const p = this.get2026Pct(d26[i]);
-              const y = getY(p.fb);
-              if (i === startIdx) ctx.moveTo(x, y);
-              else ctx.lineTo(x, y);
-            }
-            ctx.strokeStyle = isComp ? '#10b981' : '#3b82f6';
-            ctx.lineWidth = 2.6;
-            ctx.shadowColor = isComp ? 'rgba(16, 185, 129, 0.35)' : 'rgba(59, 130, 246, 0.35)';
-            ctx.shadowBlur = 7;
-            ctx.stroke();
-            ctx.shadowBlur = 0;
-
-            // L 2026
-            ctx.beginPath();
-            for (let i = startIdx; i <= endIdx; i++) {
-              const x = getX(i);
-              const p = this.get2026Pct(d26[i]);
-              const y = getY(p.l);
-              if (i === startIdx) ctx.moveTo(x, y);
-              else ctx.lineTo(x, y);
-            }
-            ctx.strokeStyle = '#ef4444';
-            ctx.lineWidth = 2.6;
-            ctx.shadowColor = 'rgba(239, 68, 68, 0.35)';
-            ctx.shadowBlur = 7;
-            ctx.stroke();
-            ctx.shadowBlur = 0;
-          }
-
-          // Annotations
-          if (140 >= startIdx && 140 <= endIdx) {
-            if (this.electionMode !== '2026') {
-              this.drawAnnotation(ctx, getX(140), getY(this.data2022[140].jp), '2022 Pico JB: 56,84%', '1,78% urnas (L: 43,16%)', '#60a5fa', false);
-            }
-            if (this.electionMode !== '2022' && d26[140]) {
-              const p140 = this.get2026Pct(d26[140]);
-              this.drawAnnotation(ctx, getX(140), getY(p140.fb), `2026 FB: ${p140.fb.toFixed(2).replace('.', ',')}%`, `L: ${p140.l.toFixed(2).replace('.', ',')}%`, '#10b981', true);
-            }
-          }
-          if (3190 >= startIdx && 3190 <= endIdx) {
-            if (this.electionMode !== '2026') {
-              this.drawAnnotation(ctx, getX(3190), getY(50.002), 'Virada 2022: 50,00%', '68,34% urnas (18:44)', '#ef4444', false);
-            }
-            if (this.electionMode !== '2022' && d26[3190]) {
-              const p3190 = this.get2026Pct(d26[3190]);
-              this.drawAnnotation(ctx, getX(3190), getY(p3190.fb), `2026 FB: ${p3190.fb.toFixed(2).replace('.', ',')}%`, 'Mantém liderança', '#10b981', true);
-            }
-          }
-
-          // Playhead
-          if (this.currentIndex >= startIdx && this.currentIndex <= endIdx) {
-            const curX = getX(this.currentIndex);
-            ctx.strokeStyle = isDark ? 'rgba(255, 255, 255, 0.45)' : 'rgba(0, 0, 0, 0.45)';
-            ctx.lineWidth = 1.5;
-            ctx.beginPath();
-            ctx.moveTo(curX, pad.top);
-            ctx.lineTo(curX, pad.top + chartH);
-            ctx.stroke();
-
-            if (this.electionMode !== '2022' && d26[this.currentIndex]) {
-              const p = this.get2026Pct(d26[this.currentIndex]);
-              this.drawGlowDot(ctx, curX, getY(p.fb), this.electionMode === 'compare' ? '#10b981' : '#3b82f6');
-              this.drawGlowDot(ctx, curX, getY(p.l), '#ef4444');
-            }
-            if (this.electionMode !== '2026') {
-              this.drawGlowDot(ctx, curX, getY(this.data2022[this.currentIndex].jp), '#60a5fa');
-              this.drawGlowDot(ctx, curX, getY(this.data2022[this.currentIndex].lp), '#fca5a5');
-            }
-          }
-
-        } else if (this.chartMetric === 'gap_pct') {
-          // --- GAP CONVERGENCE MODE: (JB - L) vs (FB - L) in Percentage Points ---
-          const minY = -6.0;
-          const maxY = 26.0;
-          const getY = (val) => pad.top + chartH - ((val - minY) / (maxY - minY)) * chartH;
-          const yZero = getY(0);
-
-          const ySteps = [-5, 0, 5, 10, 15, 20, 25];
-          ctx.strokeStyle = isDark ? 'rgba(255, 255, 255, 0.06)' : 'rgba(0, 0, 0, 0.06)';
-          ctx.lineWidth = 1;
-          ctx.textAlign = 'right';
-          ctx.textBaseline = 'middle';
-
-          ySteps.forEach(val => {
-            const y = getY(val);
-            ctx.beginPath();
-            ctx.moveTo(pad.left, y);
-            ctx.lineTo(pad.left + chartW, y);
-            ctx.stroke();
-
-            ctx.fillStyle = val === 0 ? '#f59e0b' : (isDark ? '#64748b' : '#94a3b8');
-            ctx.font = val === 0 ? 'bold 11px JetBrains Mono, monospace' : '11px JetBrains Mono, monospace';
-            ctx.fillText(`${val > 0 ? '+' : ''}${val} p.p.`, pad.left - 10, y);
-          });
-
-          // Zero Tie Line
+        // 6. Linha de referência (50% ou empate)
+        const yRef = getY(ref);
+        if (yRef >= pad.top && yRef <= pad.top + chartH) {
           ctx.save();
-          ctx.strokeStyle = '#f59e0b';
+          ctx.strokeStyle = metric === 'pct' ? C.ref : C.tie;
           ctx.lineWidth = 1.5;
           ctx.setLineDash([6, 4]);
           ctx.beginPath();
-          ctx.moveTo(pad.left, yZero);
-          ctx.lineTo(pad.left + chartW, yZero);
+          ctx.moveTo(pad.left, yRef);
+          ctx.lineTo(pad.left + chartW, yRef);
           ctx.stroke();
           ctx.restore();
+        }
 
-          // 2022 Gap Curve (JB - L)
-          if (this.electionMode !== '2026') {
-            ctx.beginPath();
-            for (let i = startIdx; i <= endIdx; i++) {
-              const x = getX(i);
-              const gap = this.data2022[i].jp - this.data2022[i].lp;
-              if (i === startIdx) ctx.moveTo(x, getY(gap));
-              else ctx.lineTo(x, getY(gap));
-            }
-            ctx.strokeStyle = '#3b82f6';
-            ctx.lineWidth = 2.5;
-            ctx.stroke();
-          }
-
-          // 2026 Gap Curve (FB - L)
-          if (this.electionMode !== '2022' && d26.length) {
-            ctx.beginPath();
-            for (let i = startIdx; i <= endIdx; i++) {
-              const x = getX(i);
-              const p = this.get2026Pct(d26[i]);
-              const gap = p.fb - p.l;
-              if (i === startIdx) ctx.moveTo(x, getY(gap));
-              else ctx.lineTo(x, getY(gap));
-            }
-            ctx.strokeStyle = '#10b981';
-            ctx.lineWidth = 2.8;
-            ctx.stroke();
-          }
-
-          if (140 >= startIdx && 140 <= endIdx) {
-            this.drawAnnotation(ctx, getX(140), getY(13.678), '2022 Pico: +13,68 p.p.', 'JB 56,84% vs L 43,16%', '#3b82f6', false);
-          }
-          if (3190 >= startIdx && 3190 <= endIdx) {
-            this.drawAnnotation(ctx, getX(3190), getY(0), '2022 Virada (0,00 p.p.)', '68,34% das urnas', '#f59e0b', false);
-          }
-
-          // Playhead
-          if (this.currentIndex >= startIdx && this.currentIndex <= endIdx) {
-            const curX = getX(this.currentIndex);
-            ctx.strokeStyle = 'rgba(255,255,255,0.4)';
-            ctx.beginPath();
-            ctx.moveTo(curX, pad.top);
-            ctx.lineTo(curX, pad.top + chartH);
-            ctx.stroke();
-
-            if (this.electionMode !== '2026') {
-              const g22 = this.data2022[this.currentIndex].jp - this.data2022[this.currentIndex].lp;
-              this.drawGlowDot(ctx, curX, getY(g22), '#3b82f6');
-            }
-            if (this.electionMode !== '2022' && d26[this.currentIndex]) {
-              const p = this.get2026Pct(d26[this.currentIndex]);
-              this.drawGlowDot(ctx, curX, getY(p.fb - p.l), '#10b981');
-            }
-          }
-
-        } else {
-          // --- ABSOLUTE VOTE MARGIN MODE (JB-L vs FB-L) ---
-          const minDiff = -2500000;
-          const maxDiff = 4200000;
-          const getY = (val) => pad.top + chartH - ((val - minDiff) / (maxDiff - minDiff)) * chartH;
-          const yZero = getY(0);
-
-          const steps = [-2000000, -1000000, 0, 1000000, 2000000, 3000000, 4000000];
-          ctx.strokeStyle = isDark ? 'rgba(255, 255, 255, 0.06)' : 'rgba(0, 0, 0, 0.06)';
-          ctx.lineWidth = 1;
-          ctx.textAlign = 'right';
-          ctx.textBaseline = 'middle';
-
-          steps.forEach(val => {
-            const y = getY(val);
-            ctx.beginPath();
-            ctx.moveTo(pad.left, y);
-            ctx.lineTo(pad.left + chartW, y);
-            ctx.stroke();
-            ctx.fillStyle = val === 0 ? '#f59e0b' : '#64748b';
-            ctx.font = '11px JetBrains Mono, monospace';
-            ctx.fillText(val === 0 ? 'Empate (0)' : `${val > 0 ? '+' : ''}${(val / 1000000).toFixed(1)}M`, pad.left - 10, y);
-          });
-
-          ctx.save();
-          ctx.strokeStyle = '#f59e0b';
-          ctx.setLineDash([5, 4]);
+        // 7. Linhas, recortadas à área do gráfico
+        ctx.save();
+        ctx.beginPath();
+        ctx.rect(pad.left, pad.top, chartW, chartH);
+        ctx.clip();
+        for (const s of series) {
           ctx.beginPath();
-          ctx.moveTo(pad.left, yZero);
-          ctx.lineTo(pad.left + chartW, yZero);
-          ctx.stroke();
-          ctx.restore();
-
-          if (this.electionMode !== '2026') {
-            ctx.beginPath();
-            for (let i = startIdx; i <= endIdx; i++) {
-              const x = getX(i);
-              const d = this.data2022[i].jv - this.data2022[i].lv;
-              if (i === startIdx) ctx.moveTo(x, getY(d));
-              else ctx.lineTo(x, getY(d));
-            }
-            ctx.strokeStyle = '#3b82f6';
-            ctx.lineWidth = 2.4;
-            ctx.stroke();
+          for (let i = startIdx; i <= endIdx; i++) {
+            const x = getX(i), y = getY(s.value(i));
+            if (i === startIdx) ctx.moveTo(x, y);
+            else ctx.lineTo(x, y);
           }
+          ctx.setLineDash(s.dashed ? [7, 4] : []);
+          ctx.strokeStyle = s.color;
+          ctx.lineWidth = s.dashed ? 2 : 2.4;
+          ctx.stroke();
+        }
+        ctx.restore();
 
-          if (this.electionMode !== '2022' && d26.length) {
-            ctx.beginPath();
-            for (let i = startIdx; i <= endIdx; i++) {
-              const x = getX(i);
-              const d = d26[i].jv - d26[i].lv;
-              if (i === startIdx) ctx.moveTo(x, getY(d));
-              else ctx.lineTo(x, getY(d));
-            }
-            ctx.strokeStyle = '#10b981';
-            ctx.lineWidth = 2.6;
-            ctx.stroke();
+        // 8. Anotações dos marcos calculados (2022 aponta para baixo, 2026 para cima)
+        const inView = (i) => i >= startIdx && i <= endIdx;
+        const notes = [];
+        if (metric === 'pct') {
+          if (this.show22) {
+            notes.push({ i: m.peakPct, y: d22[m.peakPct].jp, color: C.jb, up: false, text: `Pico JB 2022: ${fmt.pct(d22[m.peakPct].jp)}`, sub: `${fmt.share(d22[m.peakPct].p)} apurado` });
+            if (m.virada >= 0) notes.push({ i: m.virada, y: 50, color: C.l, up: false, text: 'Virada de L (2022)', sub: `${fmt.share(d22[m.virada].p)} · ${fmt.hhmm(d22[m.virada].t)}` });
+          }
+          if (this.show26) {
+            notes.push({ i: k.peak, y: p26(k.peak).fb, color: C.fb, up: true, text: `Pico FB 2026: ${fmt.pct(p26(k.peak).fb)}`, sub: `${fmt.share(d22[k.peak].p)} apurado · ${this.orderLabel}` });
+            if (k.flip >= 0) notes.push({ i: k.flip, y: p26(k.flip).fb, color: C.fb, up: true, text: 'FB retoma a frente (2026)', sub: `${fmt.share(d22[k.flip].p)} apurado` });
+          }
+        } else if (metric === 'gap_pct') {
+          if (this.show22) {
+            const g = d22[m.peakPct].jp - d22[m.peakPct].lp;
+            notes.push({ i: m.peakPct, y: g, color: C.jb, up: false, text: `Pico 2022: JB ${fmt.signPP(g)}`, sub: `${fmt.share(d22[m.peakPct].p)} apurado` });
+            if (m.virada >= 0) notes.push({ i: m.virada, y: 0, color: C.l, up: false, text: 'L vira em 2022', sub: `${fmt.share(d22[m.virada].p)} · ${fmt.hhmm(d22[m.virada].t)}` });
+          }
+          if (this.show26) {
+            const p = p26(k.peak);
+            notes.push({ i: k.peak, y: p.fb - p.l, color: C.fb, up: true, text: `Pico 2026: FB ${fmt.signPP(p.fb - p.l)}`, sub: `${fmt.share(d22[k.peak].p)} apurado · ${this.orderLabel}` });
+            if (k.flip >= 0) notes.push({ i: k.flip, y: 0, color: C.fb, up: true, text: 'FB vira em 2026', sub: `${fmt.share(d22[k.flip].p)} apurado` });
+          }
+        } else {
+          if (this.show22) {
+            const v = d22[m.peakVotes].jv - d22[m.peakVotes].lv;
+            notes.push({ i: m.peakVotes, y: v, color: C.jb, up: false, text: `2022: JB +${fmt.int(v)} votos`, sub: `maior vantagem de JB em votos` });
+            if (m.virada >= 0) notes.push({ i: m.virada, y: 0, color: C.l, up: false, text: 'L vira em 2022', sub: `${fmt.share(d22[m.virada].p)} apurado` });
+          }
+          if (this.show26) {
+            const v = d26[k.peakVotes].jv - d26[k.peakVotes].lv;
+            notes.push({ i: k.peakVotes, y: v, color: C.fb, up: true, text: `2026: FB +${fmt.int(v)} votos`, sub: `maior vantagem de FB · ${this.orderLabel}` });
+            if (k.flip >= 0) notes.push({ i: k.flip, y: 0, color: C.fb, up: true, text: 'FB vira em 2026', sub: `${fmt.share(d22[k.flip].p)} apurado` });
           }
         }
+        // Em telas estreitas, só o título de cada anotação, para não cobrir as linhas
+        const narrow = width < 560;
+        notes.filter(nt => nt.i >= 0 && inView(nt.i)).forEach(nt => {
+          this.drawAnnotation(ctx, getX(nt.i), clampY(getY(nt.y)), nt.text, narrow ? '' : nt.sub, nt.color, nt.up);
+        });
+
+        // 9. Linha de leitura do mouse e posição atual da reprodução
+        if (this.hoverIndex >= 0 && inView(this.hoverIndex) && this.hoverIndex !== this.currentIndex) {
+          ctx.strokeStyle = C.grid;
+          ctx.lineWidth = 1;
+          ctx.beginPath();
+          ctx.moveTo(getX(this.hoverIndex), pad.top);
+          ctx.lineTo(getX(this.hoverIndex), pad.top + chartH);
+          ctx.stroke();
+        }
+        if (inView(this.currentIndex)) {
+          const curX = getX(this.currentIndex);
+          ctx.strokeStyle = C.ref;
+          ctx.lineWidth = 1.5;
+          ctx.beginPath();
+          ctx.moveTo(curX, pad.top);
+          ctx.lineTo(curX, pad.top + chartH);
+          ctx.stroke();
+          series.forEach(s => this.drawGlowDot(ctx, curX, clampY(getY(s.value(this.currentIndex))), s.color, C.surface));
+        }
+
+        // 10. Rótulo direto no fim de cada linha (sem depender só da legenda)
+        const ends = series.map(s => ({ s, y: clampY(getY(s.value(endIdx))) })).sort((a, b) => a.y - b.y);
+        for (let n = 1; n < ends.length; n++) {
+          if (ends[n].y - ends[n - 1].y < 14) ends[n].y = ends[n - 1].y + 14;
+        }
+        ctx.font = 'bold 10.5px JetBrains Mono, monospace';
+        ctx.textAlign = 'left';
+        ctx.textBaseline = 'middle';
+        ends.forEach(({ s, y }) => {
+          const x = pad.left + chartW + 4;
+          ctx.save();
+          ctx.strokeStyle = s.color;
+          ctx.lineWidth = 2.4;
+          ctx.setLineDash(s.dashed ? [3, 2] : []);
+          ctx.beginPath();
+          ctx.moveTo(x, y);
+          ctx.lineTo(x + 9, y);
+          ctx.stroke();
+          ctx.restore();
+          ctx.fillStyle = C.text;
+          ctx.fillText(s.label, x + 12, y);
+        });
       }
 
-      drawAnnotation(ctx, x, y, text, subtext, color, isUp = true) {
+      // bounds: área de outro gráfico ({ left, right, height }); sem ela, usa a do gráfico principal
+      drawAnnotation(ctx, x, y, text, subtext, color, isUp = true, bounds = null) {
         ctx.save();
         const pinLen = 20;
         const targetY = isUp ? y - pinLen : y + pinLen;
@@ -2331,14 +3227,17 @@
 
         ctx.font = 'bold 10px JetBrains Mono, monospace';
         const textW = ctx.measureText(text).width;
-        ctx.font = '9px Inter, sans-serif';
+        ctx.font = '9.5px Inter, sans-serif';
         const subW = subtext ? ctx.measureText(subtext).width : 0;
         const boxW = Math.max(textW, subW) + 14;
-        const boxH = subtext ? 28 : 18;
-        const boxX = Math.max(10, Math.min(this.canvasCSSWidth - boxW - 10, x - boxW / 2));
-        const boxY = isUp ? targetY - boxH : targetY;
+        const boxH = subtext ? 29 : 18;
+        // A caixa fica dentro da área do gráfico para não cobrir os rótulos dos eixos
+        const area = bounds || this.plotArea || { left: 4, right: this.canvasCSSWidth - 4 };
+        const maxH = bounds ? bounds.height : this.canvasCSSHeight;
+        const boxX = Math.max(area.left + 2, Math.min(area.right - boxW - 2, x - boxW / 2));
+        const boxY = Math.max(2, Math.min(maxH - boxH - 2, isUp ? targetY - boxH : targetY));
 
-        ctx.fillStyle = 'rgba(15, 23, 42, 0.92)';
+        ctx.fillStyle = 'rgba(15, 23, 42, 0.94)';
         ctx.strokeStyle = color;
         ctx.lineWidth = 1;
         ctx.beginPath();
@@ -2349,42 +3248,595 @@
 
         ctx.textAlign = 'left';
         ctx.textBaseline = 'top';
-        ctx.fillStyle = color;
+        ctx.fillStyle = '#f8fafc';
         ctx.font = 'bold 10px JetBrains Mono, monospace';
         ctx.fillText(text, boxX + 7, boxY + 4);
 
         if (subtext) {
-          ctx.fillStyle = '#94a3b8';
-          ctx.font = '9px Inter, sans-serif';
+          ctx.fillStyle = '#cbd5e1';
+          ctx.font = '9.5px Inter, sans-serif';
           ctx.fillText(subtext, boxX + 7, boxY + 16);
         }
         ctx.restore();
       }
 
-      drawGlowDot(ctx, x, y, color) {
+      drawGlowDot(ctx, x, y, color, ring) {
         ctx.save();
-        ctx.shadowColor = color;
-        ctx.shadowBlur = 10;
+        ctx.fillStyle = ring;
+        ctx.beginPath();
+        ctx.arc(x, y, 7, 0, Math.PI * 2);
+        ctx.fill();
         ctx.fillStyle = color;
         ctx.beginPath();
-        ctx.arc(x, y, 5.5, 0, Math.PI * 2);
-        ctx.fill();
-        ctx.fillStyle = '#ffffff';
-        ctx.beginPath();
-        ctx.arc(x, y, 2.5, 0, Math.PI * 2);
+        ctx.arc(x, y, 5, 0, Math.PI * 2);
         ctx.fill();
         ctx.restore();
       }
 
+      // ---------- PROJEÇÃO "E SE" (frágil) ----------
+      // Modelo: depois do ponto escolhido, a vantagem de FB encolhe o mesmo tanto que a de JB encolheu em 2022
+      // a partir do mesmo % apurado. A faixa ilustrativa multiplica essa queda por 0,75 e 1,25; não é margem de erro.
+
+      initProjection() {
+        if (!this.data2022.length) return;
+        this.g22 = this.data2022.map(r => r.jp - r.lp);
+        this.projStart = this.firstReliableIdx(this.data2022);
+        this.projSummaryCache = {};
+
+        // Vantagem final de FB no 1º turno de 2026 considerando só FB e L (base do cenário "Repete o 1º turno")
+        const s = this.raw2026.summary || {};
+        const two = (s.fb_votos || 0) + (s.l_votos || 0);
+        this.firstRoundGap26 = two ? ((s.fb_votos - s.l_votos) / two) * 100 : 0;
+
+        this.projCanvas = document.getElementById('projChart');
+        this.projSummaryCanvas = document.getElementById('projSummary');
+        this.projTooltip = document.getElementById('projTooltip');
+
+        document.querySelectorAll('#projRefToggle .toggle-opt').forEach(btn => {
+          btn.addEventListener('click', () => {
+            document.querySelectorAll('#projRefToggle .toggle-opt').forEach(b => b.classList.toggle('active', b === btn));
+            this.projRef = btn.dataset.ref;
+            this.syncProjectionControls();
+            this.renderProjection();
+          });
+        });
+
+        document.getElementById('projSlider').addEventListener('input', (e) => {
+          this.projDelta = parseFloat(e.target.value) - this.g22[this.projRefIdx()];
+          this.syncProjectionControls();
+          this.renderProjection();
+        });
+
+        document.querySelectorAll('#projPresets .toggle-opt').forEach(btn => {
+          btn.addEventListener('click', () => {
+            this.projDelta = this.projPresetDelta(btn.dataset.preset);
+            this.syncProjectionControls();
+            this.renderProjection();
+          });
+        });
+
+        // Clique no gráfico-resumo escolhe a vantagem de FB do ponto clicado
+        this.projSummaryCanvas.addEventListener('click', (e) => {
+          const sc = this.projSummaryScale;
+          if (!sc) return;
+          const t = (e.clientX - this.projSummaryCanvas.getBoundingClientRect().left - sc.left) / sc.width;
+          if (t < 0 || t > 1) return;
+          this.projDelta = sc.min + t * (sc.max - sc.min) - this.g22[this.projRefIdx()];
+          this.syncProjectionControls();
+          this.renderProjection();
+        });
+
+        this.projCanvas.addEventListener('mousemove', (e) => this.onProjectionHover(e));
+        this.projCanvas.addEventListener('mouseleave', () => {
+          this.projHover = -1;
+          this.projTooltip.classList.remove('show');
+          this.drawProjectionChart();
+        });
+
+        this.setupProjectionCanvases();
+        this.syncProjectionControls();
+        this.renderProjection();
+      }
+
+      setupProjectionCanvases() {
+        if (!this.projCanvas) return;
+        this.projMain = this.fitCanvas(this.projCanvas);
+        this.projSum = this.fitCanvas(this.projSummaryCanvas);
+      }
+
+      // Ajusta a resolução do canvas à densidade da tela
+      fitCanvas(canvas) {
+        const dpr = window.devicePixelRatio || 1;
+        const rect = canvas.getBoundingClientRect();
+        canvas.width = rect.width * dpr;
+        canvas.height = rect.height * dpr;
+        const ctx = canvas.getContext('2d');
+        ctx.resetTransform();
+        ctx.scale(dpr, dpr);
+        return { ctx, w: rect.width, h: rect.height };
+      }
+
+      // "#rrggbb" -> "rgba(r, g, b, a)"
+      withAlpha(hex, a) {
+        const m = /^#?([0-9a-f]{2})([0-9a-f]{2})([0-9a-f]{2})$/i.exec(hex.trim());
+        return m ? `rgba(${parseInt(m[1], 16)}, ${parseInt(m[2], 16)}, ${parseInt(m[3], 16)}, ${a})` : hex;
+      }
+
+      projRefIdx() {
+        if (this.projRef === 'peak') return this.m22.peakPct;
+        const i = this.firstIdx(0, k => this.data2022[k].p >= parseFloat(this.projRef));
+        return i < 0 ? this.data2022.length - 1 : i;
+      }
+
+      // Quanto FB está acima de JB, no ponto de referência, em cada cenário pronto
+      projPresetDelta(key) {
+        const end22 = this.g22[this.g22.length - 1];
+        if (key === 'limit') return -end22;                       // termina exatamente empatado
+        if (key === 'first') return this.firstRoundGap26 - end22;  // termina como no 1º turno (só FB e L)
+        return 0;                                                  // igual a JB em 2022
+      }
+
+      // Faixa do controle: de 8 p.p. abaixo a 10 p.p. acima do que JB tinha nesse ponto
+      projSliderRange(base) {
+        return { min: Math.floor(base - 8), max: Math.ceil(base + 10) };
+      }
+
+      syncProjectionControls() {
+        const base = this.g22[this.projRefIdx()];
+        const { min, max } = this.projSliderRange(base);
+        this.projDelta = Math.max(min - base, Math.min(max - base, this.projDelta));
+        const slider = document.getElementById('projSlider');
+        slider.min = min;
+        slider.max = max;
+        slider.value = (base + this.projDelta).toFixed(2);
+        document.getElementById('projLeadLabel').textContent = fmt.signPP(base + this.projDelta);
+        document.querySelector('#projRefToggle [data-ref="peak"]').textContent = `Pico de 2022 (${fmt.share(this.data2022[this.m22.peakPct].p)})`;
+
+        const names = { same: 'Igual a JB em 2022', limit: 'Empate no final', first: 'Repete o 1º turno' };
+        document.querySelectorAll('#projPresets .toggle-opt').forEach(btn => {
+          const delta = this.projPresetDelta(btn.dataset.preset);
+          btn.textContent = `${names[btn.dataset.preset]} (${fmt.signPP(base + delta)})`;
+          btn.classList.toggle('active', Math.abs(delta - this.projDelta) < 0.006);
+        });
+      }
+
+      // Vantagem projetada de FB no passo i: até o ponto de referência, a curva de 2022 deslocada;
+      // depois dele, a vantagem observada menos a queda de 2022 multiplicada por k
+      projValue(i, idx0, lead0, k) {
+        const g = this.g22;
+        return i <= idx0 ? g[i] + (lead0 - g[idx0]) : lead0 + k * (g[i] - g[idx0]);
+      }
+
+      projFinal(idx0, lead0, k) {
+        return this.projValue(this.g22.length - 1, idx0, lead0, k);
+      }
+
+      // Passo a partir do qual L fica à frente até o fim; -1 se FB termina na frente
+      projOvertake(idx0, lead0, k) {
+        const last = this.g22.length - 1;
+        if (this.projValue(last, idx0, lead0, k) >= 0) return -1;
+        for (let i = last - 1; i >= 0; i--) {
+          if (this.projValue(i, idx0, lead0, k) >= 0) return i + 1;
+        }
+        return 0;
+      }
+
+      renderProjection() {
+        if (!this.projCanvas || !this.g22) return;
+        this.updateProjectionReadout();
+        this.drawProjectionChart();
+        this.drawProjectionSummary();
+      }
+
+      updateProjectionReadout() {
+        const d = this.data2022, g = this.g22, last = g.length - 1;
+        const idx0 = this.projRefIdx();
+        const base = g[idx0];
+        const lead0 = base + this.projDelta;
+        const final = this.projFinal(idx0, lead0, 1);
+        const ot = this.projOvertake(idx0, lead0, 1);
+        const when = (i) => `${fmt.share(d[i].p)} apurado`;
+
+        let verdict;
+        if (ot < 0) verdict = 'FB terminaria na frente: L não passaria.';
+        else if (lead0 < 0) verdict = 'L já estaria na frente nesse ponto e terminaria na frente.';
+        else verdict = `L passaria à frente de vez com <strong>${when(ot)}</strong> (por volta das ${fmt.hhmm(d[ot].t)} no relógio de 2022).`;
+        document.getElementById('projVerdict').innerHTML = verdict;
+        document.getElementById('projFinal').textContent = `Resultado projetado: ${leadPP(final, 'FB')}`;
+        document.getElementById('projReadout').style.setProperty('--verdict-color', final >= 0 ? 'var(--color-fb)' : 'var(--color-l)');
+
+        // Faixa ilustrativa: queda 25% maior (k = 1,25) ou menor (k = 0,75) que em 2022
+        const fA = this.projFinal(idx0, lead0, 1.25), fB = this.projFinal(idx0, lead0, 0.75);
+        const oA = this.projOvertake(idx0, lead0, 1.25), oB = this.projOvertake(idx0, lead0, 0.75);
+        let range;
+        if (oA < 0 && oB < 0) range = 'Em toda a faixa, FB terminaria na frente.';
+        else if (oA >= 0 && oB >= 0) range = `L passaria entre ${fmt.share(d[Math.min(oA, oB)].p)} e ${fmt.share(d[Math.max(oA, oB)].p)} apurado.`;
+        else range = `O resultado <strong>vira dentro da faixa</strong>: L passaria com ${when(Math.max(oA, oB))} ou não passaria.`;
+
+        const drop22 = base - g[last]; // quanto a vantagem de JB caiu desse ponto até o fim de 2022
+        const vsJb = Math.abs(this.projDelta) < 0.005 ? 'FB tem a mesma vantagem'
+          : `FB está ${fmt.pp(this.projDelta)} ${this.projDelta > 0 ? 'acima' : 'abaixo'} disso`;
+        // fmt.pp termina em "p.p.", que já serve de ponto final quando fecha a frase
+        document.getElementById('projFacts').innerHTML = [
+          `Em 2022, com ${when(idx0)}, o placar era <strong>${leadPP(base, 'JB')}</strong>; neste cenário, ${vsJb}.`,
+          `Para FB terminar na frente, precisaria de mais de <strong>${fmt.signPP(drop22)}</strong> nesse ponto.`,
+          `Se a queda for 25% menor ou maior que em 2022, o resultado ficaria entre <strong>${leadPP(Math.min(fA, fB), 'FB')}</strong> e <strong>${leadPP(Math.max(fA, fB), 'FB')}</strong> ${range}`,
+        ].map(t => `<li>${t}</li>`).join('');
+
+        // Quanto a ordem de chegada pesa, medido com os votos reais do 1º turno de 2026
+        const reg = this.raw2026.regional || [], csv = this.raw2026.csv || [];
+        if (reg.length > idx0 && csv.length > idx0) {
+          const two = (r) => r.jp - r.lp;
+          const change = (rows) => two(rows[idx0]) - two(rows[rows.length - 1]);
+          const describe = (v) => `${v >= 0 ? 'cairia' : 'subiria'} ${fmt.pp(v)}`;
+          document.getElementById('projOrderFact').innerHTML = `A ordem de chegada pesa muito: com os votos reais do 1º turno de 2026, a vantagem de FB depois desse ponto <strong>${describe(change(reg))}</strong> na ordem simulada e <strong>${describe(change(csv))}</strong> na ordem do arquivo. Em 2022, a de JB caiu ${fmt.pp(drop22)}`;
+        }
+      }
+
+      drawProjectionChart() {
+        if (!this.projMain) return;
+        const { ctx, w, h } = this.projMain;
+        const C = this.chartColors();
+        const d = this.data2022, g = this.g22, last = g.length - 1;
+        const idx0 = this.projRefIdx();
+        const lead0 = g[idx0] + this.projDelta;
+        const start = this.projStart;
+        ctx.clearRect(0, 0, w, h);
+
+        const narrow = w < 560;
+        const pad = { top: 22, right: narrow ? 80 : 84, bottom: 50, left: narrow ? 56 : 70 };
+        const cw = w - pad.left - pad.right, ch = h - pad.top - pad.bottom;
+        if (cw <= 0 || ch <= 0) return;
+        this.projScaleMain = { left: pad.left, width: cw, start, last };
+        const getX = (i) => pad.left + ((i - start) / (last - start)) * cw;
+        const val = (i, k) => this.projValue(i, idx0, lead0, k);
+        const limit = (i) => g[i] - g[last];
+
+        // Escala vertical: tudo o que será desenhado, mais o zero
+        let lo = 0, hi = 0;
+        for (let i = start; i <= last; i++) {
+          for (const v of [g[i], val(i, 0.75), val(i, 1.25), limit(i)]) {
+            if (v < lo) lo = v;
+            if (v > hi) hi = v;
+          }
+        }
+        const span = Math.max(hi - lo, 1);
+        const nice = this.niceTicks(lo - span * 0.06, hi + span * 0.06);
+        const getY = (v) => pad.top + ch - ((v - nice.min) / (nice.max - nice.min)) * ch;
+        const y0 = getY(0);
+
+        // Faixa "L à frente" e rótulos das regiões
+        ctx.fillStyle = C.isDark ? 'rgba(239, 68, 68, 0.07)' : 'rgba(220, 38, 38, 0.06)';
+        ctx.fillRect(pad.left, y0, cw, pad.top + ch - y0);
+        ctx.font = '600 11px Inter, sans-serif';
+        ctx.textAlign = 'right';
+        ctx.fillStyle = C.muted;
+        if (y0 - pad.top > 24) { ctx.textBaseline = 'top'; ctx.fillText('▲ nº 22 à frente', pad.left + cw - 8, pad.top + 6); }
+        if (pad.top + ch - y0 > 24) { ctx.textBaseline = 'bottom'; ctx.fillText('▼ L à frente', pad.left + cw - 8, pad.top + ch - 6); }
+
+        // Grade e eixos
+        ctx.lineWidth = 1;
+        ctx.textAlign = 'right';
+        ctx.textBaseline = 'middle';
+        nice.ticks.forEach(v => {
+          const y = getY(v);
+          if (y < pad.top - 1 || y > pad.top + ch + 1) return;
+          ctx.strokeStyle = C.grid;
+          ctx.beginPath();
+          ctx.moveTo(pad.left, y);
+          ctx.lineTo(pad.left + cw, y);
+          ctx.stroke();
+          ctx.fillStyle = v === 0 ? C.text : C.muted;
+          ctx.font = `${v === 0 ? 'bold ' : ''}11px JetBrains Mono, monospace`;
+          ctx.fillText(v === 0 ? '0' : `${v > 0 ? '+' : '−'}${fmt.num(Math.abs(v), v % 1 ? 1 : 0)}`, pad.left - 8, y);
+        });
+        const nx = w > 768 ? 6 : 3;
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'top';
+        ctx.fillStyle = C.muted;
+        ctx.font = '11px JetBrains Mono, monospace';
+        for (let n = 0; n <= nx; n++) {
+          const i = Math.round(start + (n / nx) * (last - start));
+          ctx.fillText(fmt.share(d[i].p), getX(i), pad.top + ch + 8);
+        }
+        ctx.font = '600 11px Inter, sans-serif';
+        ctx.fillText('% das seções apuradas →', pad.left + cw / 2, pad.top + ch + 28);
+        ctx.save();
+        ctx.translate(14, pad.top + ch / 2);
+        ctx.rotate(-Math.PI / 2);
+        ctx.textBaseline = 'middle';
+        ctx.fillText('Vantagem do nº 22 (p.p.)', 0, 0);
+        ctx.restore();
+
+        // Linha de empate
+        ctx.save();
+        ctx.strokeStyle = C.tie;
+        ctx.lineWidth = 1.5;
+        ctx.setLineDash([6, 4]);
+        ctx.beginPath();
+        ctx.moveTo(pad.left, y0);
+        ctx.lineTo(pad.left + cw, y0);
+        ctx.stroke();
+        ctx.restore();
+
+        // Faixa ilustrativa e linhas, recortadas à área do gráfico
+        ctx.save();
+        ctx.beginPath();
+        ctx.rect(pad.left, pad.top, cw, ch);
+        ctx.clip();
+
+        // Um ponto por pixel basta para desenhar (o pontilhado fica limpo); os marcadores usam a série completa
+        const step = Math.max(1, Math.floor((last - start) / cw));
+        const drawIdx = [];
+        for (let i = start; i < last; i += step) drawIdx.push(i);
+        drawIdx.push(last);
+
+        const bandFrom = Math.max(idx0, start);
+        const bandIdx = [bandFrom, ...drawIdx.filter(i => i > bandFrom)];
+        ctx.beginPath();
+        bandIdx.forEach((i, n) => n ? ctx.lineTo(getX(i), getY(val(i, 1.25))) : ctx.moveTo(getX(i), getY(val(i, 1.25))));
+        for (let n = bandIdx.length - 1; n >= 0; n--) ctx.lineTo(getX(bandIdx[n]), getY(val(bandIdx[n], 0.75)));
+        ctx.closePath();
+        ctx.fillStyle = this.withAlpha(C.fb, 0.18);
+        ctx.fill();
+
+        const line = (f, color, dash, width) => {
+          ctx.beginPath();
+          drawIdx.forEach((i, n) => n ? ctx.lineTo(getX(i), getY(f(i))) : ctx.moveTo(getX(i), getY(f(i))));
+          ctx.setLineDash(dash);
+          ctx.strokeStyle = color;
+          ctx.lineWidth = width;
+          ctx.stroke();
+        };
+        line(limit, C.muted, [2, 4], 1.5);
+        line(i => g[i], C.jb, [7, 4], 2);
+        ctx.lineCap = 'round';
+        line(i => val(i, 1), C.fb, [1, 5], 3);
+        ctx.restore();
+
+        // Linha de leitura do mouse
+        if (this.projHover >= start) {
+          ctx.strokeStyle = C.ref;
+          ctx.lineWidth = 1;
+          ctx.beginPath();
+          ctx.moveTo(getX(this.projHover), pad.top);
+          ctx.lineTo(getX(this.projHover), pad.top + ch);
+          ctx.stroke();
+        }
+
+        // Ponto de referência e momento da ultrapassagem
+        const bounds = { left: pad.left, right: pad.left + cw, height: h };
+        const xr = getX(bandFrom);
+        ctx.save();
+        ctx.strokeStyle = C.ref;
+        ctx.lineWidth = 1;
+        ctx.setLineDash([3, 3]);
+        ctx.beginPath();
+        ctx.moveTo(xr, pad.top);
+        ctx.lineTo(xr, pad.top + ch);
+        ctx.stroke();
+        ctx.restore();
+        this.drawGlowDot(ctx, xr, getY(lead0), C.fb, C.surface);
+        this.drawAnnotation(ctx, xr, getY(lead0), `FB ${fmt.signPP(lead0)}`, `com ${fmt.share(d[idx0].p)} apurado`, C.fb, true, bounds);
+
+        const ot = this.projOvertake(idx0, lead0, 1);
+        if (ot >= start) {
+          this.drawGlowDot(ctx, getX(ot), y0, C.l, C.surface);
+          this.drawAnnotation(ctx, getX(ot), y0, `L passa: ${fmt.share(d[ot].p)}`, `${fmt.hhmm(d[ot].t)} no relógio de 2022`, C.l, false, bounds);
+        }
+
+        // Rótulos no fim das linhas
+        const ends = [
+          { label: '2022 real', color: C.jb, dash: [3, 2], y: getY(g[last]) },
+          { label: 'Projeção', color: C.fb, dash: [1, 3], y: getY(val(last, 1)) },
+          { label: 'Limite', color: C.muted, dash: [1, 2], y: getY(0) },
+        ].sort((a, b) => a.y - b.y);
+        for (let n = 1; n < ends.length; n++) {
+          if (ends[n].y - ends[n - 1].y < 14) ends[n].y = ends[n - 1].y + 14;
+        }
+        ctx.font = 'bold 10.5px JetBrains Mono, monospace';
+        ctx.textAlign = 'left';
+        ctx.textBaseline = 'middle';
+        ends.forEach(e => {
+          const x = pad.left + cw + 4;
+          ctx.save();
+          ctx.strokeStyle = e.color;
+          ctx.lineWidth = 2.4;
+          ctx.setLineDash(e.dash);
+          ctx.beginPath();
+          ctx.moveTo(x, e.y);
+          ctx.lineTo(x + 9, e.y);
+          ctx.stroke();
+          ctx.restore();
+          ctx.fillStyle = C.text;
+          ctx.fillText(e.label, x + 12, e.y);
+        });
+      }
+
+      onProjectionHover(e) {
+        const sc = this.projScaleMain;
+        if (!sc) return;
+        const rect = this.projCanvas.getBoundingClientRect();
+        const t = (e.clientX - rect.left - sc.left) / sc.width;
+        if (t < 0 || t > 1) {
+          this.projHover = -1;
+          this.projTooltip.classList.remove('show');
+          this.drawProjectionChart();
+          return;
+        }
+        const i = Math.round(sc.start + t * (sc.last - sc.start));
+        const d = this.data2022, g = this.g22;
+        const idx0 = this.projRefIdx();
+        const lead0 = g[idx0] + this.projDelta;
+        this.projHover = i;
+
+        const rows = [
+          `<div class="tt-row"><span class="key key-jb">2022 real</span><span>${leadPP(g[i], 'JB')}</span></div>`,
+          `<div class="tt-row"><span class="key key-fb">Projeção 2026</span><span>${leadPP(this.projValue(i, idx0, lead0, 1), 'FB')}</span></div>`,
+        ];
+        if (i > idx0) {
+          const a = this.projValue(i, idx0, lead0, 1.25), b = this.projValue(i, idx0, lead0, 0.75);
+          rows.push(`<div class="tt-row" style="color: #cbd5e1; font-size: 0.73rem;"><span>Faixa ilustrativa:</span><span>${leadPP(Math.min(a, b), 'FB')} a ${leadPP(Math.max(a, b), 'FB')}</span></div>`);
+        }
+        rows.push('<div style="color: #fbbf24; font-size: 0.7rem; margin-top: 0.3rem;">⚠ projeção frágil, não é previsão</div>');
+        this.projTooltip.innerHTML = `<div class="tt-header"><span>${fmt.time(d[i].t)} (2022)</span><span>${fmt.pct(d[i].p)} apurado</span></div>${rows.join('')}`;
+        this.projTooltip.style.left = `${Math.max(130, Math.min(rect.width - 130, e.clientX - rect.left))}px`;
+        this.projTooltip.style.top = `${Math.max(150, e.clientY - rect.top)}px`;
+        this.projTooltip.classList.add('show');
+        this.drawProjectionChart();
+      }
+
+      // Para cada vantagem de FB (eixo x), o % apurado em que L passaria de vez; guardado por ponto de referência
+      projSummarySeries(idx0) {
+        if (this.projSummaryCache[this.projRef]) return this.projSummaryCache[this.projRef];
+        const { min, max } = this.projSliderRange(this.g22[idx0]);
+        const N = 240;
+        const pts = [];
+        for (let n = 0; n <= N; n++) {
+          const lead = min + (n / N) * (max - min);
+          const at = (k) => { const o = this.projOvertake(idx0, lead, k); return o < 0 ? null : this.data2022[o].p; };
+          pts.push({ lead, mid: at(1), early: at(1.25), late: at(0.75) });
+        }
+        return (this.projSummaryCache[this.projRef] = { min, max, pts });
+      }
+
+      drawProjectionSummary() {
+        if (!this.projSum) return;
+        const { ctx, w, h } = this.projSum;
+        const C = this.chartColors();
+        const g = this.g22;
+        const idx0 = this.projRefIdx();
+        const base = g[idx0];
+        const lead0 = base + this.projDelta;
+        const S = this.projSummarySeries(idx0);
+        ctx.clearRect(0, 0, w, h);
+
+        const pad = { top: 14, right: 14, bottom: 44, left: 50 };
+        const cw = w - pad.left - pad.right, ch = h - pad.top - pad.bottom;
+        if (cw <= 0 || ch <= 0) return;
+        this.projSummaryScale = { left: pad.left, width: cw, min: S.min, max: S.max };
+        const getX = (v) => pad.left + ((v - S.min) / (S.max - S.min)) * cw;
+        const getY = (p) => pad.top + ch - (p / 100) * ch;
+
+        // Região em que FB termina na frente
+        const xl = Math.max(pad.left, Math.min(pad.left + cw, getX(base - g[g.length - 1])));
+        ctx.fillStyle = this.withAlpha(C.fb, 0.12);
+        ctx.fillRect(xl, pad.top, pad.left + cw - xl, ch);
+        // Rótulo embaixo: o topo fica livre para o rótulo do cenário escolhido quando L não passa
+        ctx.fillStyle = C.muted;
+        ctx.font = '600 10.5px Inter, sans-serif';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'bottom';
+        if (pad.left + cw - xl > 64) {
+          ctx.fillText('FB termina', (xl + pad.left + cw) / 2, pad.top + ch - 19);
+          ctx.fillText('na frente', (xl + pad.left + cw) / 2, pad.top + ch - 6);
+        }
+
+        // Grade, eixos e títulos
+        ctx.font = '10.5px JetBrains Mono, monospace';
+        ctx.textAlign = 'right';
+        ctx.textBaseline = 'middle';
+        [0, 25, 50, 75, 100].forEach(p => {
+          ctx.strokeStyle = C.grid;
+          ctx.lineWidth = 1;
+          ctx.beginPath();
+          ctx.moveTo(pad.left, getY(p));
+          ctx.lineTo(pad.left + cw, getY(p));
+          ctx.stroke();
+          ctx.fillStyle = C.muted;
+          ctx.fillText(`${p}%`, pad.left - 6, getY(p));
+        });
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'top';
+        this.niceTicks(S.min, S.max, w > 400 ? 6 : 4).ticks.forEach(v => {
+          if (v < S.min || v > S.max) return;
+          ctx.fillText(v === 0 ? '0' : `${v > 0 ? '+' : '−'}${fmt.num(Math.abs(v), v % 1 ? 1 : 0)}`, getX(v), pad.top + ch + 6);
+        });
+        ctx.font = '600 10.5px Inter, sans-serif';
+        ctx.fillText('Vantagem de FB nesse ponto (p.p.)', pad.left + cw / 2, pad.top + ch + 24);
+        ctx.save();
+        ctx.translate(11, pad.top + ch / 2);
+        ctx.rotate(-Math.PI / 2);
+        ctx.textBaseline = 'middle';
+        ctx.fillText('L passa com (% apurado)', 0, 0);
+        ctx.restore();
+
+        ctx.save();
+        ctx.beginPath();
+        ctx.rect(pad.left, pad.top, cw, ch);
+        ctx.clip();
+
+        // Faixa ilustrativa (queda 25% maior: L passa antes; 25% menor: passa depois ou não passa)
+        const band = S.pts.filter(pt => pt.early !== null);
+        if (band.length > 1) {
+          ctx.beginPath();
+          band.forEach((pt, n) => n ? ctx.lineTo(getX(pt.lead), getY(pt.early)) : ctx.moveTo(getX(pt.lead), getY(pt.early)));
+          for (let n = band.length - 1; n >= 0; n--) ctx.lineTo(getX(band[n].lead), getY(band[n].late === null ? 100 : band[n].late));
+          ctx.closePath();
+          ctx.fillStyle = this.withAlpha(C.l, 0.14);
+          ctx.fill();
+        }
+
+        // Curva central
+        ctx.beginPath();
+        let started = false;
+        S.pts.forEach(pt => {
+          if (pt.mid === null) return;
+          if (started) ctx.lineTo(getX(pt.lead), getY(pt.mid));
+          else ctx.moveTo(getX(pt.lead), getY(pt.mid));
+          started = true;
+        });
+        ctx.strokeStyle = C.l;
+        ctx.lineWidth = 2.4;
+        ctx.stroke();
+
+        // Referência: a vantagem que JB tinha nesse ponto em 2022
+        ctx.strokeStyle = C.jb;
+        ctx.lineWidth = 1.5;
+        ctx.setLineDash([5, 4]);
+        ctx.beginPath();
+        ctx.moveTo(getX(base), pad.top);
+        ctx.lineTo(getX(base), pad.top + ch);
+        ctx.stroke();
+        ctx.restore();
+
+        ctx.fillStyle = C.muted;
+        ctx.font = '600 10px Inter, sans-serif';
+        ctx.textAlign = 'right';
+        ctx.textBaseline = 'bottom';
+        ctx.fillText('JB em 2022', getX(base) - 4, pad.top + ch - 4);
+
+        // Cenário escolhido
+        const ot = this.projOvertake(idx0, lead0, 1);
+        const xc = getX(lead0);
+        const yc = ot < 0 ? pad.top + 8 : getY(this.data2022[ot].p);
+        ctx.strokeStyle = C.ref;
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.moveTo(xc, pad.top);
+        ctx.lineTo(xc, pad.top + ch);
+        ctx.stroke();
+        this.drawGlowDot(ctx, xc, yc, ot < 0 ? C.fb : C.l, C.surface);
+        const label = `${fmt.signPP(lead0)} → ${ot < 0 ? 'não passa' : fmt.share(this.data2022[ot].p)}`;
+        ctx.font = 'bold 10.5px JetBrains Mono, monospace';
+        const lw = ctx.measureText(label).width;
+        const left = xc + 8 + lw > pad.left + cw;
+        ctx.textAlign = left ? 'right' : 'left';
+        ctx.textBaseline = 'middle';
+        ctx.fillStyle = C.text;
+        ctx.fillText(label, left ? xc - 8 : xc + 8, Math.max(pad.top + 8, Math.min(pad.top + ch - 8, yc)));
+      }
+
+      // ---------- TABELA ----------
+
       initTable() {
         const searchInput = document.getElementById('tableSearchInput');
         const filterBtn = document.getElementById('btnFilterMilestones');
-        this.onlyMilestones = false;
 
         filterBtn.onclick = () => {
           this.onlyMilestones = !this.onlyMilestones;
           filterBtn.classList.toggle('btn-primary', this.onlyMilestones);
-          filterBtn.textContent = this.onlyMilestones ? '⭐ Todos os Registros' : '⭐ Apenas Marcos';
+          filterBtn.textContent = this.onlyMilestones ? '⭐ Mostrar todas as linhas' : '⭐ Só momentos-chave';
           this.renderTable(searchInput.value, this.onlyMilestones);
         };
 
@@ -2399,42 +3851,64 @@
         const tbody = document.getElementById('dataTableBody');
         if (!tbody || !this.data2022.length) return;
 
-        const milestoneIndices = new Set([0, 4, 20, 50, 140, 500, 1387, 2500, 3121, 3190, 3994, 4986, this.data2022.length - 1]);
-        const fmtPct = (n) => (n || 0).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + '%';
-        const fmtSignPP = (n) => (n >= 0 ? '+' : '') + (n || 0).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' p.p.';
-
+        const milestoneIndices = this.milestoneIndexSet();
         const q = (query || '').toLowerCase().trim();
-        const step = q ? 1 : (onlyMilestones ? 1 : Math.max(1, Math.floor(this.data2022.length / 120)));
-        const d26 = this.active2026;
+        const step = q || onlyMilestones ? 1 : Math.max(1, Math.floor(this.data2022.length / 120));
+        const MAX_ROWS = 150;
 
         const rows = [];
         for (let i = 0; i < this.data2022.length; i += step) {
+          const isLast = i + step >= this.data2022.length;
           if (onlyMilestones && !milestoneIndices.has(i)) continue;
           const r22 = this.data2022[i];
-          const r26 = d26[i] || r22;
-          const urnasStr = fmtPct(r22.p);
-          if (q && !r22.t.toLowerCase().includes(q) && !urnasStr.toLowerCase().includes(q)) continue;
-          rows.push({ i, r22, r26 });
-          if (rows.length >= 150) break;
+          if (q && !r22.t.toLowerCase().includes(q) && !fmt.pct(r22.p).toLowerCase().includes(q)) continue;
+          rows.push(i);
+          if (rows.length >= MAX_ROWS) break;
+          // Na amostragem, garante que a última linha (100%) sempre aparece
+          if (!q && !onlyMilestones && isLast && i !== this.data2022.length - 1) rows.push(this.data2022.length - 1);
         }
 
-        tbody.innerHTML = rows.map(({ i, r22, r26 }) => {
-          const p26 = this.get2026Pct(r26);
-          const gap22 = r22.jp - r22.lp;
-          const gap26 = p26.fb - p26.l;
-          const timeStr = r22.t.split(' ')[1] || r22.t;
+        const wrap = document.getElementById('tableWrap');
+        wrap.classList.toggle('hide-2022', !this.show22);
+        wrap.classList.toggle('hide-2026', !this.show26);
 
+        const note = document.getElementById('tableNote');
+        if (q) note.textContent = `${rows.length} resultado(s) para "${query.trim()}"${rows.length >= MAX_ROWS ? ` (mostrando os primeiros ${MAX_ROWS})` : ''}.`;
+        else if (onlyMilestones) note.textContent = 'Mostrando só os momentos-chave (⭐), os mesmos dos botões de salto e do gráfico.';
+        else note.textContent = `Mostrando 1 a cada ${step} atualizações do TSE (${rows.length} linhas de ${this.data2022.length.toLocaleString('pt-BR')}). Use a busca para achar qualquer momento. ⭐ = momento-chave.`;
+
+        tbody.innerHTML = rows.map(i => {
+          const S = this.snap(i);
           return `
-            <tr style="border-bottom: 1px solid var(--border-color); cursor: pointer;" onclick="window.app.jumpTo(${i})">
-              <td style="padding: 0.55rem 0.85rem; font-family: var(--font-mono);">${timeStr}</td>
-              <td style="padding: 0.55rem 0.85rem; font-family: var(--font-mono);">${fmtPct(r22.p)}</td>
-              <td style="padding: 0.55rem 0.85rem; font-family: var(--font-mono);">JB ${fmtPct(r22.jp)} x L ${fmtPct(r22.lp)}</td>
-              <td style="padding: 0.55rem 0.85rem; font-family: var(--font-mono); color: ${gap22 >= 0 ? '#60a5fa' : '#f87171'}; font-weight: 700;">${fmtSignPP(gap22)}</td>
-              <td style="padding: 0.55rem 0.85rem; font-family: var(--font-mono);">FB ${fmtPct(p26.fb)} x L ${fmtPct(p26.l)}</td>
-              <td style="padding: 0.55rem 0.85rem; font-family: var(--font-mono); color: ${gap26 >= 0 ? '#34d399' : '#f87171'}; font-weight: 700;">${fmtSignPP(gap26)}</td>
+            <tr data-idx="${i}" onclick="window.app.jumpTo(${i})">
+              <td>${milestoneIndices.has(i) ? '⭐ ' : ''}${fmt.time(S.t)}</td>
+              <td>${fmt.pct(S.p)}</td>
+              <td class="col-22">JB ${fmt.pct(S.jb)} × L ${fmt.pct(S.l22)}</td>
+              <td class="col-22"><span class="key key-${leaderKey(S.gap22, 'jb')}">${leadPP(S.gap22, 'JB')}</span></td>
+              <td class="col-22">${leadVotes(S.votes22, 'JB')}</td>
+              <td class="col-26">FB ${fmt.pct(S.fb)} × L ${fmt.pct(S.l26)}</td>
+              <td class="col-26"><span class="key key-${leaderKey(S.gap26, 'fb')}">${leadPP(S.gap26, 'FB')}</span></td>
+              <td class="col-26">${leadVotes(S.votes26, 'FB')}</td>
             </tr>
           `;
         }).join('');
+
+        this.highlightTableRow();
+      }
+
+      // Destaca a linha mais próxima (anterior ou igual) do momento atual da reprodução
+      highlightTableRow() {
+        const tbody = document.getElementById('dataTableBody');
+        if (!tbody) return;
+        let best = null;
+        for (const tr of tbody.rows) {
+          if (parseInt(tr.dataset.idx, 10) <= this.currentIndex) best = tr;
+          else break;
+        }
+        if (best === this.currentRow) return;
+        if (this.currentRow) this.currentRow.classList.remove('row-current');
+        if (best) best.classList.add('row-current');
+        this.currentRow = best;
       }
     }
 
