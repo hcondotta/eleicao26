@@ -1,0 +1,2446 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Apuração & Comparativo: 2022 (JB x L) vs 2026 (FB x L)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-primary: #0b0f19;
+      --bg-secondary: #111827;
+      --bg-card: rgba(17, 24, 39, 0.78);
+      --bg-card-hover: rgba(31, 41, 55, 0.88);
+      --border-color: rgba(255, 255, 255, 0.08);
+      --border-color-focus: rgba(255, 255, 255, 0.22);
+      --text-primary: #f9fafb;
+      --text-secondary: #9ca3af;
+      --text-muted: #6b7280;
+      --color-l: #ef4444;
+      --color-l-glow: rgba(239, 68, 68, 0.35);
+      --color-jb: #3b82f6;
+      --color-jb-glow: rgba(59, 130, 246, 0.35);
+      --color-fb: #10b981;
+      --color-fb-glow: rgba(16, 185, 129, 0.35);
+      --color-accent: #10b981;
+      --color-gold: #f59e0b;
+      --font-main: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+    }
+
+    [data-theme="light"] {
+      --bg-primary: #f3f4f6;
+      --bg-secondary: #ffffff;
+      --bg-card: rgba(255, 255, 255, 0.92);
+      --bg-card-hover: #ffffff;
+      --border-color: rgba(0, 0, 0, 0.1);
+      --border-color-focus: rgba(0, 0, 0, 0.25);
+      --text-primary: #111827;
+      --text-secondary: #4b5563;
+      --text-muted: #9ca3af;
+      --color-l: #dc2626;
+      --color-l-glow: rgba(220, 38, 38, 0.2);
+      --color-jb: #2563eb;
+      --color-jb-glow: rgba(37, 99, 235, 0.2);
+      --color-fb: #059669;
+      --color-fb-glow: rgba(5, 150, 105, 0.2);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      font-family: var(--font-main);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow-x: hidden;
+      line-height: 1.5;
+      background-image: 
+        radial-gradient(circle at 15% 15%, rgba(239, 68, 68, 0.05) 0%, transparent 40%),
+        radial-gradient(circle at 85% 15%, rgba(59, 130, 246, 0.05) 0%, transparent 40%),
+        radial-gradient(circle at 50% 50%, rgba(16, 185, 129, 0.04) 0%, transparent 50%);
+      background-attachment: fixed;
+    }
+
+    .container {
+      max-width: 1420px;
+      margin: 0 auto;
+      padding: 1.25rem 1rem 3rem;
+      width: 100%;
+    }
+
+    /* HEADER */
+    header {
+      background: var(--bg-card);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid var(--border-color);
+      border-radius: 1.25rem;
+      padding: 1.15rem 1.5rem;
+      margin-bottom: 1rem;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.2);
+    }
+
+    .header-brand {
+      display: flex;
+      align-items: center;
+      gap: 0.9rem;
+    }
+
+    .brand-icon {
+      width: 48px;
+      height: 48px;
+      background: linear-gradient(135deg, #374151, #1f2937);
+      border: 1px solid var(--border-color);
+      border-radius: 0.875rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.65rem;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    }
+
+    .brand-title {
+      font-size: 1.3rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      background: linear-gradient(135deg, #ffffff 30%, #9ca3af 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    [data-theme="light"] .brand-title {
+      background: linear-gradient(135deg, #111827 30%, #4b5563 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .brand-subtitle {
+      font-size: 0.82rem;
+      color: var(--text-secondary);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-top: 0.1rem;
+    }
+
+    .header-badges {
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
+      flex-wrap: wrap;
+    }
+
+    /* MODE SELECTOR BAR */
+    .mode-selector-bar {
+      background: var(--bg-card);
+      backdrop-filter: blur(16px);
+      border: 1px solid var(--border-color);
+      border-radius: 1.1rem;
+      padding: 0.6rem;
+      margin-bottom: 1.25rem;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .mode-tabs {
+      display: flex;
+      gap: 0.45rem;
+      flex-wrap: wrap;
+    }
+
+    .mode-tab {
+      background: transparent;
+      border: 1px solid transparent;
+      color: var(--text-secondary);
+      padding: 0.6rem 1.15rem;
+      border-radius: 0.75rem;
+      font-size: 0.86rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: all 0.2s ease;
+      font-family: inherit;
+    }
+
+    .mode-tab:hover {
+      background: rgba(255, 255, 255, 0.05);
+      color: var(--text-primary);
+    }
+
+    .mode-tab.active {
+      background: linear-gradient(135deg, #2563eb, #1d4ed8);
+      color: #ffffff;
+      border-color: #60a5fa;
+      box-shadow: 0 4px 14px rgba(37, 99, 235, 0.35);
+    }
+
+    .mode-tab.active[data-election="compare"] {
+      background: linear-gradient(135deg, #059669, #047857);
+      border-color: #34d399;
+      box-shadow: 0 4px 14px rgba(16, 185, 129, 0.35);
+    }
+
+    .sub-options-2026 {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      flex-wrap: wrap;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.35rem 0.75rem;
+      font-size: 0.76rem;
+      font-weight: 600;
+      border-radius: 9999px;
+      border: 1px solid var(--border-color);
+      background: rgba(255, 255, 255, 0.05);
+      color: var(--text-secondary);
+    }
+
+    .badge-live {
+      background: rgba(16, 185, 129, 0.15);
+      border-color: rgba(16, 185, 129, 0.35);
+      color: #34d399;
+    }
+
+    .badge-live::before {
+      content: "";
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #10b981;
+      box-shadow: 0 0 8px #10b981;
+      animation: pulse 1.8s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.4; transform: scale(1.2); }
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      padding: 0.45rem 0.9rem;
+      font-size: 0.82rem;
+      font-weight: 600;
+      border-radius: 0.625rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      font-family: inherit;
+      border: 1px solid var(--border-color);
+      background: var(--bg-secondary);
+      color: var(--text-primary);
+    }
+
+    .btn:hover {
+      background: var(--bg-card-hover);
+      border-color: var(--border-color-focus);
+      transform: translateY(-1px);
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #2563eb, #1d4ed8);
+      border-color: #3b82f6;
+      color: #ffffff;
+    }
+
+    /* SCOREBOARD */
+    .scoreboard {
+      display: grid;
+      grid-template-columns: 1fr 350px 1fr;
+      gap: 1.15rem;
+      margin-bottom: 1.25rem;
+    }
+
+    @media (max-width: 1024px) {
+      .scoreboard {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .candidate-card {
+      background: var(--bg-card);
+      backdrop-filter: blur(16px);
+      border: 1px solid var(--border-color);
+      border-radius: 1.25rem;
+      padding: 1.35rem 1.5rem;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: all 0.25s ease;
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.15);
+    }
+
+    .candidate-card.lead {
+      border-width: 2px;
+    }
+
+    .candidate-card.l-card {
+      border-color: rgba(239, 68, 68, 0.3);
+    }
+    .candidate-card.l-card.lead {
+      border-color: var(--color-l);
+      box-shadow: 0 0 28px var(--color-l-glow);
+    }
+
+    .candidate-card.jb-card {
+      border-color: rgba(59, 130, 246, 0.3);
+    }
+    .candidate-card.jb-card.lead {
+      border-color: var(--color-jb);
+      box-shadow: 0 0 28px var(--color-jb-glow);
+    }
+
+    .candidate-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 0.75rem;
+    }
+
+    .candidate-info {
+      display: flex;
+      align-items: center;
+      gap: 0.9rem;
+    }
+
+    .candidate-avatar {
+      width: 54px;
+      height: 54px;
+      border-radius: 0.9rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.35rem;
+      font-weight: 900;
+      font-family: var(--font-mono);
+      color: #ffffff;
+      flex-shrink: 0;
+    }
+
+    .l-card .candidate-avatar {
+      background: linear-gradient(135deg, #ef4444, #b91c1c);
+      box-shadow: 0 6px 16px rgba(239, 68, 68, 0.35);
+    }
+
+    .jb-card .candidate-avatar {
+      background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+      box-shadow: 0 6px 16px rgba(59, 130, 246, 0.35);
+    }
+
+    .candidate-name-box h3 {
+      font-size: 1.3rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+    }
+
+    .candidate-role {
+      font-size: 0.78rem;
+      color: var(--text-secondary);
+      font-weight: 500;
+    }
+
+    .status-pill {
+      font-size: 0.72rem;
+      font-weight: 700;
+      padding: 0.25rem 0.7rem;
+      border-radius: 9999px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .status-lead {
+      background: rgba(16, 185, 129, 0.18);
+      border: 1px solid rgba(16, 185, 129, 0.4);
+      color: #34d399;
+    }
+
+    .status-trail {
+      background: rgba(156, 163, 175, 0.1);
+      border: 1px solid rgba(156, 163, 175, 0.2);
+      color: var(--text-muted);
+    }
+
+    .candidate-metric {
+      margin: 0.5rem 0 1rem;
+    }
+
+    .candidate-pct {
+      font-size: 3.1rem;
+      font-weight: 900;
+      line-height: 1.05;
+      font-family: var(--font-mono);
+      letter-spacing: -0.03em;
+      display: flex;
+      align-items: baseline;
+      gap: 0.15rem;
+      white-space: nowrap;
+    }
+
+    .l-card .candidate-pct { color: var(--color-l); }
+    .jb-card .candidate-pct { color: var(--color-jb); }
+
+    .candidate-pct span.symbol {
+      font-size: 1.55rem;
+      font-weight: 700;
+    }
+
+    .candidate-votes {
+      font-size: 1.05rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      font-family: var(--font-mono);
+      margin-top: 0.3rem;
+    }
+
+    .candidate-votes span.label {
+      font-size: 0.78rem;
+      font-weight: 400;
+      color: var(--text-secondary);
+      font-family: var(--font-main);
+      margin-left: 0.25rem;
+    }
+
+    .candidate-bar-wrap {
+      width: 100%;
+      height: 8px;
+      background: rgba(255, 255, 255, 0.08);
+      border-radius: 999px;
+      overflow: hidden;
+    }
+
+    .candidate-bar {
+      height: 100%;
+      border-radius: 999px;
+      transition: width 0.2s ease;
+    }
+
+    .l-card .candidate-bar { background: linear-gradient(90deg, #ef4444, #f87171); }
+    .jb-card .candidate-bar { background: linear-gradient(90deg, #3b82f6, #60a5fa); }
+
+    /* CENTER CARD */
+    .comparison-card {
+      background: var(--bg-card);
+      backdrop-filter: blur(16px);
+      border: 1px solid var(--border-color);
+      border-radius: 1.25rem;
+      padding: 1.25rem 1.4rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      align-items: center;
+      text-align: center;
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.15);
+    }
+
+    .comp-title {
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--text-muted);
+    }
+
+    .comp-diff-val {
+      font-size: 1.55rem;
+      font-weight: 800;
+      font-family: var(--font-mono);
+      letter-spacing: -0.02em;
+    }
+
+    .comp-diff-sub {
+      font-size: 0.78rem;
+      color: var(--text-secondary);
+      font-weight: 500;
+      margin-top: 0.15rem;
+    }
+
+    .gauge-wrapper {
+      width: 100%;
+      margin: 0.65rem 0;
+    }
+
+    .dual-bar-container {
+      width: 100%;
+      height: 16px;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 8px;
+      overflow: hidden;
+      display: flex;
+      position: relative;
+      border: 1px solid var(--border-color);
+    }
+
+    .dual-bar-l { background: var(--color-l); height: 100%; transition: width 0.2s ease; }
+    .dual-bar-jb { background: var(--color-jb); height: 100%; transition: width 0.2s ease; }
+
+    .dual-bar-centerline {
+      position: absolute;
+      left: 50%;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: #ffffff;
+      box-shadow: 0 0 6px rgba(255, 255, 255, 0.9);
+      z-index: 2;
+    }
+
+    .gauge-labels {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      margin-top: 0.3rem;
+      font-family: var(--font-mono);
+    }
+
+    .comp-urnas {
+      width: 100%;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--border-color);
+      border-radius: 0.8rem;
+      padding: 0.65rem 0.9rem;
+    }
+
+    .urnas-pct {
+      font-size: 1.35rem;
+      font-weight: 800;
+      font-family: var(--font-mono);
+      color: var(--color-accent);
+      line-height: 1.1;
+    }
+
+    .urnas-sub {
+      font-size: 0.72rem;
+      color: var(--text-secondary);
+      margin-top: 0.15rem;
+    }
+
+    .urnas-bar-bg {
+      width: 100%;
+      height: 5px;
+      background: rgba(255, 255, 255, 0.08);
+      border-radius: 999px;
+      margin-top: 0.45rem;
+      overflow: hidden;
+    }
+
+    .urnas-bar-fill {
+      height: 100%;
+      background: var(--color-accent);
+      border-radius: 999px;
+      transition: width 0.2s ease;
+    }
+
+    /* STATS ROW */
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 0.9rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .stat-mini-card {
+      background: var(--bg-card);
+      backdrop-filter: blur(12px);
+      border: 1px solid var(--border-color);
+      border-radius: 0.95rem;
+      padding: 0.85rem 1.15rem;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .stat-label {
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      margin-bottom: 0.2rem;
+    }
+
+    .stat-val {
+      font-size: 1.18rem;
+      font-weight: 800;
+      font-family: var(--font-mono);
+      color: var(--text-primary);
+    }
+
+    .stat-sub {
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      margin-top: 0.15rem;
+    }
+
+    /* PLAYER & SCRUBBER */
+    .player-card {
+      background: var(--bg-card);
+      backdrop-filter: blur(16px);
+      border: 1px solid var(--border-color);
+      border-radius: 1.25rem;
+      padding: 1.15rem 1.5rem;
+      margin-bottom: 1.25rem;
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.15);
+    }
+
+    .scrubber-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.6rem;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .time-display {
+      font-family: var(--font-mono);
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .scrubber-slider-wrap {
+      position: relative;
+      width: 100%;
+      margin: 0.65rem 0 1rem;
+    }
+
+    .scrubber-slider {
+      -webkit-appearance: none;
+      width: 100%;
+      height: 8px;
+      border-radius: 4px;
+      background: rgba(255, 255, 255, 0.12);
+      outline: none;
+      cursor: pointer;
+    }
+
+    .scrubber-slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: #ffffff;
+      cursor: pointer;
+      box-shadow: 0 0 12px rgba(255, 255, 255, 0.8), 0 2px 6px rgba(0, 0, 0, 0.4);
+      border: 3px solid #3b82f6;
+      transition: transform 0.15s ease;
+    }
+
+    .scrubber-slider::-webkit-slider-thumb:hover {
+      transform: scale(1.18);
+    }
+
+    .player-controls-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .play-btns {
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
+    }
+
+    .btn-circle {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      padding: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+    }
+
+    .btn-play {
+      width: 48px;
+      height: 48px;
+      background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+      color: #ffffff;
+      border-color: #60a5fa;
+      font-size: 1.25rem;
+    }
+
+    .speed-selector {
+      display: flex;
+      align-items: center;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border-color);
+      border-radius: 0.625rem;
+      padding: 0.2rem;
+    }
+
+    .speed-btn {
+      background: transparent;
+      border: none;
+      padding: 0.3rem 0.6rem;
+      font-size: 0.76rem;
+      font-weight: 700;
+      color: var(--text-secondary);
+      border-radius: 0.45rem;
+      cursor: pointer;
+      font-family: var(--font-mono);
+    }
+
+    .speed-btn.active {
+      background: #3b82f6;
+      color: #ffffff;
+    }
+
+    /* MILESTONES BAR */
+    .milestones-section {
+      margin-top: 1rem;
+      padding-top: 0.85rem;
+      border-top: 1px solid var(--border-color);
+    }
+
+    .milestones-title {
+      font-size: 0.73rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-muted);
+      margin-bottom: 0.55rem;
+    }
+
+    .milestones-chips {
+      display: flex;
+      gap: 0.55rem;
+      overflow-x: auto;
+      padding-bottom: 0.35rem;
+      scrollbar-width: thin;
+    }
+
+    .milestone-chip {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--border-color);
+      border-radius: 0.625rem;
+      padding: 0.4rem 0.8rem;
+      font-size: 0.76rem;
+      color: var(--text-secondary);
+      cursor: pointer;
+      white-space: nowrap;
+      display: flex;
+      flex-direction: column;
+      gap: 0.1rem;
+      transition: all 0.2s ease;
+    }
+
+    .milestone-chip:hover {
+      background: var(--bg-card-hover);
+      border-color: var(--border-color-focus);
+      color: var(--text-primary);
+      transform: translateY(-2px);
+    }
+
+    .milestone-chip strong {
+      color: var(--text-primary);
+      font-weight: 700;
+    }
+
+    .milestone-chip.highlight-virada {
+      border-color: rgba(239, 68, 68, 0.5);
+      background: rgba(239, 68, 68, 0.1);
+    }
+    .milestone-chip.highlight-virada strong { color: #f87171; }
+
+    .milestone-chip.highlight-jb {
+      border-color: rgba(59, 130, 246, 0.5);
+      background: rgba(59, 130, 246, 0.12);
+    }
+    .milestone-chip.highlight-jb strong { color: #60a5fa; }
+
+    /* CHART CONTAINER */
+    .chart-card {
+      background: var(--bg-card);
+      backdrop-filter: blur(16px);
+      border: 1px solid var(--border-color);
+      border-radius: 1.25rem;
+      padding: 1.35rem 1.5rem;
+      margin-bottom: 1.25rem;
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.15);
+    }
+
+    .chart-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .chart-title-box h3 {
+      font-size: 1.18rem;
+      font-weight: 800;
+      letter-spacing: -0.01em;
+    }
+
+    .chart-title-box p {
+      font-size: 0.78rem;
+      color: var(--text-secondary);
+      margin-top: 0.15rem;
+    }
+
+    .chart-actions {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+
+    .toggle-group {
+      display: inline-flex;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border-color);
+      border-radius: 0.6rem;
+      padding: 0.18rem;
+    }
+
+    .toggle-opt {
+      background: transparent;
+      border: none;
+      padding: 0.35rem 0.7rem;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+      border-radius: 0.45rem;
+      cursor: pointer;
+      font-family: inherit;
+      transition: all 0.15s ease;
+    }
+
+    .toggle-opt.active {
+      background: var(--bg-secondary);
+      color: var(--text-primary);
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+    }
+
+    .canvas-wrapper {
+      position: relative;
+      width: 100%;
+      height: 450px;
+    }
+
+    canvas#electionChart {
+      width: 100%;
+      height: 100%;
+      display: block;
+      cursor: crosshair;
+    }
+
+    /* CHART LEGEND */
+    .chart-legend {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 1.25rem;
+      margin-top: 0.85rem;
+      padding-top: 0.75rem;
+      border-top: 1px solid var(--border-color);
+      font-size: 0.78rem;
+      color: var(--text-secondary);
+    }
+
+    .legend-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      font-weight: 600;
+    }
+
+    .legend-line {
+      width: 22px;
+      height: 3px;
+      border-radius: 2px;
+      display: inline-block;
+    }
+
+    .legend-line.dashed {
+      background: repeating-linear-gradient(90deg, currentColor 0, currentColor 5px, transparent 5px, transparent 9px);
+      height: 3px;
+    }
+
+    /* CHART TOOLTIP */
+    .custom-tooltip {
+      position: absolute;
+      pointer-events: none;
+      background: rgba(15, 23, 42, 0.96);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      backdrop-filter: blur(12px);
+      border-radius: 0.75rem;
+      padding: 0.75rem 1rem;
+      font-size: 0.78rem;
+      color: #ffffff;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.55);
+      z-index: 100;
+      transform: translate(-50%, -110%);
+      transition: opacity 0.12s ease;
+      opacity: 0;
+      min-width: 235px;
+    }
+
+    .custom-tooltip.show {
+      opacity: 1;
+    }
+
+    .tt-header {
+      font-weight: 700;
+      font-family: var(--font-mono);
+      color: #93c5fd;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      padding-bottom: 0.35rem;
+      margin-bottom: 0.45rem;
+      display: flex;
+      justify-content: space-between;
+      gap: 0.75rem;
+    }
+
+    .tt-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin: 0.25rem 0;
+      font-family: var(--font-mono);
+      gap: 0.75rem;
+    }
+
+    .tt-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      display: inline-block;
+      margin-right: 0.4rem;
+    }
+
+    /* NARRATIVE PHASES */
+    .phases-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.15rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .phase-card {
+      background: var(--bg-card);
+      backdrop-filter: blur(12px);
+      border: 1px solid var(--border-color);
+      border-radius: 1.15rem;
+      padding: 1.2rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .phase-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      font-size: 0.7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      padding: 0.2rem 0.6rem;
+      border-radius: 999px;
+      margin-bottom: 0.65rem;
+      width: fit-content;
+    }
+
+    .phase-badge.phase-1 { background: rgba(59, 130, 246, 0.15); color: #60a5fa; }
+    .phase-badge.phase-2 { background: rgba(245, 158, 11, 0.15); color: #fbbf24; }
+    .phase-badge.phase-3 { background: rgba(239, 68, 68, 0.15); color: #f87171; }
+    .phase-badge.phase-4 { background: rgba(16, 185, 129, 0.15); color: #34d399; }
+
+    .phase-title {
+      font-size: 1rem;
+      font-weight: 700;
+      margin-bottom: 0.35rem;
+    }
+
+    .phase-desc {
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+      line-height: 1.45;
+      margin-bottom: 0.9rem;
+    }
+
+    .phase-btn {
+      font-size: 0.74rem;
+      padding: 0.35rem 0.7rem;
+    }
+
+    footer {
+      margin-top: auto;
+      text-align: center;
+      padding: 1.75rem 1rem;
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      border-top: 1px solid var(--border-color);
+    }
+
+    .text-mono { font-family: var(--font-mono); }
+    .text-red { color: var(--color-l); }
+    .text-blue { color: var(--color-jb); }
+    .text-green { color: var(--color-accent); }
+    .text-gold { color: var(--color-gold); }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+
+    <!-- HEADER -->
+    <header>
+      <div class="header-brand">
+        <div class="brand-icon">🏢</div>
+        <div>
+          <h1 class="brand-title" id="mainPageTitle">Análise Comparativa: 2022 (JB x L) vs 2026 (FB x L)</h1>
+          <div class="brand-subtitle">
+            <span id="headerSubtitle">Evolução dos Percentuais e Queda da Diferença ao Longo da Apuração</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="header-badges">
+        <div class="badge badge-live" id="badgeLive">DADOS 2022 & 2026 CARREGADOS</div>
+        <button class="btn" id="btnThemeToggle" title="Alternar tema claro/escuro">🌓 Tema</button>
+      </div>
+    </header>
+
+    <!-- ELECTION / COMPARISON MODE BAR -->
+    <section class="mode-selector-bar">
+      <div class="mode-tabs" id="electionModeTabs">
+        <button class="mode-tab active" data-election="compare">
+          ⚖️ Comparativo: 2022 (JB x L) vs 2026 (FB x L)
+        </button>
+        <button class="mode-tab" data-election="2026">
+          🗳️ Eleição 2026 (FB x L • 499.206 seções)
+        </button>
+        <button class="mode-tab" data-election="2022">
+          🗳️ Eleição 2022 (JB x L • 472.075 seções)
+        </button>
+      </div>
+
+      <div class="sub-options-2026" id="subOptions2026">
+        <div class="toggle-group" id="order2026Toggle" title="Como ordenar as 499.206 seções do CSV de 2026 (já que o arquivo de seção tem hora de geração fixa 14:03:43)">
+          <button class="toggle-opt active" data-order="regional">2026: Ritmo Cronológico TSE</button>
+          <button class="toggle-opt" data-order="csv">2026: Ordem Bruta do CSV</button>
+        </div>
+
+        <div class="toggle-group" id="norm2026Toggle" title="Comparar proporção direta FB vs L (soma 100%) ou percentual sobre todos os votos válidos do 1º turno">
+          <button class="toggle-opt active" data-norm="two">FB x L (100%)</button>
+          <button class="toggle-opt" data-norm="valid">Válidos 1ºT</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- SCOREBOARD -->
+    <section class="scoreboard">
+
+      <!-- LEFT CARD (L in single election, or 2022 JB x L in Compare Mode) -->
+      <div class="candidate-card l-card" id="cardLeft">
+        <div class="candidate-top">
+          <div class="candidate-info">
+            <div class="candidate-avatar" id="avatarLeft">L</div>
+            <div class="candidate-name-box">
+              <h3 id="titleLeft">Chapa L</h3>
+              <div class="candidate-role" id="roleLeft">Candidato (13)</div>
+            </div>
+          </div>
+          <span class="status-pill status-lead" id="pillLeft">LIDERANDO</span>
+        </div>
+
+        <div class="candidate-metric">
+          <div class="candidate-pct" id="pctLeft">
+            50,90<span class="symbol">%</span>
+          </div>
+          <div class="candidate-votes" id="subLeft">
+            <span id="votesLeft">60.345.999</span>
+            <span class="label" id="labelLeft">votos válidos</span>
+          </div>
+        </div>
+
+        <div class="candidate-bar-wrap">
+          <div class="candidate-bar" id="barLeft" style="width: 50.9%;"></div>
+        </div>
+      </div>
+
+      <!-- CENTER COMPARISON CARD -->
+      <div class="comparison-card">
+        <div class="comp-title" id="centerTitle">Diferença em Tempo Real</div>
+
+        <div style="margin: 0.4rem 0; width: 100%;">
+          <div class="comp-diff-val" id="diffValue">+2.139.645</div>
+          <div class="comp-diff-sub" id="diffSubtitle">Vantagem de 1,80% p.p.</div>
+        </div>
+
+        <div class="gauge-wrapper">
+          <div class="dual-bar-container">
+            <div class="dual-bar-l" id="dualBarLeft" style="width: 50.9%;"></div>
+            <div class="dual-bar-jb" id="dualBarRight" style="width: 49.1%;"></div>
+            <div class="dual-bar-centerline" title="Marca de equilíbrio (50%)"></div>
+          </div>
+          <div class="gauge-labels">
+            <span id="gaugeLabelLeft">L: 50,90%</span>
+            <span>50%</span>
+            <span id="gaugeLabelRight">JB: 49,10%</span>
+          </div>
+        </div>
+
+        <div class="comp-urnas">
+          <div class="urnas-pct" id="urnasPct">100,00%</div>
+          <div class="urnas-sub" id="urnasCount">100% das seções apuradas</div>
+          <div class="urnas-bar-bg">
+            <div class="urnas-bar-fill" id="urnasBarFill" style="width: 100%;"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- RIGHT CARD (JB / FB in single election, or 2026 FB x L in Compare Mode) -->
+      <div class="candidate-card jb-card" id="cardRight">
+        <div class="candidate-top">
+          <div class="candidate-info">
+            <div class="candidate-avatar" id="avatarRight">FB</div>
+            <div class="candidate-name-box">
+              <h3 id="titleRight">Chapa FB</h3>
+              <div class="candidate-role" id="roleRight">Candidato (22)</div>
+            </div>
+          </div>
+          <span class="status-pill status-trail" id="pillRight">LIDERANDO</span>
+        </div>
+
+        <div class="candidate-metric">
+          <div class="candidate-pct" id="pctRight">
+            51,01<span class="symbol">%</span>
+          </div>
+          <div class="candidate-votes" id="subRight">
+            <span id="votesRight">56.104.503</span>
+            <span class="label" id="labelRight">votos válidos</span>
+          </div>
+        </div>
+
+        <div class="candidate-bar-wrap">
+          <div class="candidate-bar" id="barRight" style="width: 51.01%;"></div>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- STATS ROW -->
+    <section class="stats-row">
+      <div class="stat-mini-card">
+        <span class="stat-label" id="stat1Label">Pico Inicial (JB 2022)</span>
+        <span class="stat-val text-blue" id="stat1Val">56,84% vs 43,16%</span>
+        <span class="stat-sub" id="stat1Sub">Às 17:17 (vantagem de +13,68 p.p.)</span>
+      </div>
+      <div class="stat-mini-card">
+        <span class="stat-label" id="stat2Label">Pico Inicial (FB 2026)</span>
+        <span class="stat-val text-green" id="stat2Val">63,72% vs 36,28%</span>
+        <span class="stat-sub" id="stat2Sub">58,02% x 33,04% dos válidos totais</span>
+      </div>
+      <div class="stat-mini-card">
+        <span class="stat-label" id="stat3Label">Aos 68,34% das Urnas (18:44)</span>
+        <span class="stat-val text-gold" id="stat3Val">22: Empate | 26: FB +4,8 p.p.</span>
+        <span class="stat-sub" id="stat3Sub">Momento da virada em 2022</span>
+      </div>
+      <div class="stat-mini-card">
+        <span class="stat-label" id="stat4Label">Resultado Final 2022 (100%)</span>
+        <span class="stat-val text-red" id="stat4Val">L 50,90% x 49,10% JB</span>
+        <span class="stat-sub" id="stat4Sub">L vence por +2.139.645 votos</span>
+      </div>
+      <div class="stat-mini-card">
+        <span class="stat-label" id="stat5Label">Resultado Final 2026 (100%)</span>
+        <span class="stat-val text-blue" id="stat5Val">FB 51,01% x 48,99% L</span>
+        <span class="stat-sub" id="stat5Sub">FB vence por +2.224.965 votos (47,03% x 45,16% vál.)</span>
+      </div>
+    </section>
+
+    <!-- SCRUBBER / REPLAY CONTROLS -->
+    <section class="player-card">
+      <div class="scrubber-header">
+        <div class="time-display">
+          <span>🕒</span>
+          <span id="currentTimeDisplay">100,00% das seções</span>
+          <span class="badge" id="scrubberPctBadge" style="margin-left: 0.4rem;">100,00% apurado</span>
+        </div>
+        <div style="font-size: 0.78rem; color: var(--text-secondary);">
+          Passo <span id="currentRecordIdx" class="text-mono" style="color: var(--text-primary);">5286</span> de <span id="totalRecordsCount" class="text-mono">5286</span>
+        </div>
+      </div>
+
+      <div class="scrubber-slider-wrap">
+        <input type="range" id="scrubberSlider" class="scrubber-slider" min="0" max="5285" value="5285">
+      </div>
+
+      <div class="player-controls-row">
+        <div class="play-btns">
+          <button class="btn btn-circle" id="btnToStart" title="Ir para o início">⏮</button>
+          <button class="btn btn-circle" id="btnStepBack" title="Voltar 1 registro">◀</button>
+          <button class="btn btn-circle btn-play" id="btnPlayPause" title="Reproduzir / Pausar">▶</button>
+          <button class="btn btn-circle" id="btnStepFwd" title="Avançar 1 registro">▶</button>
+          <button class="btn btn-circle" id="btnToEnd" title="Ir para 100%">⏭</button>
+        </div>
+
+        <div style="display: flex; align-items: center; gap: 0.65rem;">
+          <span style="font-size: 0.75rem; color: var(--text-muted); font-weight: 700;">VELOCIDADE:</span>
+          <div class="speed-selector">
+            <button class="speed-btn" data-speed="1">1x</button>
+            <button class="speed-btn" data-speed="5">5x</button>
+            <button class="speed-btn active" data-speed="20">20x</button>
+            <button class="speed-btn" data-speed="60">60x</button>
+            <button class="speed-btn" data-speed="150">Max</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- KEY MOMENTS CHIPS -->
+      <div class="milestones-section">
+        <div class="milestones-title">
+          ⚡ Saltos Rápidos para Comparar a Queda da Diferença (2022 vs 2026):
+        </div>
+        <div class="milestones-chips">
+          <div class="milestone-chip" data-idx="0" data-zoom="inicio">
+            <strong>🏁 0,01% Urnas (17:00)</strong>
+            <span>2022: L 50,6% | 2026 CSV: FB 57,1% x L 42,9%</span>
+          </div>
+          <div class="milestone-chip highlight-jb" data-idx="50" data-zoom="inicio">
+            <strong>🚀 0,61% Urnas (17:11)</strong>
+            <span>2022: JB 55,6% | 2026: FB > 54% (Vantagem Inicial)</span>
+          </div>
+          <div class="milestone-chip highlight-jb" data-idx="140" data-zoom="inicio" style="border-color: #3b82f6; background: rgba(59, 130, 246, 0.18);">
+            <strong>🔥 1,78% Urnas (17:17:29)</strong>
+            <span>Pico JB 2022 (56,84% x 43,16%) & FB 2026 na frente</span>
+          </div>
+          <div class="milestone-chip highlight-jb" data-idx="500" data-zoom="inicio">
+            <strong>📉 8,13% Urnas (17:30)</strong>
+            <span>Diferença começa a cair (JB 52,4% | FB 58,9%)</span>
+          </div>
+          <div class="milestone-chip highlight-jb" data-idx="1387" data-zoom="all">
+            <strong>🏔️ 25,70% Urnas (17:56)</strong>
+            <span>2022: JB +2,62 p.p. (+790k) | 2026: FB +9,12 p.p.</span>
+          </div>
+          <div class="milestone-chip" data-idx="2500" data-zoom="all">
+            <strong>⚖️ 50,45% Urnas (18:27)</strong>
+            <span>Metade das urnas: 2022 JB +0,7% | 2026 FB +5,9%</span>
+          </div>
+          <div class="milestone-chip highlight-virada" data-idx="3190" data-zoom="all">
+            <strong>⚡ 68,34% Urnas (18:44:51)</strong>
+            <span>Virada de L em 2022 (50,0%) | Em 2026 FB mantém +4,8 p.p.</span>
+          </div>
+          <div class="milestone-chip" data-idx="5285" data-zoom="all">
+            <strong>🏁 100% Urnas (00:18)</strong>
+            <span>Final: 2022 L +1,80 p.p. | 2026 FB +2,02 p.p. (+2,22M)</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CHART CARD -->
+    <section class="chart-card">
+      <div class="chart-header">
+        <div class="chart-title-box">
+          <h3 id="chartMainTitle">Comparativo: Evolução dos Percentuais e Queda da Diferença (2022 vs 2026)</h3>
+          <p id="chartSubTitle">Veja como JB (2022) e FB (2026) largam acima de 56% contra menos de 44% de L, e como a vantagem diminui ao longo da apuração</p>
+        </div>
+
+        <div class="chart-actions">
+          <!-- ZOOM / PERÍODO -->
+          <div class="toggle-group" id="chartZoomToggle">
+            <button class="toggle-opt" data-zoom="inicio" title="Zoom nos primeiros 45 minutos (0% a 15% das urnas) onde JB e FB passam de 56% e L fica abaixo de 44%">🔍 Início (0% - 15%)</button>
+            <button class="toggle-opt" data-zoom="virada" title="Zoom no meio da apuração e momento da virada de 2022">⚡ Meio / Virada (38% - 88%)</button>
+            <button class="toggle-opt" data-zoom="final" title="Zoom na reta final">🏁 Reta Final (80% - 100%)</button>
+            <button class="toggle-opt active" data-zoom="all" title="Visão completa de 0% a 100%">🌐 Total (0% - 100%)</button>
+          </div>
+
+          <!-- ESCALA Y -->
+          <div class="toggle-group" id="chartYScaleToggle">
+            <button class="toggle-opt active" data-yscale="full" title="Escala ampla (35% a 65%) que exibe todos os picos iniciais">Escala Total (35%-65%)</button>
+            <button class="toggle-opt" data-yscale="tight" title="Foco na faixa central (45% a 55%)">Foco Central (45%-55%)</button>
+            <button class="toggle-opt" data-yscale="auto" title="Escala automática">Auto</button>
+          </div>
+
+          <!-- MÉTRICA -->
+          <div class="toggle-group" id="chartMetricToggle">
+            <button class="toggle-opt active" data-metric="pct" title="Curvas de evolução percentual dos candidatos">Curvas (%)</button>
+            <button class="toggle-opt" data-metric="gap_pct" title="Mostra diretamente a queda da diferença percentual: (JB - L) em 2022 vs (FB - L) em 2026">📉 Queda da Diferença (p.p.)</button>
+            <button class="toggle-opt" data-metric="diff" title="Diferença absoluta em votos nominais">Margem (Votos)</button>
+          </div>
+
+          <!-- EIXO X -->
+          <div class="toggle-group" id="chartAxisToggle">
+            <button class="toggle-opt active" data-axis="urnas">Eixo X: % Seções</button>
+            <button class="toggle-opt" data-axis="time">Eixo X: Horário</button>
+          </div>
+
+          <button class="btn" id="btnExportChart" style="padding: 0.35rem 0.7rem; font-size: 0.75rem;" title="Baixar gráfico como PNG">
+            📸 PNG
+          </button>
+        </div>
+      </div>
+
+      <div class="canvas-wrapper" id="canvasWrapper">
+        <canvas id="electionChart"></canvas>
+        <div class="custom-tooltip" id="customTooltip">
+          <div class="tt-header">
+            <span id="ttTime">--:--:--</span>
+            <span id="ttUrnas">0,00% seções</span>
+          </div>
+          <div id="ttBody"></div>
+        </div>
+      </div>
+
+      <div class="chart-legend" id="chartLegend">
+        <div class="legend-item"><span class="legend-line" style="background: #10b981;"></span> FB 2026 (22)</div>
+        <div class="legend-item"><span class="legend-line" style="background: #ef4444;"></span> L 2026 (13)</div>
+        <div class="legend-item"><span class="legend-line dashed" style="color: #60a5fa;"></span> JB 2022 (22)</div>
+        <div class="legend-item"><span class="legend-line dashed" style="color: #fca5a5;"></span> L 2022 (13)</div>
+      </div>
+    </section>
+
+    <!-- COMPARATIVE INSIGHTS CARDS -->
+    <section class="phases-grid">
+      <div class="phase-card">
+        <div>
+          <span class="phase-badge phase-1">1. Abertura (0% a 2% das seções)</span>
+          <h4 class="phase-title">Largada Acima de 56% vs Abaixo de 44%</h4>
+          <p class="phase-desc">
+            Em <strong>2022</strong>, às 17:17 (1,78% das seções), <strong>JB atingiu 56,84%</strong> contra <strong>43,16% de L</strong> (+13,68 p.p.). Em <strong>2026</strong>, o mesmo fenômeno se repete: na ordem bruta do CSV, <strong>FB larga com 57,10% a 60,98%</strong> contra <strong>42,90% a 39,02% de L</strong>; e no ritmo cronológico regional, FB abre acima de <strong>58% dos válidos (63,7% direto)</strong>.
+          </p>
+        </div>
+        <button class="btn phase-btn" onclick="window.app.jumpToAndZoom(140, 'inicio')">🔍 Ver Início no Gráfico (1,78%)</button>
+      </div>
+
+      <div class="phase-card">
+        <div>
+          <span class="phase-badge phase-2">2. Desaceleração (5% a 50% das seções)</span>
+          <h4 class="phase-title">Como a Diferença Vai Diminuindo</h4>
+          <p class="phase-desc">
+            À medida que a apuração avança pelas demais regiões, a diferença cai nas duas eleições: em <strong>2022</strong>, a vantagem de JB cai de <strong>+13,68 p.p.</strong> para <strong>+2,62 p.p.</strong> (aos 25,7% das urnas) e <strong>+0,72 p.p.</strong> (aos 50%). Em <strong>2026</strong>, a vantagem de FB também recua continuamente para <strong>+9,12 p.p.</strong> (aos 25,7%) e <strong>+5,91 p.p.</strong> (aos 50%).
+          </p>
+        </div>
+        <button class="btn phase-btn" onclick="window.app.setMetricAndZoom('gap_pct', 'all')">📉 Ver Curva de Queda da Diferença</button>
+      </div>
+
+      <div class="phase-card">
+        <div>
+          <span class="phase-badge phase-3">3. O Ponto Crítico (68,34% das seções)</span>
+          <h4 class="phase-title">Virada em 2022 vs Sustentação em 2026</h4>
+          <p class="phase-desc">
+            Aos <strong>68,34% das seções (18:44:51)</strong>, a curva de diferença de <strong>2022</strong> cruza o zero: L empata e vira sobre JB. Já em <strong>2026</strong>, embora a diferença entre FB e L continue diminuindo na mesma inclinação, FB sustenta uma margem positiva de <strong>+4,80 p.p.</strong> (+3,59 milhões de votos naquele instante).
+          </p>
+        </div>
+        <button class="btn phase-btn" onclick="window.app.jumpToAndZoom(3190, 'virada')">⚡ Comparar nos 68,34% (18:44)</button>
+      </div>
+
+      <div class="phase-card">
+        <div>
+          <span class="phase-badge phase-4">4. Fechamento 100% (Totalização Final)</span>
+          <h4 class="phase-title">Resultado Final Comparado</h4>
+          <p class="phase-desc">
+            Em <strong>2022 (2ºT)</strong>, L encerra com <strong>50,90% (60.345.999)</strong> contra <strong>49,10% (58.206.354)</strong> de JB (L +2.139.645 votos). Em <strong>2026 (1ºT)</strong>, FB encerra com <strong>56.104.503 votos (47,03% dos válidos / 51,01% FBxL)</strong> contra <strong>53.879.538 de L (45,16% dos válidos / 48,99% FBxL)</strong> — vantagem final de <strong>+2.224.965 votos para FB</strong>.
+          </p>
+        </div>
+        <button class="btn phase-btn" onclick="window.app.jumpToAndZoom(5285, 'all')">🏁 Ver 100% Totalizado</button>
+      </div>
+    </section>
+
+    <!-- DATA TABLE SECTION -->
+    <section class="chart-card" style="margin-top: 1rem;">
+      <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; margin-bottom: 1rem;">
+        <div>
+          <h3 style="font-size: 1.1rem; font-weight: 700;">Tabela Comparativa Passo a Passo (2022 vs 2026)</h3>
+          <p style="font-size: 0.78rem; color: var(--text-secondary);">Compare os percentuais e a queda da diferença em cada percentual de seções apuradas</p>
+        </div>
+        <div style="display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap;">
+          <input type="text" id="tableSearchInput" placeholder="Filtrar por horário ou % (ex: 17:17 ou 68,3)..." style="background: rgba(255,255,255,0.05); border: 1px solid var(--border-color); border-radius: 0.5rem; padding: 0.42rem 0.85rem; font-size: 0.8rem; color: var(--text-primary); outline: none; width: 260px;">
+          <button class="btn" id="btnFilterMilestones" style="font-size: 0.76rem; padding: 0.42rem 0.75rem;">⭐ Apenas Marcos</button>
+        </div>
+      </div>
+
+      <div style="max-height: 390px; overflow-y: auto; border: 1px solid var(--border-color); border-radius: 0.75rem;">
+        <table style="width: 100%; border-collapse: collapse; font-size: 0.78rem; text-align: left;" id="dataTable">
+          <thead style="position: sticky; top: 0; background: var(--bg-secondary); border-bottom: 1px solid var(--border-color); z-index: 10;">
+            <tr>
+              <th style="padding: 0.6rem 0.85rem;">Ref. Tempo</th>
+              <th style="padding: 0.6rem 0.85rem;">% Seções</th>
+              <th style="padding: 0.6rem 0.85rem; color: #60a5fa;">2022: JB x L</th>
+              <th style="padding: 0.6rem 0.85rem;">Dif. 2022 (JB-L)</th>
+              <th style="padding: 0.6rem 0.85rem; color: #34d399;">2026: FB x L</th>
+              <th style="padding: 0.6rem 0.85rem;">Dif. 2026 (FB-L)</th>
+            </tr>
+          </thead>
+          <tbody id="dataTableBody"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+      <p>Painel Comparativo de Evolução Eleitoral • 2022 (<code class="text-mono">Presidente_BR_2T_2022.csv</code>) vs 2026 (<code class="text-mono">votacao_secao_2026_BR.csv</code>)</p>
+      <p style="margin-top: 0.3rem;">Nota técnica: O arquivo de 2026 é por seção eleitoral (499.206 seções, 3.800.511 linhas, exportado em 06/10/2026 às 14:03:43). Você pode alternar no topo entre o <strong>Ritmo Cronológico Regional TSE</strong> e a <strong>Ordem Bruta de Aparição das Seções no CSV</strong>.</p>
+    </footer>
+
+  </div>
+
+  <!-- DATASETS -->
+  <script src="dados_eleicao.js"></script>
+  <script src="dados_eleicao_2026.js"></script>
+
+  <!-- APPLICATION SCRIPT -->
+  <script>
+    class ElectionComparisonApp {
+      constructor() {
+        this.data2022 = window.RAW_ELECTION_DATA || [];
+        this.raw2026 = window.RAW_ELECTION_DATA_2026 || { csv: [], regional: [], summary: {} };
+
+        this.electionMode = 'compare'; // 'compare' | '2026' | '2022'
+        this.order2026 = 'regional';   // 'regional' | 'csv'
+        this.norm2026 = 'two';         // 'two' (FB+L=100%) | 'valid' (% over all valid votes)
+
+        this.currentIndex = Math.max(0, this.data2022.length - 1);
+        this.isPlaying = false;
+        this.playSpeed = 20;
+        this.playTimer = null;
+
+        this.chartMetric = 'pct';      // 'pct' | 'gap_pct' | 'diff'
+        this.chartAxis = 'urnas';      // 'urnas' | 'time'
+        this.zoomKey = 'all';          // 'all' | 'inicio' | 'virada' | 'final'
+        this.yScaleMode = 'full';      // 'full' | 'tight' | 'auto'
+        this.zoomRange = { start: 0, end: Math.max(0, this.data2022.length - 1) };
+        this.hoverIndex = -1;
+
+        this.canvas = document.getElementById('electionChart');
+        this.ctx = this.canvas.getContext('2d');
+        this.tooltip = document.getElementById('customTooltip');
+
+        this.init();
+      }
+
+      get active2026() {
+        return this.order2026 === 'csv' ? this.raw2026.csv : this.raw2026.regional;
+      }
+
+      get2026Pct(row) {
+        if (!row) return { fb: 0, l: 0 };
+        if (this.norm2026 === 'valid') {
+          return { fb: row.jpv, l: row.lpv };
+        }
+        return { fb: row.jp, l: row.lp };
+      }
+
+      init() {
+        this.initTheme();
+        this.setupCanvas();
+        this.setupEventListeners();
+
+        const total = this.data2022.length;
+        const slider = document.getElementById('scrubberSlider');
+        slider.min = 0;
+        slider.max = Math.max(0, total - 1);
+        slider.value = this.currentIndex;
+        document.getElementById('totalRecordsCount').textContent = total.toLocaleString('pt-BR');
+
+        this.updateModeHeaders();
+        this.updateUI();
+        this.initTable();
+      }
+
+      updateModeHeaders() {
+        const subOpts = document.getElementById('subOptions2026');
+        subOpts.style.display = this.electionMode === '2022' ? 'none' : 'flex';
+
+        const legend = document.getElementById('chartLegend');
+        if (this.electionMode === 'compare') {
+          if (this.chartMetric === 'gap_pct' || this.chartMetric === 'diff') {
+            legend.innerHTML = `
+              <div class="legend-item"><span class="legend-line" style="background: #10b981;"></span> Vantagem FB sobre L em 2026 (FB - L)</div>
+              <div class="legend-item"><span class="legend-line" style="background: #3b82f6;"></span> Vantagem JB sobre L em 2022 (JB - L)</div>
+              <div class="legend-item"><span class="legend-line dashed" style="color: #f59e0b;"></span> Linha de Empate (0,00 p.p.)</div>
+            `;
+          } else {
+            legend.innerHTML = `
+              <div class="legend-item"><span class="legend-line" style="background: #10b981;"></span> FB 2026 (22)</div>
+              <div class="legend-item"><span class="legend-line" style="background: #ef4444;"></span> L 2026 (13)</div>
+              <div class="legend-item"><span class="legend-line dashed" style="color: #60a5fa;"></span> JB 2022 (22)</div>
+              <div class="legend-item"><span class="legend-line dashed" style="color: #fca5a5;"></span> L 2022 (13)</div>
+            `;
+          }
+        } else if (this.electionMode === '2026') {
+          legend.innerHTML = `
+            <div class="legend-item"><span class="legend-line" style="background: #3b82f6;"></span> Chapa FB 2026 (22)</div>
+            <div class="legend-item"><span class="legend-line" style="background: #ef4444;"></span> Chapa L 2026 (13)</div>
+          `;
+        } else {
+          legend.innerHTML = `
+            <div class="legend-item"><span class="legend-line" style="background: #3b82f6;"></span> Chapa JB 2022 (22)</div>
+            <div class="legend-item"><span class="legend-line" style="background: #ef4444;"></span> Chapa L 2022 (13)</div>
+          `;
+        }
+      }
+
+      updateUI() {
+        if (!this.data2022.length) return;
+        const r22 = this.data2022[this.currentIndex];
+        const r26 = this.active2026[this.currentIndex] || r22;
+        const p26 = this.get2026Pct(r26);
+
+        const fmtInt = (n) => (n || 0).toLocaleString('pt-BR');
+        const fmtPct = (n) => (n || 0).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + '%';
+        const fmtPctNoSym = (n) => (n || 0).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
+        if (this.electionMode === 'compare') {
+          // Left Card = 2022 (JB x L)
+          document.getElementById('avatarLeft').textContent = '22';
+          document.getElementById('titleLeft').textContent = 'Eleição 2022 (JB x L)';
+          document.getElementById('roleLeft').textContent = `Seções: ${fmtInt(r22.s)} / ${fmtInt(r22.st)}`;
+
+          const gap22 = r22.jp - r22.lp; // JB - L
+          const diffVotes22 = r22.jv - r22.lv;
+          const jbLeads22 = gap22 >= 0;
+
+          document.getElementById('pillLeft').className = 'status-pill ' + (jbLeads22 ? 'status-lead' : 'status-trail');
+          document.getElementById('pillLeft').textContent = jbLeads22 ? `JB +${fmtPctNoSym(Math.abs(gap22))} p.p.` : `L +${fmtPctNoSym(Math.abs(gap22))} p.p.`;
+          document.getElementById('pctLeft').innerHTML = `JB ${fmtPctNoSym(r22.jp)}<span class="symbol">%</span>`;
+          document.getElementById('subLeft').innerHTML = `L: <strong>${fmtPct(r22.lp)}</strong> • Dif (JB-L): <strong>${diffVotes22 >= 0 ? '+' : ''}${fmtInt(diffVotes22)}</strong>`;
+          document.getElementById('barLeft').style.width = `${Math.min(100, Math.max(0, r22.jp))}%`;
+
+          // Right Card = 2026 (FB x L)
+          document.getElementById('avatarRight').textContent = '26';
+          document.getElementById('titleRight').textContent = 'Eleição 2026 (FB x L)';
+          document.getElementById('roleRight').textContent = `Seções: ${fmtInt(r26.s)} / ${fmtInt(r26.st)}`;
+
+          const gap26 = p26.fb - p26.l; // FB - L
+          const diffVotes26 = r26.jv - r26.lv;
+          const fbLeads26 = gap26 >= 0;
+
+          document.getElementById('pillRight').className = 'status-pill ' + (fbLeads26 ? 'status-lead' : 'status-trail');
+          document.getElementById('pillRight').textContent = fbLeads26 ? `FB +${fmtPctNoSym(Math.abs(gap26))} p.p.` : `L +${fmtPctNoSym(Math.abs(gap26))} p.p.`;
+          document.getElementById('pctRight').innerHTML = `FB ${fmtPctNoSym(p26.fb)}<span class="symbol">%</span>`;
+          document.getElementById('subRight').innerHTML = `L: <strong>${fmtPct(p26.l)}</strong> • Dif (FB-L): <strong>${diffVotes26 >= 0 ? '+' : ''}${fmtInt(diffVotes26)}</strong>`;
+          document.getElementById('barRight').style.width = `${Math.min(100, Math.max(0, p26.fb))}%`;
+
+          // Center Card = Gap Comparison
+          document.getElementById('centerTitle').textContent = 'Diferença (JB-L 22 vs FB-L 26)';
+          document.getElementById('diffValue').className = 'comp-diff-val text-green';
+          document.getElementById('diffValue').textContent = `${gap22 >= 0 ? '+' : ''}${fmtPctNoSym(gap22)} vs ${gap26 >= 0 ? '+' : ''}${fmtPctNoSym(gap26)} p.p.`;
+          document.getElementById('diffSubtitle').textContent = `2022: ${jbLeads22 ? 'JB' : 'L'} lidera | 2026: ${fbLeads26 ? 'FB' : 'L'} lidera`;
+
+          document.getElementById('dualBarLeft').style.width = `${ p26.l }%`;
+          document.getElementById('dualBarRight').style.width = `${ p26.fb }%`;
+          document.getElementById('gaugeLabelLeft').textContent = `26 L: ${fmtPct(p26.l)}`;
+          document.getElementById('gaugeLabelRight').textContent = `26 FB: ${fmtPct(p26.fb)}`;
+
+        } else {
+          // Single election mode (2022 or 2026)
+          const is26 = this.electionMode === '2026';
+          const row = is26 ? r26 : r22;
+          const rightCand = is26 ? 'FB' : 'JB';
+          const lPct = is26 ? p26.l : r22.lp;
+          const rPct = is26 ? p26.fb : r22.jp;
+
+          document.getElementById('avatarLeft').textContent = 'L';
+          document.getElementById('titleLeft').textContent = 'Chapa L (13)';
+          document.getElementById('roleLeft').textContent = is26 ? 'Eleição 2026 (1º Turno)' : 'Eleição 2022 (2º Turno)';
+          document.getElementById('pctLeft').innerHTML = `${fmtPctNoSym(lPct)}<span class="symbol">%</span>`;
+          document.getElementById('subLeft').innerHTML = `<span id="votesLeft">${fmtInt(row.lv)}</span> <span class="label">votos válidos</span>`;
+          document.getElementById('barLeft').style.width = `${Math.min(100, Math.max(0, lPct))}%`;
+
+          document.getElementById('avatarRight').textContent = rightCand;
+          document.getElementById('titleRight').textContent = `Chapa ${rightCand} (22)`;
+          document.getElementById('roleRight').textContent = is26 ? 'Eleição 2026 (1º Turno)' : 'Eleição 2022 (2º Turno)';
+          document.getElementById('pctRight').innerHTML = `${fmtPctNoSym(rPct)}<span class="symbol">%</span>`;
+          document.getElementById('subRight').innerHTML = `<span id="votesRight">${fmtInt(row.jv)}</span> <span class="label">votos válidos</span>`;
+          document.getElementById('barRight').style.width = `${Math.min(100, Math.max(0, rPct))}%`;
+
+          const diffVotes = row.jv - row.lv; // Right (JB/FB) - L
+          const diffPct = Math.abs(rPct - lPct);
+          const rightLeads = rPct > lPct;
+
+          document.getElementById('pillLeft').className = 'status-pill ' + (!rightLeads ? 'status-lead' : 'status-trail');
+          document.getElementById('pillLeft').textContent = !rightLeads ? 'LIDERANDO' : '2º LUGAR';
+          document.getElementById('pillRight').className = 'status-pill ' + (rightLeads ? 'status-lead' : 'status-trail');
+          document.getElementById('pillRight').textContent = rightLeads ? 'LIDERANDO' : '2º LUGAR';
+
+          document.getElementById('centerTitle').textContent = `Diferença (${rightCand} vs L)`;
+          document.getElementById('diffValue').className = 'comp-diff-val ' + (rightLeads ? 'text-blue' : 'text-red');
+          document.getElementById('diffValue').textContent = `${rightLeads ? rightCand : 'L'} +${fmtInt(Math.abs(diffVotes))}`;
+          document.getElementById('diffSubtitle').textContent = `Diferença de ${fmtPctNoSym(diffPct)} p.p.`;
+
+          const tot2 = lPct + rPct;
+          const barL = tot2 > 0 ? (lPct / tot2) * 100 : 50;
+          const barR = tot2 > 0 ? (rPct / tot2) * 100 : 50;
+          document.getElementById('dualBarLeft').style.width = `${barL}%`;
+          document.getElementById('dualBarRight').style.width = `${barR}%`;
+          document.getElementById('gaugeLabelLeft').textContent = `L: ${fmtPct(lPct)}`;
+          document.getElementById('gaugeLabelRight').textContent = `${rightCand}: ${fmtPct(rPct)}`;
+        }
+
+        // Common progress & scrubber info
+        document.getElementById('urnasPct').textContent = fmtPct(r22.p);
+        document.getElementById('urnasCount').textContent = `2022: ${fmtInt(r22.s)} seções | 2026: ${fmtInt(r26.s)} seções`;
+        document.getElementById('urnasBarFill').style.width = `${Math.min(100, Math.max(0, r22.p))}%`;
+
+        const timePart = r22.t.split(' ')[1] || r22.t;
+        document.getElementById('currentTimeDisplay').textContent = `Horário Ref: ${timePart} (${fmtPct(r22.p)} das seções)`;
+        document.getElementById('scrubberPctBadge').textContent = `${fmtPct(r22.p)} apurado`;
+        document.getElementById('currentRecordIdx').textContent = (this.currentIndex + 1).toLocaleString('pt-BR');
+        document.getElementById('scrubberSlider').value = this.currentIndex;
+
+        this.renderChart();
+      }
+
+      setZoom(key) {
+        const total = this.data2022.length;
+        if (!total) return;
+        this.zoomKey = key;
+
+        if (key === 'inicio') {
+          this.zoomRange = { start: 0, end: Math.min(total - 1, 1000) };
+        } else if (key === 'virada') {
+          this.zoomRange = { start: Math.min(total - 1, 2000), end: Math.min(total - 1, 4000) };
+        } else if (key === 'final') {
+          this.zoomRange = { start: Math.min(total - 1, 3800), end: total - 1 };
+        } else {
+          this.zoomRange = { start: 0, end: total - 1 };
+        }
+
+        document.querySelectorAll('#chartZoomToggle .toggle-opt').forEach(btn => {
+          btn.classList.toggle('active', btn.dataset.zoom === key);
+        });
+
+        this.renderChart();
+      }
+
+      setMetricAndZoom(metric, zoomKey) {
+        this.pause();
+        this.chartMetric = metric;
+        document.querySelectorAll('#chartMetricToggle .toggle-opt').forEach(o => {
+          o.classList.toggle('active', o.dataset.metric === metric);
+        });
+        this.updateModeHeaders();
+        this.setZoom(zoomKey);
+      }
+
+      jumpToAndZoom(index, zoomKey) {
+        this.pause();
+        if (zoomKey) this.setZoom(zoomKey);
+        this.jumpTo(index);
+      }
+
+      jumpTo(index) {
+        if (!this.data2022.length) return;
+        this.currentIndex = Math.max(0, Math.min(this.data2022.length - 1, index));
+        this.updateUI();
+      }
+
+      togglePlay() {
+        if (this.isPlaying) this.pause();
+        else this.play();
+      }
+
+      play() {
+        if (this.currentIndex >= this.data2022.length - 1) {
+          this.currentIndex = 0;
+        }
+        this.isPlaying = true;
+        document.getElementById('btnPlayPause').textContent = '⏸';
+
+        const step = () => {
+          if (!this.isPlaying) return;
+          this.currentIndex = Math.min(this.data2022.length - 1, this.currentIndex + 1);
+          this.updateUI();
+          if (this.currentIndex >= this.data2022.length - 1) {
+            this.pause();
+            return;
+          }
+          const interval = Math.max(16, Math.floor(1000 / this.playSpeed));
+          this.playTimer = setTimeout(step, interval);
+        };
+        step();
+      }
+
+      pause() {
+        this.isPlaying = false;
+        clearTimeout(this.playTimer);
+        document.getElementById('btnPlayPause').textContent = '▶';
+      }
+
+      setupEventListeners() {
+        // Election Mode Tabs
+        document.querySelectorAll('#electionModeTabs .mode-tab').forEach(tab => {
+          tab.addEventListener('click', () => {
+            document.querySelectorAll('#electionModeTabs .mode-tab').forEach(t => t.classList.remove('active'));
+            tab.classList.add('active');
+            this.electionMode = tab.dataset.election;
+            this.updateModeHeaders();
+            this.updateUI();
+            this.renderTable(document.getElementById('tableSearchInput').value, this.onlyMilestones);
+          });
+        });
+
+        // 2026 Ordering Toggle
+        document.querySelectorAll('#order2026Toggle .toggle-opt').forEach(opt => {
+          opt.addEventListener('click', () => {
+            document.querySelectorAll('#order2026Toggle .toggle-opt').forEach(o => o.classList.remove('active'));
+            opt.classList.add('active');
+            this.order2026 = opt.dataset.order;
+            this.updateUI();
+            this.renderTable(document.getElementById('tableSearchInput').value, this.onlyMilestones);
+          });
+        });
+
+        // 2026 Normalization Toggle
+        document.querySelectorAll('#norm2026Toggle .toggle-opt').forEach(opt => {
+          opt.addEventListener('click', () => {
+            document.querySelectorAll('#norm2026Toggle .toggle-opt').forEach(o => o.classList.remove('active'));
+            opt.classList.add('active');
+            this.norm2026 = opt.dataset.norm;
+            this.updateUI();
+            this.renderTable(document.getElementById('tableSearchInput').value, this.onlyMilestones);
+          });
+        });
+
+        // Scrubber
+        document.getElementById('scrubberSlider').addEventListener('input', (e) => {
+          this.pause();
+          this.currentIndex = parseInt(e.target.value, 10);
+          this.updateUI();
+        });
+
+        // Player Buttons
+        document.getElementById('btnPlayPause').addEventListener('click', () => this.togglePlay());
+        document.getElementById('btnToStart').addEventListener('click', () => { this.pause(); this.jumpTo(0); });
+        document.getElementById('btnToEnd').addEventListener('click', () => { this.pause(); this.jumpTo(this.data2022.length - 1); });
+        document.getElementById('btnStepBack').addEventListener('click', () => { this.pause(); this.jumpTo(this.currentIndex - 1); });
+        document.getElementById('btnStepFwd').addEventListener('click', () => { this.pause(); this.jumpTo(this.currentIndex + 1); });
+
+        // Speed
+        document.querySelectorAll('.speed-btn').forEach(btn => {
+          btn.addEventListener('click', () => {
+            document.querySelectorAll('.speed-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            this.playSpeed = parseInt(btn.dataset.speed, 10);
+          });
+        });
+
+        // Milestone chips
+        document.querySelectorAll('.milestone-chip').forEach(chip => {
+          chip.addEventListener('click', () => {
+            const idx = parseInt(chip.dataset.idx, 10);
+            const z = chip.dataset.zoom;
+            this.jumpToAndZoom(idx, z);
+          });
+        });
+
+        // Chart Zoom
+        document.querySelectorAll('#chartZoomToggle .toggle-opt').forEach(opt => {
+          opt.addEventListener('click', () => this.setZoom(opt.dataset.zoom));
+        });
+
+        // Chart Y-Scale
+        document.querySelectorAll('#chartYScaleToggle .toggle-opt').forEach(opt => {
+          opt.addEventListener('click', () => {
+            document.querySelectorAll('#chartYScaleToggle .toggle-opt').forEach(o => o.classList.remove('active'));
+            opt.classList.add('active');
+            this.yScaleMode = opt.dataset.yscale;
+            this.renderChart();
+          });
+        });
+
+        // Chart Metric
+        document.querySelectorAll('#chartMetricToggle .toggle-opt').forEach(opt => {
+          opt.addEventListener('click', () => {
+            document.querySelectorAll('#chartMetricToggle .toggle-opt').forEach(o => o.classList.remove('active'));
+            opt.classList.add('active');
+            this.chartMetric = opt.dataset.metric;
+            this.updateModeHeaders();
+            this.renderChart();
+          });
+        });
+
+        // Chart X-Axis
+        document.querySelectorAll('#chartAxisToggle .toggle-opt').forEach(opt => {
+          opt.addEventListener('click', () => {
+            document.querySelectorAll('#chartAxisToggle .toggle-opt').forEach(o => o.classList.remove('active'));
+            opt.classList.add('active');
+            this.chartAxis = opt.dataset.axis;
+            this.renderChart();
+          });
+        });
+
+        // Export PNG
+        document.getElementById('btnExportChart').addEventListener('click', () => {
+          const link = document.createElement('a');
+          link.download = `comparativo-eleicao-${this.electionMode}.png`;
+          link.href = this.canvas.toDataURL('image/png');
+          link.click();
+        });
+
+        // Theme Toggle
+        document.getElementById('btnThemeToggle').addEventListener('click', () => {
+          const cur = document.body.getAttribute('data-theme');
+          const next = cur === 'light' ? 'dark' : 'light';
+          document.body.setAttribute('data-theme', next);
+          localStorage.setItem('election_theme', next);
+          this.renderChart();
+        });
+
+        // Resize
+        window.addEventListener('resize', () => {
+          this.setupCanvas();
+          this.renderChart();
+        });
+      }
+
+      initTheme() {
+        const saved = localStorage.getItem('election_theme') || 'dark';
+        document.body.setAttribute('data-theme', saved);
+      }
+
+      setupCanvas() {
+        const dpr = window.devicePixelRatio || 1;
+        const rect = this.canvas.getBoundingClientRect();
+        this.canvas.width = rect.width * dpr;
+        this.canvas.height = rect.height * dpr;
+        this.ctx.resetTransform();
+        this.ctx.scale(dpr, dpr);
+        this.canvasCSSWidth = rect.width;
+        this.canvasCSSHeight = rect.height;
+        this.setupChartInteractivity();
+      }
+
+      setupChartInteractivity() {
+        const getIndexFromX = (clientX) => {
+          const rect = this.canvas.getBoundingClientRect();
+          const pad = { left: 68, right: 30 };
+          const chartW = rect.width - pad.left - pad.right;
+          const x = clientX - rect.left - pad.left;
+          if (x < 0 || x > chartW || !this.data2022.length) return -1;
+          const startIdx = this.zoomRange.start;
+          const endIdx = this.zoomRange.end;
+          const pct = Math.max(0, Math.min(1, x / chartW));
+          return Math.round(startIdx + pct * (endIdx - startIdx));
+        };
+
+        this.canvas.onmousemove = (e) => {
+          const idx = getIndexFromX(e.clientX);
+          this.hoverIndex = idx;
+          if (idx >= 0 && idx < this.data2022.length) {
+            this.showTooltip(idx, e.clientX, e.clientY);
+          } else {
+            this.hideTooltip();
+          }
+          this.renderChart();
+        };
+
+        this.canvas.onmouseleave = () => {
+          this.hoverIndex = -1;
+          this.hideTooltip();
+          this.renderChart();
+        };
+
+        this.canvas.onclick = (e) => {
+          const idx = getIndexFromX(e.clientX);
+          if (idx >= 0 && idx < this.data2022.length) {
+            this.pause();
+            this.jumpTo(idx);
+          }
+        };
+
+        this.canvas.ondblclick = () => this.setZoom('all');
+      }
+
+      showTooltip(idx, mouseX, mouseY) {
+        const r22 = this.data2022[idx];
+        const r26 = this.active2026[idx] || r22;
+        const p26 = this.get2026Pct(r26);
+        const rect = this.canvas.getBoundingClientRect();
+
+        const fmtInt = (n) => (n || 0).toLocaleString('pt-BR');
+        const fmtPct = (n) => (n || 0).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + '%';
+        const fmtSignPct = (n) => (n >= 0 ? '+' : '') + (n || 0).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' p.p.';
+
+        document.getElementById('ttTime').textContent = r22.t.split(' ')[1] || r22.t;
+        document.getElementById('ttUrnas').textContent = `${fmtPct(r22.p)} seções`;
+
+        const gap22 = r22.jp - r22.lp;
+        const gap26 = p26.fb - p26.l;
+
+        let html = '';
+        if (this.electionMode === 'compare') {
+          html = `
+            <div class="tt-row" style="color: #34d399;">
+              <span><strong>2026 FB x L:</strong></span>
+              <span>${fmtPct(p26.fb)} x ${fmtPct(p26.l)}</span>
+            </div>
+            <div class="tt-row" style="color: #a7f3d0; font-size: 0.73rem;">
+              <span>Dif. 2026 (FB-L):</span>
+              <span>${fmtSignPct(gap26)} (${r26.jv - r26.lv >= 0 ? '+' : ''}${fmtInt(r26.jv - r26.lv)})</span>
+            </div>
+            <div class="tt-row" style="color: #60a5fa; border-top: 1px dashed rgba(255,255,255,0.12); padding-top: 0.3rem; margin-top: 0.3rem;">
+              <span><strong>2022 JB x L:</strong></span>
+              <span>${fmtPct(r22.jp)} x ${fmtPct(r22.lp)}</span>
+            </div>
+            <div class="tt-row" style="color: #bfdbfe; font-size: 0.73rem;">
+              <span>Dif. 2022 (JB-L):</span>
+              <span>${fmtSignPct(gap22)} (${r22.jv - r22.lv >= 0 ? '+' : ''}${fmtInt(r22.jv - r22.lv)})</span>
+            </div>
+          `;
+        } else if (this.electionMode === '2026') {
+          html = `
+            <div class="tt-row text-blue"><span>FB (22):</span><span>${fmtPct(p26.fb)} (${fmtInt(r26.jv)})</span></div>
+            <div class="tt-row text-red"><span>L (13):</span><span>${fmtPct(p26.l)} (${fmtInt(r26.lv)})</span></div>
+            <div class="tt-row text-gold"><span>Dif. (FB-L):</span><span>${fmtSignPct(gap26)}</span></div>
+          `;
+        } else {
+          html = `
+            <div class="tt-row text-blue"><span>JB (22):</span><span>${fmtPct(r22.jp)} (${fmtInt(r22.jv)})</span></div>
+            <div class="tt-row text-red"><span>L (13):</span><span>${fmtPct(r22.lp)} (${fmtInt(r22.lv)})</span></div>
+            <div class="tt-row text-gold"><span>Dif. (JB-L):</span><span>${fmtSignPct(gap22)}</span></div>
+          `;
+        }
+
+        document.getElementById('ttBody').innerHTML = html;
+        this.tooltip.style.left = `${mouseX - rect.left}px`;
+        this.tooltip.style.top = `${mouseY - rect.top}px`;
+        this.tooltip.classList.add('show');
+      }
+
+      hideTooltip() {
+        this.tooltip.classList.remove('show');
+      }
+
+      renderChart() {
+        if (!this.data2022.length) return;
+        const ctx = this.ctx;
+        const width = this.canvasCSSWidth;
+        const height = this.canvasCSSHeight;
+        const isDark = document.body.getAttribute('data-theme') !== 'light';
+
+        ctx.clearRect(0, 0, width, height);
+
+        const pad = { top: 32, right: 30, bottom: 42, left: 68 };
+        const chartW = width - pad.left - pad.right;
+        const chartH = height - pad.top - pad.bottom;
+        if (chartW <= 0 || chartH <= 0) return;
+
+        const startIdx = Math.max(0, this.zoomRange.start || 0);
+        const endIdx = Math.min(this.data2022.length - 1, this.zoomRange.end || (this.data2022.length - 1));
+        const count = Math.max(2, endIdx - startIdx + 1);
+        const getX = (i) => pad.left + ((i - startIdx) / (count - 1)) * chartW;
+
+        const d26 = this.active2026;
+
+        // Draw X Axis Ticks
+        const xLabelsCount = width > 768 ? 8 : 4;
+        ctx.fillStyle = isDark ? '#64748b' : '#94a3b8';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'top';
+        ctx.font = '11px JetBrains Mono, monospace';
+
+        for (let k = 0; k <= xLabelsCount; k++) {
+          const idx = Math.min(endIdx, Math.round(startIdx + (k / xLabelsCount) * (endIdx - startIdx)));
+          const x = getX(idx);
+          const item = this.data2022[idx];
+          let label = '';
+          if (this.chartAxis === 'time') {
+            label = (item.t.split(' ')[1] || item.t).substring(0, 5);
+          } else {
+            label = `${item.p.toFixed(item.p < 1 ? 2 : 1)}%`;
+          }
+          ctx.fillText(label, x, pad.top + chartH + 12);
+        }
+
+        if (this.chartMetric === 'pct') {
+          // --- PERCENTAGE EVOLUTION CURVES ---
+          let minY = 35.0;
+          let maxY = 65.0;
+          let ySteps = [35, 40, 45, 50, 55, 60, 65];
+
+          if (this.yScaleMode === 'tight') {
+            minY = 44.0;
+            maxY = 56.0;
+            ySteps = [44, 46, 48, 50, 52, 54, 56];
+          } else if (this.yScaleMode === 'auto') {
+            let curMin = 100, curMax = 0;
+            for (let i = startIdx; i <= endIdx; i++) {
+              const vals = [];
+              if (this.electionMode !== '2026') vals.push(this.data2022[i].lp, this.data2022[i].jp);
+              if (this.electionMode !== '2022' && d26[i]) {
+                const p = this.get2026Pct(d26[i]);
+                vals.push(p.fb, p.l);
+              }
+              for (const v of vals) {
+                if (v < curMin) curMin = v;
+                if (v > curMax) curMax = v;
+              }
+            }
+            minY = Math.max(25, Math.floor(curMin - 1.5));
+            maxY = Math.min(75, Math.ceil(curMax + 1.5));
+            ySteps = [];
+            const step = (maxY - minY) > 14 ? 4 : 2;
+            for (let s = Math.floor(minY); s <= Math.ceil(maxY); s += step) ySteps.push(s);
+          }
+
+          const getY = (val) => pad.top + chartH - ((val - minY) / (maxY - minY)) * chartH;
+
+          // Horizontal Grid
+          ctx.strokeStyle = isDark ? 'rgba(255, 255, 255, 0.06)' : 'rgba(0, 0, 0, 0.06)';
+          ctx.lineWidth = 1;
+          ctx.textAlign = 'right';
+          ctx.textBaseline = 'middle';
+
+          ySteps.forEach(val => {
+            const y = getY(val);
+            if (y < pad.top - 2 || y > pad.top + chartH + 2) return;
+            ctx.beginPath();
+            ctx.moveTo(pad.left, y);
+            ctx.lineTo(pad.left + chartW, y);
+            ctx.stroke();
+
+            ctx.fillStyle = val === 50 ? (isDark ? '#e2e8f0' : '#1e293b') : (isDark ? '#64748b' : '#94a3b8');
+            ctx.font = val === 50 ? 'bold 11px JetBrains Mono, monospace' : '11px JetBrains Mono, monospace';
+            ctx.fillText(`${val}.0%`, pad.left - 10, y);
+          });
+
+          // 50% Reference Line
+          const y50 = getY(50.0);
+          if (y50 >= pad.top && y50 <= pad.top + chartH) {
+            ctx.save();
+            ctx.strokeStyle = isDark ? 'rgba(255, 255, 255, 0.4)' : 'rgba(0, 0, 0, 0.4)';
+            ctx.lineWidth = 1.5;
+            ctx.setLineDash([6, 4]);
+            ctx.beginPath();
+            ctx.moveTo(pad.left, y50);
+            ctx.lineTo(pad.left + chartW, y50);
+            ctx.stroke();
+            ctx.restore();
+          }
+
+          // Draw 2022 Curves (Dashed in Compare Mode, Solid in 2022 Mode)
+          if (this.electionMode === 'compare' || this.electionMode === '2022') {
+            const isComp = this.electionMode === 'compare';
+            ctx.save();
+            if (isComp) ctx.setLineDash([6, 4]);
+
+            // JB 2022
+            ctx.beginPath();
+            for (let i = startIdx; i <= endIdx; i++) {
+              const x = getX(i);
+              const y = getY(this.data2022[i].jp);
+              if (i === startIdx) ctx.moveTo(x, y);
+              else ctx.lineTo(x, y);
+            }
+            ctx.strokeStyle = isComp ? '#60a5fa' : '#3b82f6';
+            ctx.lineWidth = isComp ? 2.0 : 2.5;
+            ctx.stroke();
+
+            // L 2022
+            ctx.beginPath();
+            for (let i = startIdx; i <= endIdx; i++) {
+              const x = getX(i);
+              const y = getY(this.data2022[i].lp);
+              if (i === startIdx) ctx.moveTo(x, y);
+              else ctx.lineTo(x, y);
+            }
+            ctx.strokeStyle = isComp ? '#fca5a5' : '#ef4444';
+            ctx.lineWidth = isComp ? 2.0 : 2.5;
+            ctx.stroke();
+            ctx.restore();
+          }
+
+          // Draw 2026 Curves (Solid)
+          if ((this.electionMode === 'compare' || this.electionMode === '2026') && d26.length) {
+            const isComp = this.electionMode === 'compare';
+            // FB 2026
+            ctx.beginPath();
+            for (let i = startIdx; i <= endIdx; i++) {
+              const x = getX(i);
+              const p = this.get2026Pct(d26[i]);
+              const y = getY(p.fb);
+              if (i === startIdx) ctx.moveTo(x, y);
+              else ctx.lineTo(x, y);
+            }
+            ctx.strokeStyle = isComp ? '#10b981' : '#3b82f6';
+            ctx.lineWidth = 2.6;
+            ctx.shadowColor = isComp ? 'rgba(16, 185, 129, 0.35)' : 'rgba(59, 130, 246, 0.35)';
+            ctx.shadowBlur = 7;
+            ctx.stroke();
+            ctx.shadowBlur = 0;
+
+            // L 2026
+            ctx.beginPath();
+            for (let i = startIdx; i <= endIdx; i++) {
+              const x = getX(i);
+              const p = this.get2026Pct(d26[i]);
+              const y = getY(p.l);
+              if (i === startIdx) ctx.moveTo(x, y);
+              else ctx.lineTo(x, y);
+            }
+            ctx.strokeStyle = '#ef4444';
+            ctx.lineWidth = 2.6;
+            ctx.shadowColor = 'rgba(239, 68, 68, 0.35)';
+            ctx.shadowBlur = 7;
+            ctx.stroke();
+            ctx.shadowBlur = 0;
+          }
+
+          // Annotations
+          if (140 >= startIdx && 140 <= endIdx) {
+            if (this.electionMode !== '2026') {
+              this.drawAnnotation(ctx, getX(140), getY(this.data2022[140].jp), '2022 Pico JB: 56,84%', '1,78% urnas (L: 43,16%)', '#60a5fa', false);
+            }
+            if (this.electionMode !== '2022' && d26[140]) {
+              const p140 = this.get2026Pct(d26[140]);
+              this.drawAnnotation(ctx, getX(140), getY(p140.fb), `2026 FB: ${p140.fb.toFixed(2).replace('.', ',')}%`, `L: ${p140.l.toFixed(2).replace('.', ',')}%`, '#10b981', true);
+            }
+          }
+          if (3190 >= startIdx && 3190 <= endIdx) {
+            if (this.electionMode !== '2026') {
+              this.drawAnnotation(ctx, getX(3190), getY(50.002), 'Virada 2022: 50,00%', '68,34% urnas (18:44)', '#ef4444', false);
+            }
+            if (this.electionMode !== '2022' && d26[3190]) {
+              const p3190 = this.get2026Pct(d26[3190]);
+              this.drawAnnotation(ctx, getX(3190), getY(p3190.fb), `2026 FB: ${p3190.fb.toFixed(2).replace('.', ',')}%`, 'Mantém liderança', '#10b981', true);
+            }
+          }
+
+          // Playhead
+          if (this.currentIndex >= startIdx && this.currentIndex <= endIdx) {
+            const curX = getX(this.currentIndex);
+            ctx.strokeStyle = isDark ? 'rgba(255, 255, 255, 0.45)' : 'rgba(0, 0, 0, 0.45)';
+            ctx.lineWidth = 1.5;
+            ctx.beginPath();
+            ctx.moveTo(curX, pad.top);
+            ctx.lineTo(curX, pad.top + chartH);
+            ctx.stroke();
+
+            if (this.electionMode !== '2022' && d26[this.currentIndex]) {
+              const p = this.get2026Pct(d26[this.currentIndex]);
+              this.drawGlowDot(ctx, curX, getY(p.fb), this.electionMode === 'compare' ? '#10b981' : '#3b82f6');
+              this.drawGlowDot(ctx, curX, getY(p.l), '#ef4444');
+            }
+            if (this.electionMode !== '2026') {
+              this.drawGlowDot(ctx, curX, getY(this.data2022[this.currentIndex].jp), '#60a5fa');
+              this.drawGlowDot(ctx, curX, getY(this.data2022[this.currentIndex].lp), '#fca5a5');
+            }
+          }
+
+        } else if (this.chartMetric === 'gap_pct') {
+          // --- GAP CONVERGENCE MODE: (JB - L) vs (FB - L) in Percentage Points ---
+          const minY = -6.0;
+          const maxY = 26.0;
+          const getY = (val) => pad.top + chartH - ((val - minY) / (maxY - minY)) * chartH;
+          const yZero = getY(0);
+
+          const ySteps = [-5, 0, 5, 10, 15, 20, 25];
+          ctx.strokeStyle = isDark ? 'rgba(255, 255, 255, 0.06)' : 'rgba(0, 0, 0, 0.06)';
+          ctx.lineWidth = 1;
+          ctx.textAlign = 'right';
+          ctx.textBaseline = 'middle';
+
+          ySteps.forEach(val => {
+            const y = getY(val);
+            ctx.beginPath();
+            ctx.moveTo(pad.left, y);
+            ctx.lineTo(pad.left + chartW, y);
+            ctx.stroke();
+
+            ctx.fillStyle = val === 0 ? '#f59e0b' : (isDark ? '#64748b' : '#94a3b8');
+            ctx.font = val === 0 ? 'bold 11px JetBrains Mono, monospace' : '11px JetBrains Mono, monospace';
+            ctx.fillText(`${val > 0 ? '+' : ''}${val} p.p.`, pad.left - 10, y);
+          });
+
+          // Zero Tie Line
+          ctx.save();
+          ctx.strokeStyle = '#f59e0b';
+          ctx.lineWidth = 1.5;
+          ctx.setLineDash([6, 4]);
+          ctx.beginPath();
+          ctx.moveTo(pad.left, yZero);
+          ctx.lineTo(pad.left + chartW, yZero);
+          ctx.stroke();
+          ctx.restore();
+
+          // 2022 Gap Curve (JB - L)
+          if (this.electionMode !== '2026') {
+            ctx.beginPath();
+            for (let i = startIdx; i <= endIdx; i++) {
+              const x = getX(i);
+              const gap = this.data2022[i].jp - this.data2022[i].lp;
+              if (i === startIdx) ctx.moveTo(x, getY(gap));
+              else ctx.lineTo(x, getY(gap));
+            }
+            ctx.strokeStyle = '#3b82f6';
+            ctx.lineWidth = 2.5;
+            ctx.stroke();
+          }
+
+          // 2026 Gap Curve (FB - L)
+          if (this.electionMode !== '2022' && d26.length) {
+            ctx.beginPath();
+            for (let i = startIdx; i <= endIdx; i++) {
+              const x = getX(i);
+              const p = this.get2026Pct(d26[i]);
+              const gap = p.fb - p.l;
+              if (i === startIdx) ctx.moveTo(x, getY(gap));
+              else ctx.lineTo(x, getY(gap));
+            }
+            ctx.strokeStyle = '#10b981';
+            ctx.lineWidth = 2.8;
+            ctx.stroke();
+          }
+
+          if (140 >= startIdx && 140 <= endIdx) {
+            this.drawAnnotation(ctx, getX(140), getY(13.678), '2022 Pico: +13,68 p.p.', 'JB 56,84% vs L 43,16%', '#3b82f6', false);
+          }
+          if (3190 >= startIdx && 3190 <= endIdx) {
+            this.drawAnnotation(ctx, getX(3190), getY(0), '2022 Virada (0,00 p.p.)', '68,34% das urnas', '#f59e0b', false);
+          }
+
+          // Playhead
+          if (this.currentIndex >= startIdx && this.currentIndex <= endIdx) {
+            const curX = getX(this.currentIndex);
+            ctx.strokeStyle = 'rgba(255,255,255,0.4)';
+            ctx.beginPath();
+            ctx.moveTo(curX, pad.top);
+            ctx.lineTo(curX, pad.top + chartH);
+            ctx.stroke();
+
+            if (this.electionMode !== '2026') {
+              const g22 = this.data2022[this.currentIndex].jp - this.data2022[this.currentIndex].lp;
+              this.drawGlowDot(ctx, curX, getY(g22), '#3b82f6');
+            }
+            if (this.electionMode !== '2022' && d26[this.currentIndex]) {
+              const p = this.get2026Pct(d26[this.currentIndex]);
+              this.drawGlowDot(ctx, curX, getY(p.fb - p.l), '#10b981');
+            }
+          }
+
+        } else {
+          // --- ABSOLUTE VOTE MARGIN MODE (JB-L vs FB-L) ---
+          const minDiff = -2500000;
+          const maxDiff = 4200000;
+          const getY = (val) => pad.top + chartH - ((val - minDiff) / (maxDiff - minDiff)) * chartH;
+          const yZero = getY(0);
+
+          const steps = [-2000000, -1000000, 0, 1000000, 2000000, 3000000, 4000000];
+          ctx.strokeStyle = isDark ? 'rgba(255, 255, 255, 0.06)' : 'rgba(0, 0, 0, 0.06)';
+          ctx.lineWidth = 1;
+          ctx.textAlign = 'right';
+          ctx.textBaseline = 'middle';
+
+          steps.forEach(val => {
+            const y = getY(val);
+            ctx.beginPath();
+            ctx.moveTo(pad.left, y);
+            ctx.lineTo(pad.left + chartW, y);
+            ctx.stroke();
+            ctx.fillStyle = val === 0 ? '#f59e0b' : '#64748b';
+            ctx.font = '11px JetBrains Mono, monospace';
+            ctx.fillText(val === 0 ? 'Empate (0)' : `${val > 0 ? '+' : ''}${(val / 1000000).toFixed(1)}M`, pad.left - 10, y);
+          });
+
+          ctx.save();
+          ctx.strokeStyle = '#f59e0b';
+          ctx.setLineDash([5, 4]);
+          ctx.beginPath();
+          ctx.moveTo(pad.left, yZero);
+          ctx.lineTo(pad.left + chartW, yZero);
+          ctx.stroke();
+          ctx.restore();
+
+          if (this.electionMode !== '2026') {
+            ctx.beginPath();
+            for (let i = startIdx; i <= endIdx; i++) {
+              const x = getX(i);
+              const d = this.data2022[i].jv - this.data2022[i].lv;
+              if (i === startIdx) ctx.moveTo(x, getY(d));
+              else ctx.lineTo(x, getY(d));
+            }
+            ctx.strokeStyle = '#3b82f6';
+            ctx.lineWidth = 2.4;
+            ctx.stroke();
+          }
+
+          if (this.electionMode !== '2022' && d26.length) {
+            ctx.beginPath();
+            for (let i = startIdx; i <= endIdx; i++) {
+              const x = getX(i);
+              const d = d26[i].jv - d26[i].lv;
+              if (i === startIdx) ctx.moveTo(x, getY(d));
+              else ctx.lineTo(x, getY(d));
+            }
+            ctx.strokeStyle = '#10b981';
+            ctx.lineWidth = 2.6;
+            ctx.stroke();
+          }
+        }
+      }
+
+      drawAnnotation(ctx, x, y, text, subtext, color, isUp = true) {
+        ctx.save();
+        const pinLen = 20;
+        const targetY = isUp ? y - pinLen : y + pinLen;
+
+        ctx.strokeStyle = color;
+        ctx.lineWidth = 1.2;
+        ctx.beginPath();
+        ctx.moveTo(x, y);
+        ctx.lineTo(x, targetY);
+        ctx.stroke();
+
+        ctx.fillStyle = color;
+        ctx.beginPath();
+        ctx.arc(x, y, 3.5, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.font = 'bold 10px JetBrains Mono, monospace';
+        const textW = ctx.measureText(text).width;
+        ctx.font = '9px Inter, sans-serif';
+        const subW = subtext ? ctx.measureText(subtext).width : 0;
+        const boxW = Math.max(textW, subW) + 14;
+        const boxH = subtext ? 28 : 18;
+        const boxX = Math.max(10, Math.min(this.canvasCSSWidth - boxW - 10, x - boxW / 2));
+        const boxY = isUp ? targetY - boxH : targetY;
+
+        ctx.fillStyle = 'rgba(15, 23, 42, 0.92)';
+        ctx.strokeStyle = color;
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        if (ctx.roundRect) ctx.roundRect(boxX, boxY, boxW, boxH, 5);
+        else ctx.rect(boxX, boxY, boxW, boxH);
+        ctx.fill();
+        ctx.stroke();
+
+        ctx.textAlign = 'left';
+        ctx.textBaseline = 'top';
+        ctx.fillStyle = color;
+        ctx.font = 'bold 10px JetBrains Mono, monospace';
+        ctx.fillText(text, boxX + 7, boxY + 4);
+
+        if (subtext) {
+          ctx.fillStyle = '#94a3b8';
+          ctx.font = '9px Inter, sans-serif';
+          ctx.fillText(subtext, boxX + 7, boxY + 16);
+        }
+        ctx.restore();
+      }
+
+      drawGlowDot(ctx, x, y, color) {
+        ctx.save();
+        ctx.shadowColor = color;
+        ctx.shadowBlur = 10;
+        ctx.fillStyle = color;
+        ctx.beginPath();
+        ctx.arc(x, y, 5.5, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.fillStyle = '#ffffff';
+        ctx.beginPath();
+        ctx.arc(x, y, 2.5, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+      }
+
+      initTable() {
+        const searchInput = document.getElementById('tableSearchInput');
+        const filterBtn = document.getElementById('btnFilterMilestones');
+        this.onlyMilestones = false;
+
+        filterBtn.onclick = () => {
+          this.onlyMilestones = !this.onlyMilestones;
+          filterBtn.classList.toggle('btn-primary', this.onlyMilestones);
+          filterBtn.textContent = this.onlyMilestones ? '⭐ Todos os Registros' : '⭐ Apenas Marcos';
+          this.renderTable(searchInput.value, this.onlyMilestones);
+        };
+
+        searchInput.oninput = () => {
+          this.renderTable(searchInput.value, this.onlyMilestones);
+        };
+
+        this.renderTable('', false);
+      }
+
+      renderTable(query, onlyMilestones) {
+        const tbody = document.getElementById('dataTableBody');
+        if (!tbody || !this.data2022.length) return;
+
+        const milestoneIndices = new Set([0, 4, 20, 50, 140, 500, 1387, 2500, 3121, 3190, 3994, 4986, this.data2022.length - 1]);
+        const fmtPct = (n) => (n || 0).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + '%';
+        const fmtSignPP = (n) => (n >= 0 ? '+' : '') + (n || 0).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' p.p.';
+
+        const q = (query || '').toLowerCase().trim();
+        const step = q ? 1 : (onlyMilestones ? 1 : Math.max(1, Math.floor(this.data2022.length / 120)));
+        const d26 = this.active2026;
+
+        const rows = [];
+        for (let i = 0; i < this.data2022.length; i += step) {
+          if (onlyMilestones && !milestoneIndices.has(i)) continue;
+          const r22 = this.data2022[i];
+          const r26 = d26[i] || r22;
+          const urnasStr = fmtPct(r22.p);
+          if (q && !r22.t.toLowerCase().includes(q) && !urnasStr.toLowerCase().includes(q)) continue;
+          rows.push({ i, r22, r26 });
+          if (rows.length >= 150) break;
+        }
+
+        tbody.innerHTML = rows.map(({ i, r22, r26 }) => {
+          const p26 = this.get2026Pct(r26);
+          const gap22 = r22.jp - r22.lp;
+          const gap26 = p26.fb - p26.l;
+          const timeStr = r22.t.split(' ')[1] || r22.t;
+
+          return `
+            <tr style="border-bottom: 1px solid var(--border-color); cursor: pointer;" onclick="window.app.jumpTo(${i})">
+              <td style="padding: 0.55rem 0.85rem; font-family: var(--font-mono);">${timeStr}</td>
+              <td style="padding: 0.55rem 0.85rem; font-family: var(--font-mono);">${fmtPct(r22.p)}</td>
+              <td style="padding: 0.55rem 0.85rem; font-family: var(--font-mono);">JB ${fmtPct(r22.jp)} x L ${fmtPct(r22.lp)}</td>
+              <td style="padding: 0.55rem 0.85rem; font-family: var(--font-mono); color: ${gap22 >= 0 ? '#60a5fa' : '#f87171'}; font-weight: 700;">${fmtSignPP(gap22)}</td>
+              <td style="padding: 0.55rem 0.85rem; font-family: var(--font-mono);">FB ${fmtPct(p26.fb)} x L ${fmtPct(p26.l)}</td>
+              <td style="padding: 0.55rem 0.85rem; font-family: var(--font-mono); color: ${gap26 >= 0 ? '#34d399' : '#f87171'}; font-weight: 700;">${fmtSignPP(gap26)}</td>
+            </tr>
+          `;
+        }).join('');
+      }
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      window.app = new ElectionComparisonApp();
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,7 @@
+# Ignorar arquivos CSV brutos pesados (os dados já estão compilados em dados_eleicao*.js)
+*.csv
+
+# Ignorar cache Python
+__pycache__/
+*.pyc
+
